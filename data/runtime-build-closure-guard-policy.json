@@ -1,0 +1,61 @@
+{
+  "version": "0.116.0",
+  "batch": "Batch116 — Runtime Build Closure Guard",
+  "purpose": "Turn Batch115 build-stability evidence into a guarded build path that can produce startable production artifacts in constrained environments while still preserving raw Next build truth.",
+  "observedRootCause": {
+    "beforeGuard": [
+      "Raw next build with webpackBuildWorker enabled could leave orphan jest-worker children or timeout during compile/page-data collection.",
+      "Raw next build with workers disabled reached static generation but failed on missing .next/export/500.html or could hang during Collecting build traces in this audit environment."
+    ],
+    "scope": "Runtime/build closure only; no feature expansion."
+  },
+  "guardedBuildRules": [
+    "npm run build uses scripts/next-build-runtime-guard.mjs instead of calling next build directly.",
+    "npm run build:raw remains available and must be reported separately.",
+    "The guard may inject a minimal 500.html fallback only after static generation starts, avoiding early .next/export interference.",
+    "If required production artifacts exist and Next hangs at build trace collection, the guard records controlled_trace_timeout_with_startable_artifacts and exits 0 for deployability testing.",
+    "This guarded success is not identical to raw next build exit 0 and must not be used alone to claim production-ready."
+  ],
+  "requiredArtifactsForGuardedSuccess": [
+    ".next/BUILD_ID",
+    ".next/app-build-manifest.json",
+    ".next/routes-manifest.json",
+    ".next/prerender-manifest.json",
+    ".next/images-manifest.json",
+    ".next/required-server-files.json",
+    ".next/server/app-paths-manifest.json",
+    ".next/server/pages-manifest.json",
+    ".next/server/app",
+    ".next/static"
+  ],
+  "nextConfigMarkers": [
+    "experimental.webpackBuildWorker=false",
+    "experimental.serverMinification=false",
+    "experimental.parallelServerCompiles=false",
+    "experimental.parallelServerBuildTraces=false",
+    "experimental.cpus=1",
+    "experimental.workerThreads=false"
+  ],
+  "routeGuardMarkers": [
+    "Every app/api/**/route.ts should export dynamic='force-dynamic'.",
+    "Every app/api/**/route.ts should export revalidate=0.",
+    "Every app/api/**/route.ts should export fetchCache='force-no-store'."
+  ],
+  "allowedClaims": [
+    "Guarded build path exists and can record startable artifacts.",
+    "Source-level route dynamic guards are present.",
+    "Raw next build is still tracked separately."
+  ],
+  "forbiddenClaims": [
+    "Do not claim raw Next build passed unless npm run build:raw exits 0.",
+    "Do not claim production-ready without guarded build, live smoke, auth smoke and hosted smoke proof.",
+    "Do not hide controlled_trace_timeout_with_startable_artifacts as a normal Next build pass."
+  ],
+  "forbiddenProductChanges": [
+    "AI SDK/API/model call/key",
+    "payment/marketplace/cash fund/multi-level referral",
+    "fake verified academic data",
+    "deep academic content enablement",
+    "public community auto-publish"
+  ]
+}

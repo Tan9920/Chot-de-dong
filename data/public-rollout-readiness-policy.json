@@ -1,0 +1,187 @@
+{
+  "batch": "Batch133 — Public Rollout Readiness Control Center",
+  "version": "0.133.0",
+  "phase": "P0/P1 public rollout readiness hard gate",
+  "purpose": "Improve the best currently actionable area: public rollout readiness/source-level control, without pretending hosted proof or production readiness is closed.",
+  "selectedBecause": [
+    "Local/runtime proof is already near 99% and cannot be materially improved without Node24/Vercel evidence.",
+    "Hosted/public proof cannot be closed in this container because there is no real APP_URL, Node24 CI run, or browser visual capture.",
+    "Public rollout readiness can be improved now by adding a single source-of-truth gate, rollback/safe-mode checklist, no-user validation dossier, and evidence requirements."
+  ],
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "canImproveNow": "public_rollout_readiness_source_level",
+  "mustStayBlockedUntil": [
+    "Node24 CI/Vercel proof passes",
+    "APP_URL hosted strict smoke passes",
+    "hosted account save/export smoke passes",
+    "visual smoke evidence passes at required breakpoints",
+    "security/data protection report passes",
+    "rollback/safe-mode checklist is complete",
+    "legal/community/payment/AI gates are explicitly not bypassed"
+  ],
+  "readinessLanes": [
+    {
+      "id": "source_and_runtime_local",
+      "label": "Source/local runtime proof",
+      "targetPercent": "99% local-only",
+      "claim": "local_runtime_high",
+      "blocksPublicRollout": false
+    },
+    {
+      "id": "hosted_public_proof",
+      "label": "Hosted/public proof",
+      "targetPercent": "must be real evidence",
+      "claim": "not_closed_without_app_url",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "security_data_protection",
+      "label": "Security & data protection foundation",
+      "targetPercent": "source-level pass",
+      "claim": "foundation_only",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "visual_ux_evidence",
+      "label": "Visual UX smoke evidence",
+      "targetPercent": "all required breakpoints",
+      "claim": "not_closed_without_captures",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "rollback_safe_mode",
+      "label": "Rollback / founder absence / safe mode",
+      "targetPercent": "dossier required",
+      "claim": "dossier_source_level",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "no_user_validation",
+      "label": "No-user validation / small pilot guard",
+      "targetPercent": "structured dossier required",
+      "claim": "source_level_pilot_ready",
+      "blocksPublicRollout": false
+    }
+  ],
+  "requiredGates": [
+    {
+      "id": "source_validate",
+      "label": "Source validator registry pass",
+      "command": "npm run source:validate",
+      "artifact": "data/source-validate-last-run.json",
+      "required": true,
+      "blocksPublicRollout": false
+    },
+    {
+      "id": "data_validate",
+      "label": "JSON data validation pass",
+      "command": "npm run data:validate",
+      "artifact": "artifacts/data-validate-last-run.json",
+      "required": false,
+      "blocksPublicRollout": false,
+      "note": "data:validate may not emit an artifact; dedicated source validator also checks JSON."
+    },
+    {
+      "id": "batch132_ci_report",
+      "label": "Batch132 hosted CI final proof report present",
+      "command": "npm run runtime:p0-hosted-ci-proof-report",
+      "artifact": "artifacts/runtime-p0-hosted-ci-final-proof-report-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "requirePublicRolloutAllowed": true
+    },
+    {
+      "id": "security_data_protection_report",
+      "label": "Security/data protection report",
+      "command": "npm run security:data-protection-report",
+      "artifact": "artifacts/security-data-protection-report-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "live_smoke_clean",
+      "label": "Production-mode local live smoke",
+      "command": "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+      "artifact": "artifacts/live-http-smoke-last-run.json",
+      "required": true,
+      "blocksPublicRollout": false
+    },
+    {
+      "id": "auth_invite_smoke",
+      "label": "Auth/invite runtime smoke",
+      "command": "npm run auth-invite:runtime-smoke",
+      "artifact": "artifacts/auth-invite-runtime-smoke-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "loopback_hosted_style_smoke",
+      "label": "Loopback hosted-style route smoke",
+      "command": "npm run runtime:p0-loopback-url-smoke",
+      "artifact": "artifacts/p0-loopback-url-smoke-last-run.json",
+      "required": true,
+      "blocksPublicRollout": false
+    },
+    {
+      "id": "visual_smoke_evidence",
+      "label": "Visual smoke evidence",
+      "command": "npm run visual:smoke:evidence-validate",
+      "artifact": "artifacts/visual-smoke-evidence.json",
+      "required": true,
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "public_rollout_dossier",
+      "label": "Public rollout dossier template/evidence",
+      "command": "npm run public-rollout:dossier-template",
+      "artifact": "artifacts/public-rollout-dossier-template.json",
+      "required": true,
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "hosted_p0_100_release",
+      "label": "Hosted final P0 release chain",
+      "command": "APP_URL=https://<vercel-url> npm run verify:p0-100-release",
+      "artifact": "artifacts/verify-release-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "requireNode24": true,
+      "requireHostedUrl": true
+    }
+  ],
+  "dossierRequiredSections": [
+    "targetUsersAndScope",
+    "allowedClaims",
+    "blockedClaims",
+    "rollbackPlan",
+    "safeModePlan",
+    "supportAndTakedownChannels",
+    "visualSmokeChecklist",
+    "hostedProofCommands",
+    "noAiPaymentVerifiedFakeStatement"
+  ],
+  "allowedPilotScope": {
+    "mode": "trusted_small_group_only",
+    "maxTeachersBeforeHostedProof": "0 public rollout; only internal/local or explicitly trusted technical smoke",
+    "publicMarketingAllowed": false,
+    "teacherFacingClaim": "Bản thử nghiệm nội bộ; giáo viên phải kiểm tra và chỉnh trước khi dùng chính thức."
+  },
+  "claimPolicy": {
+    "canClaimAfterBatch133": [
+      "public rollout readiness control center source present",
+      "dossier template generated",
+      "public rollout remains blocked until evidence passes"
+    ],
+    "mustNotClaimWithoutHostedEvidence": [
+      "public-rollout-ready",
+      "production-ready",
+      "hosted-demo-closed",
+      "100%",
+      "chuẩn Bộ",
+      "đúng 100%",
+      "không vi phạm gì cả"
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  }
+}

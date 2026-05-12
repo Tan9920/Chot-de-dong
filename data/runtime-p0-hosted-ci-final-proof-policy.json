@@ -1,0 +1,173 @@
+{
+  "batch": "Batch143 — P0/P1 Final Closure Candidate & Visual Smoke Contract Harmonization",
+  "version": "0.143.0",
+  "phase": "P0 hosted/public proof evidence runner",
+  "purpose": "Push P0/P1 as far as possible without overclaiming: align visual smoke viewport contracts, require real Chromium screenshot capture for hosted visual evidence, and keep public rollout blocked until Node24 CI/APP_URL/save-export/visual/P0-100 proof all pass.",
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "strictProofRequires": [
+    "Node 24 GitHub Actions/Vercel runtime proof with CI provenance",
+    "APP_URL hosted strict smoke",
+    "hosted real account save/export smoke",
+    "visual smoke evidence at required breakpoints",
+    "final p0-100 release chain with separate artifact contract",
+    "canonical visual viewport ids shared by template, validator, hosted CI report, public rollout and P0/P1 stability gates"
+  ],
+  "requiredEvidence": [
+    {
+      "id": "node24_ci_deepest",
+      "label": "Node24 GitHub Actions runtime proof with provenance",
+      "command": "npm run verify:p0-deepest-node24-ci",
+      "artifact": "artifacts/verify-p0-deepest-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "artifactContract": {
+        "command": "verify:p0-deepest",
+        "requireNode24": true,
+        "nodeMajor": 24,
+        "mustPassIds": [
+          "source-validate",
+          "data-validate",
+          "typecheck",
+          "controlled-startable-build",
+          "production-live-smoke",
+          "auth-invite-runtime-smoke",
+          "loopback-hosted-route-smoke"
+        ],
+        "requireCiProvenance": true,
+        "ciProvider": "github_actions",
+        "mustHaveCiFields": [
+          "githubActions",
+          "githubWorkflow",
+          "githubRunId",
+          "runnerOS"
+        ]
+      }
+    },
+    {
+      "id": "hosted_release_strict",
+      "label": "Hosted APP_URL strict release smoke",
+      "command": "APP_URL=https://<vercel-url> npm run verify:release:strict",
+      "artifact": "artifacts/verify-release-strict-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "artifactContract": {
+        "command": "verify:release:strict",
+        "proofProfile": "hosted_release_strict",
+        "requireHostedUrl": true,
+        "requireVisualSmoke": false,
+        "requireNode24": false,
+        "mustPassIds": [
+          "verify-p0-deepest",
+          "smoke-url-strict"
+        ],
+        "mustSkipIds": [
+          "visual-smoke-evidence"
+        ]
+      }
+    },
+    {
+      "id": "hosted_url_save_export",
+      "label": "Hosted account save/export smoke",
+      "command": "GIAOAN_DEMO_URL=https://<vercel-url> npm run hosted:url-smoke",
+      "artifact": "artifacts/hosted-demo-url-smoke-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "artifactContract": {
+        "mustHaveOk": true,
+        "mustHaveBase": true,
+        "mustHaveSummaryKey": "batch98RealAccountSaveExportSmoke"
+      }
+    },
+    {
+      "id": "visual_smoke_evidence",
+      "label": "Visual smoke evidence",
+      "command": "npm run visual:smoke:evidence-validate",
+      "artifact": "artifacts/visual-smoke-evidence.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "artifactContract": {
+        "mustHaveOk": true,
+        "requiredViewportsFromPolicy": true,
+        "requiredStatus": "pass"
+      }
+    },
+    {
+      "id": "p0_100_release",
+      "label": "Final P0 100 release chain",
+      "command": "APP_URL=https://<vercel-url> npm run verify:p0-100-release",
+      "artifact": "artifacts/verify-p0-100-release-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "artifactContract": {
+        "command": "verify:p0-100-release",
+        "proofProfile": "p0_100_release",
+        "requireHostedUrl": true,
+        "requireVisualSmoke": true,
+        "requireNode24": true,
+        "mustPassIds": [
+          "verify-p0-deepest",
+          "smoke-url-strict",
+          "visual-smoke-evidence"
+        ]
+      }
+    }
+  ],
+  "workflow": {
+    "file": ".github/workflows/p0-hosted-final-proof.yml",
+    "nodeVersion": "24",
+    "requiredSecretOrInput": "GIAOAN_DEMO_URL or workflow_dispatch app_url",
+    "optionalSecret": "VERCEL_AUTOMATION_BYPASS_SECRET",
+    "uploadsArtifacts": true,
+    "strictCommand": "npm run verify:p0-hosted-ci-proof",
+    "requiresCiProvenance": true,
+    "visualCaptureCommand": "npm run visual:smoke:evidence-capture"
+  },
+  "visualEvidence": {
+    "templateCommand": "npm run visual:smoke:evidence-template",
+    "validationCommand": "npm run visual:smoke:evidence-validate",
+    "requiredViewports": [
+      "mobile-360",
+      "mobile-390",
+      "mobile-430",
+      "tablet-768",
+      "desktop-1366",
+      "desktop-1440"
+    ],
+    "mustShow": [
+      "home/app shell is usable",
+      "lesson creation/edit flow is visible",
+      "governance/source labels are visible",
+      "export actions are reachable",
+      "sidebar/bottom navigation does not trap the screen"
+    ],
+    "captureCommand": "APP_URL=https://<vercel-url> npm run visual:smoke:evidence-capture"
+  },
+  "claimPolicy": {
+    "localOrSourcePassCanClaim": [
+      "Batch142 source-level CI provenance hardening is present",
+      "Local Node24 runs can no longer close the Node24 CI/Vercel evidence item",
+      "public rollout still blocked until real GitHub Actions Node24, APP_URL hosted smoke, save/export smoke, visual smoke and P0-100 artifacts pass"
+    ],
+    "mustNotClaimWithoutAllEvidence": [
+      "hosted-demo-closed",
+      "public-rollout-ready",
+      "production-ready",
+      "100%",
+      "p0_100_release_without_matching_artifact_contract",
+      "node24_ci_closed_without_github_actions_provenance",
+      "ci_vercel_proof_from_local_node24"
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  },
+  "artifactIntegrityRules": [
+    "Hosted strict release and P0-100 release must use separate artifact files.",
+    "A required evidence item is pass only when artifact.ok=true and the artifact proofProfile/command/required flags match that evidence item.",
+    "verify-release-strict cannot satisfy p0_100_release because it lacks requireVisualSmoke=true and requireNode24=true.",
+    "P0-100 release must include Node24, hosted URL and visual smoke requirements before public rollout can be closed.",
+    "Node24 deepest CI proof cannot be satisfied by a local Node24 run; artifact.ciProvenance.githubActions must be true when requireCiProvenance=true.",
+    "The node24_ci_deepest evidence item must include GitHub workflow/run provenance before it can unblock hosted/public proof.",
+    "Local Node24 proof is useful for debugging only and must remain unverified/blocked for CI/Vercel claims.",
+    "Visual smoke evidence viewport ids must use the canonical hyphenated ids so template/capture/validator/public rollout all read the same contract."
+  ]
+}

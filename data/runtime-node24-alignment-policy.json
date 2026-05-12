@@ -1,0 +1,34 @@
+{
+  "version": "batch124-node24-runtime-alignment",
+  "generatedAt": "2026-05-08",
+  "targetRuntime": "node24",
+  "packageEngine": "24.x",
+  "nodeVersionFile": "24.15.0",
+  "why": [
+    "Vercel currently supports 24.x as the default Node.js LTS runtime and still supports 22.x/20.x, so the project should stop pinning deploys to 22.x when moving forward.",
+    "Node 24 LTS provides a longer support window than Node 22 and avoids accidental deploys on older runtime settings.",
+    "The project remains No-AI and JSON-fallback friendly; this batch only updates runtime alignment and validation, not product scope."
+  ],
+  "controls": {
+    "vercelUsesPackageEngine": true,
+    "githubActionsUsesNode24": true,
+    "localTermuxCanStillInstallIfEngineStrictFalse": true,
+    "noAiAdded": true,
+    "noPaymentAdded": true,
+    "noFakeVerifiedData": true
+  },
+  "commandsToVerify": [
+    "node -v",
+    "npm ci --ignore-scripts --no-audit --no-fund",
+    "npm run lint",
+    "npm run data:validate",
+    "npm run typecheck",
+    "npm run build",
+    "npm run verify:release"
+  ],
+  "honestLimitations": [
+    "Running these commands on Node 22 can still pass because .npmrc keeps engine-strict=false, but that is not proof of Node 24 runtime behavior.",
+    "Hosted Vercel proof still requires a real APP_URL/NEXT_PUBLIC_APP_URL smoke run after deployment.",
+    "This does not claim production-ready status."
+  ]
+}

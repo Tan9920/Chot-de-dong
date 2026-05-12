@@ -1,0 +1,72 @@
+{
+  "version": "batch109_offline_print_export_v1",
+  "batch": "Batch109 — Offline Teacher Export & Printable Lesson Preview Polish",
+  "status": "offline_print_export_source_ready_hosted_runtime_still_guarded",
+  "purpose": "Sau Batch108 đã sửa đầu vào lớp/môn/chủ đề, Batch109 làm đầu ra dễ dùng hơn cho giáo viên: preview giáo án in được, tải TXT/HTML offline, checklist an toàn thân thiện và gói xuất không phụ thuộc npm/build.",
+  "sourceOfTruth": "Repo/code thật vẫn là nguồn sự thật. Offline export proof không thay thế typecheck/build/runtime/hosted smoke.",
+  "offlineArtifact": "public/teacher-pilot-demo.html",
+  "exportModes": [
+    {
+      "id": "copy_draft",
+      "label": "Copy bản nháp",
+      "runtimeDependency": "none",
+      "allowedFor": "teacher_pilot",
+      "claim": "Copy nội dung khung giáo án an toàn vào clipboard nếu trình duyệt hỗ trợ."
+    },
+    {
+      "id": "download_txt",
+      "label": "Tải TXT",
+      "runtimeDependency": "none",
+      "allowedFor": "teacher_pilot",
+      "claim": "Tải bản nháp dạng văn bản để giáo viên chỉnh tiếp."
+    },
+    {
+      "id": "download_print_html",
+      "label": "Tải HTML in được",
+      "runtimeDependency": "none",
+      "allowedFor": "teacher_pilot",
+      "claim": "Tải một file HTML có CSS in ấn cơ bản, kèm cảnh báo dữ liệu và checklist."
+    },
+    {
+      "id": "browser_print",
+      "label": "In từ trình duyệt",
+      "runtimeDependency": "browser_print_dialog",
+      "allowedFor": "teacher_pilot",
+      "claim": "Mở hộp thoại in của trình duyệt; không claim PDF server-side."
+    }
+  ],
+  "teacherFacingChecklist": [
+    "Có đủ 8 mục giáo án ưu tiên.",
+    "Mỗi hoạt động có mục tiêu, nội dung, sản phẩm, tổ chức thực hiện.",
+    "Nhãn dữ liệu tự động, không cho giáo viên tự chọn verified.",
+    "Nếu seed/scaffold/custom_teacher_input thì chỉ là khung an toàn, không sinh kiến thức sâu.",
+    "Học liệu cần source/license/attribution/approval status/takedown.",
+    "Không copy dài SGK/tài liệu bản quyền; giáo viên kiểm tra trước khi dùng."
+  ],
+  "claimPolicy": {
+    "canClaim": [
+      "Có demo offline mở trực tiếp được với preview giáo án in được.",
+      "Có nút tải TXT và tải HTML in được ở mức client-side/offline.",
+      "Có checklist an toàn giáo viên dễ hiểu hơn, không chỉ marker kỹ thuật.",
+      "Batch108 guard vẫn giữ: không Tiếng Việt + Phân số, không chọn verified bằng tay, không sinh nội dung sâu."
+    ],
+    "cannotClaim": [
+      "Không claim DOCX/PDF server-side đã pass runtime.",
+      "Không claim hosted demo pass khi chưa có hosted URL smoke thật.",
+      "Không claim production-ready hoặc dùng chính thức không cần sửa.",
+      "Không claim dữ liệu học thuật verified 1-12."
+    ]
+  },
+  "guardrails": {
+    "aiUsed": false,
+    "addsAiDependency": false,
+    "createsVerifiedData": false,
+    "contentDepthAllowed": false,
+    "serverSideDocxPdfProof": false,
+    "hostedRuntimeClaimed": false
+  },
+  "nextAfterBatch109": [
+    "Nếu có Vercel/npm log thật: làm Real Vercel Runtime Fix.",
+    "Nếu chưa có log thật: mở rộng Lesson Composer section editor hoặc làm DOCX/PDF export structure source-level, nhưng vẫn không claim runtime pass."
+  ]
+}

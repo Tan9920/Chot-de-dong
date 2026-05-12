@@ -1,0 +1,66 @@
+name: Demo Runtime Verify
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-demo-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_DEMO_MODE: "true"
+      GIAOAN_DEMO_MODE: "true"
+      GIAOAN_ALLOW_DEMO_LOGIN: "true"
+      GIAOAN_PUBLIC_TEST_MODE: "limited"
+      GIAOAN_SMOKE_MODE: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      APP_URL: ${{ secrets.GIAOAN_DEMO_URL }}
+      NEXT_PUBLIC_APP_URL: ${{ secrets.GIAOAN_DEMO_URL }}
+      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Diagnose public registry
+        run: npm run registry:diagnose
+
+      - name: Normalize lockfile registry
+        run: npm run lockfile:public-registry
+
+      - name: Install dependencies cleanly
+        run: npm run install:clean
+
+      - name: Check Next SWC readiness
+        run: npm run next:swc-ready
+
+      - name: P0 98-99 local runtime verification on Node 24
+        run: npm run verify:p0-9899-node24-ci
+
+      - name: Release verification with optional hosted URL smoke
+        run: npm run verify:release
+
+      - name: Strict hosted release gate when demo URL secret exists
+        run: |
+          if [ -n "$APP_URL" ]; then
+            npm run verify:release:strict
+          else
+            echo "SKIP strict hosted release gate because GIAOAN_DEMO_URL secret is empty. Public rollout remains blocked."
+          fi
+
+      - name: Upload verification artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-runtime-verify-artifacts
+          path: artifacts/*.json
+          if-no-files-found: ignore

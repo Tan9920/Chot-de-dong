@@ -1,0 +1,154 @@
+{
+  "batch": "Batch139 — P0/P1 Stability Gate with Local Evidence Lift",
+  "version": "0.139.0",
+  "phase": "P0/P1 stabilization before feature expansion",
+  "sourceLevelOnly": true,
+  "selectedBecause": "Batch139 strengthens the previous P0/P1 stability gate by replacing manual local proof notes with current-run command evidence artifacts and a local evidence runner.",
+  "scope": [
+    "Keep P0 build/runtime/hosted proof above new feature work.",
+    "Allow only guarded P1 source work when local P0 evidence is clean.",
+    "Block public P1 rollout until Node24, APP_URL hosted smoke, visual smoke, security and policy evidence pass.",
+    "Keep No-AI, no payment, no fake verified data, and no auto-public community guardrails."
+  ],
+  "localP0RequiredEvidence": [
+    {
+      "id": "source_validate",
+      "label": "Source validator registry pass",
+      "command": "npm run source:validate",
+      "artifact": "data/source-validate-last-run.json",
+      "required": true
+    },
+    {
+      "id": "data_validate",
+      "label": "JSON/data validation evidence artifact",
+      "command": "npm run p0-p1:data-evidence",
+      "artifact": "artifacts/p0-p1-data-validate-evidence-last-run.json",
+      "required": true
+    },
+    {
+      "id": "typecheck_artifact",
+      "label": "TypeScript typecheck evidence artifact",
+      "command": "npm run p0-p1:typecheck-evidence",
+      "artifact": "artifacts/p0-p1-typecheck-evidence-last-run.json",
+      "required": true
+    },
+    {
+      "id": "next_swc_artifact",
+      "label": "Next/SWC readiness evidence artifact",
+      "command": "npm run p0-p1:swc-evidence",
+      "artifact": "artifacts/p0-p1-next-swc-evidence-last-run.json",
+      "required": true
+    },
+    {
+      "id": "artifact_hygiene_artifact",
+      "label": "Artifact hygiene evidence artifact (recommended before ZIP packaging)",
+      "command": "npm run p0-p1:artifact-hygiene-evidence",
+      "artifact": "artifacts/p0-p1-artifact-hygiene-evidence-last-run.json",
+      "required": false,
+      "recommended": true
+    },
+    {
+      "id": "route_contract_artifact",
+      "label": "Route contract evidence artifact",
+      "command": "npm run p0-p1:route-contract-evidence",
+      "artifact": "artifacts/p0-p1-route-contract-evidence-last-run.json",
+      "required": true
+    },
+    {
+      "id": "runtime_preflight_artifact",
+      "label": "Runtime preflight evidence artifact (recommended before ZIP packaging)",
+      "command": "npm run p0-p1:runtime-preflight-evidence",
+      "artifact": "artifacts/p0-p1-runtime-preflight-evidence-last-run.json",
+      "required": false,
+      "recommended": true
+    },
+    {
+      "id": "guarded_build",
+      "label": "Guarded Next build artifact readiness",
+      "command": "GIAOAN_BUILD_TRACE_GRACE_MS=0 GIAOAN_BUILD_ARTIFACT_READY_GRACE_MS=0 npm run build",
+      "artifact": "artifacts/next-build-runtime-guard-last-run.json",
+      "required": true
+    },
+    {
+      "id": "live_smoke_clean",
+      "label": "Production-mode local live smoke",
+      "command": "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+      "artifact": "artifacts/live-http-smoke-last-run.json",
+      "required": true
+    },
+    {
+      "id": "auth_invite_runtime_smoke",
+      "label": "Auth/invite runtime smoke blocks role self-elevation",
+      "command": "npm run auth-invite:runtime-smoke",
+      "artifact": "artifacts/auth-invite-runtime-smoke-last-run.json",
+      "required": true
+    },
+    {
+      "id": "loopback_hosted_style_smoke",
+      "label": "Loopback hosted-style URL smoke",
+      "command": "npm run runtime:p0-loopback-url-smoke",
+      "artifact": "artifacts/p0-loopback-url-smoke-last-run.json",
+      "required": true
+    }
+  ],
+  "hostedPublicRequiredEvidence": [
+    {
+      "id": "node24_ci",
+      "label": "Node24 CI/deploy proof",
+      "command": "npm run verify:p0-deepest-node24-ci",
+      "artifact": "artifacts/runtime-p0-hosted-ci-final-proof-report-last-run.json",
+      "required": true
+    },
+    {
+      "id": "app_url_strict_smoke",
+      "label": "APP_URL strict hosted smoke",
+      "command": "APP_URL=https://<vercel-url> npm run verify:release:strict",
+      "artifact": "artifacts/verify-release-last-run.json",
+      "required": true
+    },
+    {
+      "id": "visual_smoke_evidence",
+      "label": "Real browser visual smoke evidence",
+      "command": "npm run visual:smoke:evidence-validate",
+      "artifact": "artifacts/visual-smoke-evidence.json",
+      "required": true
+    },
+    {
+      "id": "public_rollout_readiness",
+      "label": "Public rollout readiness board allows rollout",
+      "command": "npm run public-rollout:readiness-report",
+      "artifact": "artifacts/public-rollout-readiness-report-last-run.json",
+      "required": true
+    }
+  ],
+  "p1FoundationRequiredEvidence": [
+    {
+      "id": "security_data_protection_report",
+      "label": "Security/Data Protection Foundation report",
+      "command": "npm run security:data-protection-report",
+      "artifact": "artifacts/security-data-protection-report-last-run.json",
+      "required": true
+    },
+    {
+      "id": "auth_invite_runtime_smoke",
+      "label": "Role/admin invite runtime smoke",
+      "command": "npm run auth-invite:runtime-smoke",
+      "artifact": "artifacts/auth-invite-runtime-smoke-last-run.json",
+      "required": true
+    }
+  ],
+  "claimPolicy": {
+    "allowed": [
+      "P0/P1 source stability guard exists.",
+      "P1 source work can be planned only when local P0 evidence is clean.",
+      "Public rollout remains blocked unless hosted, Node24, visual and policy evidence pass.",
+      "Batch139 local P0/P1 evidence uses command artifacts instead of manual pass notes for typecheck/SWC/preflight checks."
+    ],
+    "blocked": [
+      "Không nói production-ready.",
+      "Không nói public rollout đã mở nếu missing hosted evidence.",
+      "Không gọi P1 ổn định nếu auth/security smoke chưa chạy lại.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ]
+  }
+}

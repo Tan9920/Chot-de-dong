@@ -1,0 +1,142 @@
+{
+  "version": "2026-04-30.batch87-controlled-demo-feedback-loop",
+  "updatedAt": "2026-04-30T18:45:00.000Z",
+  "purpose": "Controlled teacher testing package for the hosted demo. It turns a shared link into a guided, evidence-based test without claiming production readiness.",
+  "positioning": {
+    "publicSentence": "Đây là bản demo kiểm thử có kiểm soát của nền tảng soạn giáo án, xuất Word/PDF, lưu nháp và kiểm nguồn; không phải sản phẩm production-ready.",
+    "mustSay": [
+      "Giáo viên phải kiểm tra nội dung trước khi dùng thật.",
+      "Dữ liệu seed/scaffold chỉ dùng dựng khung an toàn.",
+      "Demo dùng để phát hiện lỗi luồng, giao diện, export và cảnh báo dữ liệu."
+    ],
+    "mustNotSay": [
+      "AI tạo giáo án chuẩn",
+      "chuẩn Bộ 100%",
+      "dùng ngay không cần sửa",
+      "không vi phạm bản quyền",
+      "cộng đồng public tự do",
+      "đăng tài liệu là có tiền"
+    ],
+    "nonAiCore": true,
+    "teacherFinalReviewRequired": true
+  },
+  "allowedTesterGroups": [
+    {
+      "id": "internal_owner",
+      "label": "Người làm dự án",
+      "scope": "Kiểm install/build/deploy/log và các route kỹ thuật trước khi gửi giáo viên."
+    },
+    {
+      "id": "trusted_teacher_small_group",
+      "label": "Nhóm giáo viên tin cậy 3–10 người",
+      "scope": "Kiểm luồng sử dụng thật, xuất file, dễ hiểu, cảnh báo dữ liệu; chưa chia rộng."
+    },
+    {
+      "id": "subject_reviewer",
+      "label": "Người góp ý chuyên môn",
+      "scope": "Chỉ góp ý cấu trúc, nhãn dữ liệu, mức an toàn; không coi seed/scaffold là đã duyệt."
+    }
+  ],
+  "beforeSharingChecklist": [
+    {
+      "id": "vercel_build_passed",
+      "label": "Vercel build/deploy đã pass, không còn lỗi build chết.",
+      "evidence": "Ảnh/log deployment thành công."
+    },
+    {
+      "id": "hosted_url_smoke_passed",
+      "label": "Domain thật đã chạy hosted:url-smoke pass.",
+      "evidence": "artifacts/hosted-demo-url-smoke-last-run.json hoặc log CI."
+    },
+    {
+      "id": "launch_gate_reviewed",
+      "label": "/api/demo/launch-gate không có source blocker; nếu còn must_run_on_host thì chưa chia rộng.",
+      "evidence": "Ảnh API hoặc panel launch gate."
+    },
+    {
+      "id": "no_overclaim_copy",
+      "label": "Nội dung gửi tester ghi rõ demo chưa production-ready và giáo viên phải kiểm tra.",
+      "evidence": "Tin nhắn mời test."
+    },
+    {
+      "id": "feedback_channel_ready",
+      "label": "Có nơi thu feedback: form, chat nhóm, Google Sheet hoặc tin nhắn có mẫu.",
+      "evidence": "Link/kênh nhận feedback."
+    }
+  ],
+  "testerTasks": [
+    {
+      "id": "mobile_open",
+      "title": "Mở demo trên điện thoại",
+      "persona": "Giáo viên phổ thông dùng Android/iPhone",
+      "steps": ["Mở link bằng Chrome/Safari mobile.", "Xem hero, cam kết demo trung thực, form chọn bài.", "Chụp ảnh nếu chữ nhỏ, vỡ bố cục hoặc khó bấm."],
+      "successEvidence": ["Trang mở dưới 10 giây trên mạng thường.", "Không có màn hình trắng.", "Nút chính bấm được."],
+      "riskFlags": ["Giao diện quá kỹ thuật.", "Không đọc được cảnh báo demo."]
+    },
+    {
+      "id": "create_grade1_frame",
+      "title": "Tạo khung bài lớp 1",
+      "persona": "Giáo viên tiểu học",
+      "steps": ["Chọn lớp 1, môn Tiếng Việt hoặc Toán.", "Nhập chủ đề đơn giản.", "Bấm tạo khung giáo án."],
+      "successEvidence": ["Khung có câu lệnh ngắn, hoạt động trực quan, nhiều hỗ trợ.", "Không tự bịa nội dung sâu nếu thiếu dữ liệu."],
+      "riskFlags": ["Dùng phong cách THCS/THPT cho lớp 1.", "Thiếu cảnh báo nguồn/dữ liệu."]
+    },
+    {
+      "id": "create_grade5_transition",
+      "title": "Tạo khung lớp 5 chuyển tiếp",
+      "persona": "Giáo viên cuối cấp tiểu học",
+      "steps": ["Chọn lớp 5.", "Kiểm tra phần phân hóa và vận dụng."],
+      "successEvidence": ["Có hoạt động rõ, vừa sức, không quá trừu tượng."],
+      "riskFlags": ["Nhảy sang phong cách THCS quá sớm."]
+    },
+    {
+      "id": "create_grade10_frame",
+      "title": "Tạo khung THPT/lớp 10",
+      "persona": "Giáo viên THPT",
+      "steps": ["Chọn lớp 10 và một môn bất kỳ.", "Kiểm tra yêu cầu cần đạt, hoạt động, sản phẩm, đánh giá."],
+      "successEvidence": ["Có định hướng tự học/lập luận/dự án ở mức phù hợp."],
+      "riskFlags": ["Template quá tiểu học hoặc thiếu minh chứng đánh giá."]
+    },
+    {
+      "id": "quality_check_export",
+      "title": "Chạy checklist và xuất DOCX/PDF",
+      "persona": "Giáo viên muốn lấy file",
+      "steps": ["Tạo khung bài.", "Chạy checklist chất lượng.", "Xuất DOCX và PDF.", "Mở file tải về."],
+      "successEvidence": ["File tải được, mở được, không lỗi font/bố cục lớn.", "Có nhãn bản nháp/cần kiểm tra."],
+      "riskFlags": ["File trắng/lỗi tải.", "Không có compliance/data label."]
+    },
+    {
+      "id": "save_restore_draft",
+      "title": "Lưu nháp và mở lại",
+      "persona": "Giáo viên dùng nhiều lần",
+      "steps": ["Tạo nội dung.", "Bấm lưu nháp.", "Reload trang.", "Mở lại bản đã lưu."],
+      "successEvidence": ["Bản nháp còn trong danh sách.", "Không mất nội dung chính."],
+      "riskFlags": ["Mất dữ liệu sau reload.", "Không rõ đang lưu server hay local fallback."]
+    }
+  ],
+  "feedbackQuestions": [
+    { "id": "first_impression", "type": "rating_1_5", "question": "Mở demo lần đầu có hiểu đây là web soạn giáo án/xuất file, không phải AI tạo chuẩn, không?" },
+    { "id": "ease_of_use", "type": "rating_1_5", "question": "Form tạo giáo án có dễ hiểu với giáo viên phổ thông không?" },
+    { "id": "export_quality", "type": "rating_1_5", "question": "DOCX/PDF tải về có đủ đẹp để góp ý tiếp không?" },
+    { "id": "trust_warning", "type": "rating_1_5", "question": "Cảnh báo dữ liệu seed/scaffold/cần giáo viên kiểm tra có đủ rõ không?" },
+    { "id": "blocking_bug", "type": "text", "question": "Lỗi nào khiến thầy/cô không thể test tiếp?" },
+    { "id": "most_useful", "type": "text", "question": "Tính năng nào hữu ích nhất trong bản demo này?" },
+    { "id": "too_technical", "type": "text", "question": "Phần nào đang quá kỹ thuật hoặc khó hiểu với giáo viên?" },
+    { "id": "missing_for_real_use", "type": "text", "question": "Muốn dùng thử thật thì còn thiếu gì nhất: mẫu đẹp, export, kho học liệu, phiếu, slide, lưu trữ, hay duyệt tổ?" }
+  ],
+  "severityGuide": [
+    { "level": "P0", "meaning": "Không mở được web, build/deploy chết, màn hình trắng, không tạo/xuất/lưu được ở mọi máy.", "action": "Dừng chia link và sửa ngay." },
+    { "level": "P1", "meaning": "Một luồng chính lỗi: tạo khung, lưu, DOCX/PDF, CSRF/session, mobile layout.", "action": "Sửa trước khi mời thêm tester." },
+    { "level": "P2", "meaning": "Giao diện khó hiểu, file chưa đẹp, cảnh báo chưa rõ, thiếu hướng dẫn.", "action": "Gom phản hồi và sửa trong batch UX/export." },
+    { "level": "P3", "meaning": "Góp ý tính năng mới hoặc nội dung học thuật cần review.", "action": "Đưa vào roadmap, không làm vội nếu chưa qua governance." }
+  ],
+  "safeSharingMessage": "Đây là bản demo kiểm thử có kiểm soát, chưa phải sản phẩm hoàn thiện. Nhờ thầy/cô thử mở web, tạo một khung giáo án, lưu nháp, xuất Word/PDF và báo lỗi giao diện/file tải/cảnh báo dữ liệu. Nội dung tạo ra chỉ là bản nháp tham khảo, giáo viên vẫn phải kiểm tra kiến thức, nguồn và chỉnh trước khi dùng thật.",
+  "evidenceToCollect": [
+    "Ảnh deployment success trên Vercel.",
+    "Log hosted:url-smoke pass/fail.",
+    "Ảnh mobile màn hình đầu.",
+    "Một file DOCX và một file PDF tải về.",
+    "Danh sách lỗi theo P0/P1/P2/P3.",
+    "3–10 phản hồi giáo viên đầu tiên."
+  ]
+}

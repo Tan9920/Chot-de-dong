@@ -1,0 +1,19 @@
+{
+  "batch": "Batch121 — Full Verify Chain Stability & Cache Hygiene",
+  "version": "0.121.0",
+  "priority": "P0 Runtime/Build Closure",
+  "problem": "Batch120 one-command verify could time out in constrained runs when raw Next build entered optimized build and generated heavy .next/cache/webpack packs; raw build evidence should remain strict while reducing cache-related instability.",
+  "controls": [
+    "Disable webpack filesystem cache in next.config.ts for production build diagnostics.",
+    "Clean .next/cache before raw build diagnostic starts.",
+    "Keep raw build closure strict: only finalized rawNextBuildExitCode 0 counts.",
+    "Keep hosted closure strict: GIAOAN_DEMO_URL smoke is still required for hosted proof.",
+    "Do not add AI, payment, marketplace, verified fake data, or community auto-publish."
+  ],
+  "blockedClaimsWithoutHostedUrl": [
+    "hostedClosed",
+    "productionReady",
+    "publicTeacherPilotReady"
+  ],
+  "noAiPaymentVerifiedFakeAdded": true
+}

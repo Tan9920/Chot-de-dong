@@ -1,0 +1,175 @@
+{
+  "version": "2026-05-04.batch111-official-curriculum-source-spine",
+  "updatedAt": "2026-05-04T00:00:00.000+07:00",
+  "batch": "Batch111 — Verified Academic 1–12 Readiness & Official Source Spine",
+  "purpose": "Tạo xương sống nguồn chính thống để bắt đầu nâng Verified học thuật thật 1–12 theo evidence/reviewer/release gate, không copy dài SGK và không tự nâng nhãn verified.",
+  "noContentImported": true,
+  "teacherFacingPromise": "Đã có lớp dữ liệu nguồn chính thống để đội nội dung đối chiếu. Đây chưa phải verified bài học; giáo viên vẫn cần kiểm tra trước khi dùng.",
+  "sourceUsePolicy": {
+    "allowed": [
+      "Lưu metadata văn bản chính thống, số/ký hiệu, ngày ban hành, phạm vi áp dụng và locator nguồn.",
+      "Dùng làm source spine để reviewer đối chiếu scope lớp/môn/chủ đề.",
+      "Dùng làm evidence bắt buộc trước khi xét reviewed/foundation hoặc verified/release."
+    ],
+    "notAllowed": [
+      "Không copy dài phụ lục/chương trình/SGK/sách giáo viên vào database.",
+      "Không tự chuyển mọi scope 1–12 thành verified chỉ vì đã có văn bản chương trình tổng thể.",
+      "Không tạo câu hỏi, đáp án, Casio hoặc kiến thức sâu khi chưa có source pack + reviewer cho bài cụ thể."
+    ]
+  },
+  "officialSources": [
+    {
+      "id": "moet-tt32-2018-ctgdpt",
+      "title": "Thông tư 32/2018/TT-BGDĐT ban hành Chương trình giáo dục phổ thông",
+      "issuer": "Bộ Giáo dục và Đào tạo",
+      "documentNumber": "32/2018/TT-BGDĐT",
+      "issuedAt": "2018-12-26",
+      "effectiveAt": "2019-02-15",
+      "sourceType": "official_public_curriculum_document",
+      "locator": "https://moet.gov.vn/content/vanban/Lists/VBPQ/Attachments/1301/TT%2032.2018%20CTGDPT.pdf",
+      "coverage": [
+        "general_education_program",
+        "grade_1_to_12",
+        "subject_program_spine"
+      ],
+      "legalUse": "official_public_metadata_only",
+      "contentImportPolicy": "metadata_mapping_short_excerpt_only",
+      "verificationValue": "root_program_spine",
+      "stillRequires": [
+        "subject_specific_mapping",
+        "lesson_or_topic_mapping",
+        "reviewer_signoff",
+        "license_attribution_check",
+        "release_gate"
+      ]
+    },
+    {
+      "id": "gov-tt20-2021-ctgdpt-amendment",
+      "title": "Thông tư 20/2021/TT-BGDĐT sửa đổi, bổ sung Điều 3 Thông tư 32/2018/TT-BGDĐT",
+      "issuer": "Bộ Giáo dục và Đào tạo",
+      "documentNumber": "20/2021/TT-BGDĐT",
+      "issuedAt": "2021-07-01",
+      "effectiveAt": "2021-08-16",
+      "sourceType": "official_public_curriculum_amendment",
+      "locator": "https://vanban.chinhphu.vn/default.aspx?docid=203766&pageid=27160",
+      "coverage": [
+        "implementation_timeline",
+        "ctgdpt_amendment"
+      ],
+      "legalUse": "official_public_metadata_only",
+      "contentImportPolicy": "metadata_mapping_short_excerpt_only",
+      "verificationValue": "amendment_spine",
+      "stillRequires": [
+        "check_current_effect",
+        "subject_specific_mapping",
+        "reviewer_signoff",
+        "release_gate"
+      ]
+    },
+    {
+      "id": "gov-tt13-2022-ctgdpt-amendment",
+      "title": "Thông tư 13/2022/TT-BGDĐT sửa đổi, bổ sung một số nội dung trong Chương trình giáo dục phổ thông",
+      "issuer": "Bộ Giáo dục và Đào tạo",
+      "documentNumber": "13/2022/TT-BGDĐT",
+      "issuedAt": "2022-08-03",
+      "effectiveAt": "2022-08-03",
+      "sourceType": "official_public_curriculum_amendment",
+      "locator": "https://chinhphu.vn/?docid=206343&pageid=27160",
+      "coverage": [
+        "ctgdpt_amendment",
+        "general_program_update"
+      ],
+      "legalUse": "official_public_metadata_only",
+      "contentImportPolicy": "metadata_mapping_short_excerpt_only",
+      "verificationValue": "amendment_spine",
+      "stillRequires": [
+        "check_current_effect",
+        "subject_specific_mapping",
+        "reviewer_signoff",
+        "release_gate"
+      ]
+    },
+    {
+      "id": "gov-tt17-2025-ctgdpt-amendment",
+      "title": "Thông tư 17/2025/TT-BGDĐT sửa đổi, bổ sung một số nội dung trong Chương trình giáo dục phổ thông",
+      "issuer": "Bộ Giáo dục và Đào tạo",
+      "documentNumber": "17/2025/TT-BGDĐT",
+      "issuedAt": "2025-09-12",
+      "effectiveAt": "2025-09-12",
+      "sourceType": "official_public_curriculum_amendment_current_check_required",
+      "locator": "https://vanban.chinhphu.vn/?docid=215347&pageid=27160",
+      "coverage": [
+        "lich_su_va_dia_li_tieu_hoc",
+        "lich_su_va_dia_li_thcs",
+        "lich_su_lop_10",
+        "dia_li",
+        "giao_duc_cong_dan"
+      ],
+      "legalUse": "official_public_metadata_only",
+      "contentImportPolicy": "metadata_mapping_short_excerpt_only",
+      "verificationValue": "latest_known_amendment_spine_as_of_2026_05_04",
+      "stillRequires": [
+        "check_current_effect_before_release",
+        "subject_specific_mapping",
+        "reviewer_signoff",
+        "release_gate"
+      ]
+    }
+  ],
+  "gradeBandSourceSpine": [
+    {
+      "gradeBand": "primary_1_5",
+      "grades": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "rootSourceIds": [
+        "moet-tt32-2018-ctgdpt",
+        "gov-tt13-2022-ctgdpt-amendment",
+        "gov-tt17-2025-ctgdpt-amendment"
+      ],
+      "note": "TT17/2025 đặc biệt cần đối chiếu khi scope liên quan Lịch sử và Địa lí cấp tiểu học."
+    },
+    {
+      "gradeBand": "lower_secondary_6_9",
+      "grades": [
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "rootSourceIds": [
+        "moet-tt32-2018-ctgdpt",
+        "gov-tt13-2022-ctgdpt-amendment",
+        "gov-tt17-2025-ctgdpt-amendment"
+      ],
+      "note": "TT17/2025 đặc biệt cần đối chiếu khi scope liên quan Lịch sử và Địa lí THCS."
+    },
+    {
+      "gradeBand": "upper_secondary_10_12",
+      "grades": [
+        "10",
+        "11",
+        "12"
+      ],
+      "rootSourceIds": [
+        "moet-tt32-2018-ctgdpt",
+        "gov-tt13-2022-ctgdpt-amendment",
+        "gov-tt17-2025-ctgdpt-amendment"
+      ],
+      "note": "TT17/2025 đặc biệt cần đối chiếu với Lịch sử lớp 10, Địa lí và Giáo dục công dân/GDKT&PL tùy scope."
+    }
+  ],
+  "releaseRule": "Một scope chỉ được nâng reviewed/verified khi có source pack cho bài/chủ đề cụ thể, reviewer thật, legal/license check, approved references, export compliance label và release gate mở.",
+  "neverAutoUpgradeStatuses": [
+    "seed",
+    "scaffold",
+    "community",
+    "teacher_input",
+    "legacy_reference",
+    "unmapped"
+  ]
+}

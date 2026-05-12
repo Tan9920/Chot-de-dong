@@ -1,0 +1,103 @@
+{
+  "version": "2026-05-05.batch113-first-source-pack-release-dry-run",
+  "updatedAt": "2026-05-05T00:00:00.000+07:00",
+  "batch": "Batch113 — First Source Pack Pilot Dossier & Legal Release Dry-run",
+  "purpose": "Tạo release dry-run cho một số scope nhỏ để kiểm tra đủ nguồn hợp pháp, legal/copyright, reviewer chuyên môn, export label, takedown và audit log trước khi nâng reviewed/verified. Batch113 không cập nhật subject-data-registry và không bật contentDepthAllowed.",
+  "registryMutationPolicy": {
+    "registryMutationsInBatch113": 0,
+    "fakeVerifiedCreated": 0,
+    "fakeContentDepthCreated": 0,
+    "allowedNow": false,
+    "reason": "Release dry-run only; không mutate registry."
+  },
+  "pilotScopePolicy": {
+    "maxScopes": 3,
+    "allowedReleaseDecision": "dry_run_only_no_registry_mutation",
+    "teacherFacingFallback": "Chỉ dựng khung giáo án an toàn; giáo viên nhập/chọn nội dung hợp pháp trước khi dạy thật."
+  },
+  "releaseGateChecklist": [
+    {
+      "id": "registry_scope_exists",
+      "required": true
+    },
+    {
+      "id": "source_pack_exists",
+      "required": true
+    },
+    {
+      "id": "source_pack_ready_for_reviewed_candidate",
+      "required": true
+    },
+    {
+      "id": "copyright_legal_ready",
+      "required": true
+    },
+    {
+      "id": "current_law_check_complete",
+      "required": true
+    },
+    {
+      "id": "academic_reviewer_signoff",
+      "required": true
+    },
+    {
+      "id": "legal_reviewer_signoff",
+      "required": true
+    },
+    {
+      "id": "approved_reference_count",
+      "required": true
+    },
+    {
+      "id": "export_label_ready",
+      "required": true
+    },
+    {
+      "id": "no_deep_content_without_verified_release",
+      "required": true
+    },
+    {
+      "id": "audit_log_ready",
+      "required": true
+    }
+  ],
+  "pilotScopes": [
+    {
+      "scopeId": "g5-toan",
+      "sourcePackId": "source-draft-g5-toan",
+      "grade": "5",
+      "subject": "Toán",
+      "topic": "Chủ đề chuyển tiếp tiểu học",
+      "expectedDecision": "blocked_safe_frame_only"
+    },
+    {
+      "scopeId": "g9-ngu-van",
+      "sourcePackId": "source-draft-g9-ngu-van",
+      "grade": "9",
+      "subject": "Ngữ văn",
+      "topic": "Chủ đề ôn thi vào 10 hoặc bài học cụ thể",
+      "expectedDecision": "blocked_safe_frame_only"
+    },
+    {
+      "scopeId": "g12-toan",
+      "sourcePackId": "source-draft-g12-toan",
+      "grade": "12",
+      "subject": "Toán",
+      "topic": "Chuyên đề hoặc ôn thi THPT",
+      "expectedDecision": "blocked_safe_frame_only"
+    }
+  ],
+  "blockedClaims": [
+    "Không nói đã verified học thuật thật cho scope pilot.",
+    "Không nói đã legal-ready nếu source pack thiếu license/reviewer/takedown/current law check.",
+    "Không copy dài SGK/SGV/văn bản đọc hiểu/đề/đáp án thương mại.",
+    "Không bật contentDepthAllowed, câu hỏi sâu, đáp án, Casio hoặc export chính thức khi dry-run chưa pass."
+  ],
+  "nextEvidenceNeeded": [
+    "source pack cụ thể theo bài/chủ đề với metadata/locator hợp pháp",
+    "license/permissionBasis/attribution/takedownContact",
+    "reviewer chuyên môn thật và legal reviewer thật",
+    "approved references và assessment items reviewed",
+    "export label/appendix compliance"
+  ]
+}

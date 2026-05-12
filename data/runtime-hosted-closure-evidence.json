@@ -1,0 +1,102 @@
+{
+  "version": "batch106-real-hosted-runtime-closure",
+  "batch": "Batch106 — Real Hosted Runtime Closure / Vercel Log Fix",
+  "updatedAt": "2026-05-03T00:00:00.000Z",
+  "purpose": "Turn Batch105 runtime/deploy closure gate into a stricter hosted-runtime evidence board that captures registry/install/Next/SWC/build/local smoke/auth smoke/hosted URL/browser QA proof before any teacher-test claim.",
+  "sourceOfTruthRule": "Runtime/build/hosted claims are allowed only after concrete artifacts or logs prove each gate. Source-level validators are not runtime proof.",
+  "requiredProofChain": [
+    {
+      "id": "registry_diagnose",
+      "label": "Public npm registry reachable",
+      "command": "npm run registry:diagnose",
+      "requiredArtifact": "fresh command output with ok=true",
+      "blocksTeacherTest": true,
+      "teacherMeaning": "Nếu registry không tới được thì không thể cài dependency sạch để build demo."
+    },
+    {
+      "id": "install_clean",
+      "label": "Clean dependency install completed",
+      "command": "npm run install:clean",
+      "requiredArtifact": "node_modules + package-lock-consistent npm ci exit 0",
+      "blocksTeacherTest": true,
+      "teacherMeaning": "Dependency phải cài đủ, không được chỉ có node_modules tạm/incomplete."
+    },
+    {
+      "id": "next_swc_ready",
+      "label": "Next binary and SWC package ready",
+      "command": "npm run next:swc-ready",
+      "requiredArtifact": "node_modules/.bin/next and platform @next/swc package exist",
+      "blocksTeacherTest": true,
+      "teacherMeaning": "Nếu thiếu Next/SWC thì build sẽ fail, không gọi là demo chạy thật."
+    },
+    {
+      "id": "build_clean",
+      "label": "Production build completed",
+      "command": "npm run build:clean",
+      "requiredArtifact": ".next/BUILD_ID exists after build",
+      "blocksTeacherTest": true,
+      "teacherMeaning": "Phải có build production thật trước khi đưa link cho giáo viên."
+    },
+    {
+      "id": "live_smoke_clean",
+      "label": "Local production HTTP smoke passed",
+      "command": "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+      "requiredArtifact": "live smoke ok=true",
+      "blocksTeacherTest": true,
+      "teacherMeaning": "Build phải chạy được bằng HTTP thật, không chỉ typecheck."
+    },
+    {
+      "id": "auth_invite_runtime_smoke",
+      "label": "Auth/invite runtime smoke passed",
+      "command": "npm run auth-invite:runtime-smoke",
+      "requiredArtifact": "auth invite smoke ok=true",
+      "blocksTeacherTest": true,
+      "teacherMeaning": "Luồng tài khoản/mời tổ không được chỉ đúng ở source-level."
+    },
+    {
+      "id": "hosted_url_smoke",
+      "label": "Hosted URL smoke passed",
+      "command": "GIAOAN_DEMO_URL=https://... npm run hosted:url-smoke",
+      "requiredArtifact": "artifacts/hosted-demo-url-smoke-last-run.json ok=true for the real hosted URL",
+      "blocksTeacherTest": true,
+      "teacherMeaning": "Phải test URL host thật, không suy luận từ local."
+    },
+    {
+      "id": "browser_qa_mobile_desktop",
+      "label": "Browser QA on mobile and desktop captured",
+      "command": "manual QA: mobile + desktop screenshots/logs",
+      "requiredArtifact": "evidence note/screenshot/log, not required for source-level but required before wider tester rollout",
+      "blocksTeacherTest": false,
+      "teacherMeaning": "Sau khi hosted smoke pass vẫn cần nhìn UI thật trên điện thoại/máy tính."
+    }
+  ],
+  "knownBlockersFromBatch105": [
+    "registry:diagnose failed with EAI_AGAIN/fetch failed in audit environment",
+    "install:clean timed out or produced incomplete node_modules in prior audit",
+    "next:swc-ready failed when node_modules/.bin/next was missing",
+    "build:clean failed when next binary was not found",
+    "live:smoke:clean and auth-invite:runtime-smoke were blocked by dependencies_missing",
+    "hosted:url-smoke was not strict-run without GIAOAN_DEMO_URL"
+  ],
+  "claimPolicy": {
+    "sourceLevelAllowed": true,
+    "buildPassRequires": ["next_swc_ready", "build_clean"],
+    "runtimePassRequires": ["build_clean", "live_smoke_clean", "auth_invite_runtime_smoke"],
+    "hostedPassRequires": ["hosted_url_smoke"],
+    "teacherSmallGroupTestRequires": ["registry_diagnose", "install_clean", "next_swc_ready", "build_clean", "live_smoke_clean", "auth_invite_runtime_smoke", "hosted_url_smoke"],
+    "productionReady": false
+  },
+  "forbiddenClaims": [
+    "Không nói production-ready.",
+    "Không nói hosted demo đã ổn nếu chưa có hosted URL smoke ok=true cho URL thật.",
+    "Không nói build pass nếu chưa có .next/BUILD_ID sau npm run build:clean.",
+    "Không nói runtime pass nếu live smoke/auth smoke chưa pass.",
+    "Không nói dữ liệu học thuật 1-12 đã verified vì Batch106 không nâng verified data.",
+    "Không nói app là AI tạo giáo án chuẩn."
+  ],
+  "allowedClaims": [
+    "Có Batch106 hosted runtime closure board để phân loại blocker registry/install/Next/SWC/build/smoke/hosted.",
+    "Có thể dán Vercel/npm/build log vào POST /api/runtime/hosted-closure để phân loại blocker ở chế độ dry-run.",
+    "Batch106 không thêm AI, không thêm payment, không nâng dữ liệu verified giả."
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "version": "2026-05-03.batch104-academic-source-pack-intake",
+  "updatedAt": "2026-05-03T00:00:00.000Z",
+  "batch": "Batch104 — Academic Source Pack Intake & Review Gate Foundation",
+  "purpose": "Tạo quy trình nhập-duyệt nguồn học thuật trước khi nâng bất kỳ scope 1–12 nào từ seed/developing sang reviewed/foundation. Batch104 không nâng registry thành verified và không tạo dữ liệu verified giả.",
+  "nonNegotiables": [
+    "Không tự sửa sourceStatus/reviewStatus/supportLevel/contentDepthAllowed để làm đẹp chỉ số coverage.",
+    "Không copy dài SGK/sách giáo viên/tài liệu bản quyền; source pack chỉ lưu metadata, mapping, trích yếu ngắn hợp pháp hoặc nội dung giáo viên tự sở hữu.",
+    "Một source pack thiếu license/attribution/takedown/reviewer không được phép vào reviewed/foundation.",
+    "Reviewer signoff phải có danh tính/vai trò/thời điểm; không dùng string demo để thay thế review thật.",
+    "Approved references phải là nguồn hợp pháp hoặc tài liệu do giáo viên/trường sở hữu quyền sử dụng.",
+    "Cơ chế takedown là bắt buộc trước khi học liệu/ảnh/tài nguyên được public.",
+    "Casio/máy tính cầm tay chỉ được mở khi có dữ liệu đã duyệt riêng hoặc giáo viên tự nhập chịu trách nhiệm."
+  ],
+  "sourcePackStages": [
+    "draft",
+    "metadata_ready",
+    "legal_hold",
+    "reviewer_queue",
+    "reviewed_candidate",
+    "release_candidate",
+    "rejected",
+    "taken_down"
+  ],
+  "requiredMetadata": [
+    "scopeId",
+    "grade",
+    "subject",
+    "book",
+    "topic",
+    "sourceType",
+    "sourceTitle",
+    "sourceOwner",
+    "sourceLocator",
+    "license",
+    "attribution",
+    "permissionBasis",
+    "shortExcerptPolicy",
+    "takedownContact",
+    "reviewerRole",
+    "reviewerId",
+    "reviewerSignoffAt",
+    "legalCheckStatus",
+    "releaseGateStatus",
+    "approvedReferences"
+  ],
+  "legalCheck": {
+    "allowedStatusesForReview": ["cleared", "teacher_owned", "official_public_metadata_only"],
+    "blockedStatuses": ["unknown", "missing", "copyright_risk", "needs_permission"],
+    "requiresNoLongCopyrightCopy": true,
+    "requiresAttributionBeforePublic": true,
+    "requiresTakedownPathBeforePublic": true
+  },
+  "reviewGate": {
+    "requiresReviewerIdentity": true,
+    "requiresReviewerRole": true,
+    "requiresReviewerSignoffAt": true,
+    "requiresApprovedReferenceCount": 1,
+    "requiresAssessmentItemReviewBeforeDeepContent": true,
+    "requiresExportComplianceLabel": true
+  },
+  "releaseGate": {
+    "allowedStatusBeforeRegistryChange": "release_candidate",
+    "requiresHumanDecision": true,
+    "requiresAuditLog": true,
+    "batch104DoesNotMutateRegistry": true,
+    "safeNextAction": "Sau khi source pack đạt release_candidate bằng bằng chứng thật, tạo batch riêng để cập nhật registry có audit log và rollback."
+  },
+  "teacherFacingPromiseAllowed": [
+    "Có quy trình nhập nguồn để chuẩn bị review học thuật.",
+    "Scope chưa đủ bằng chứng vẫn chỉ dựng khung giáo án an toàn.",
+    "Nguồn/ảnh/học liệu thiếu license hoặc takedown không được public."
+  ],
+  "forbiddenClaims": [
+    "Không nói Batch104 đã verified dữ liệu 1–12.",
+    "Không nói source pack demo là nguồn hợp pháp thật.",
+    "Không nói giáo án chuẩn Bộ/đúng 100%.",
+    "Không nói có thể sinh câu hỏi/đáp án/Casio sâu nếu chưa có review thật."
+  ]
+}

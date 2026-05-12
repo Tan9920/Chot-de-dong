@@ -1,0 +1,39 @@
+{
+  "batch": "Batch135 Plan Bridge UI Guardrails",
+  "version": "0.135.0",
+  "purpose": "Harden the Batch134 UI/features ported from the kế hoạch file so they do not look like production backend actions.",
+  "scope": "source_level_ui_hardening_only",
+  "notProductionClaims": [
+    "weekly schedule data remains UI sample until account-backed storage is implemented",
+    "resource save/report actions are source-level notices until backend/audit log exists",
+    "community moderation actions do not public/takedown real resources without backend audit",
+    "release gate must read /api/runtime/public-rollout-readiness when available"
+  ],
+  "actionContracts": [
+    {
+      "id": "weekly_prefill_only",
+      "area": "week",
+      "allowedNow": "prefill composer from sample lesson",
+      "blockedUntilBackend": ["persist schedule", "notify teacher/team", "mark lesson ready"]
+    },
+    {
+      "id": "resource_insert_guard",
+      "area": "resources",
+      "allowedNow": "add safe resource metadata into teacher note for eligible samples",
+      "blockedUntilBackend": ["public sharing", "community insert without license", "verified claim"]
+    },
+    {
+      "id": "moderation_notice_only",
+      "area": "moderation",
+      "allowedNow": "show decision notice and block high-risk approval",
+      "blockedUntilBackend": ["approve community", "takedown real item", "assign moderator role"]
+    },
+    {
+      "id": "dynamic_release_gate",
+      "area": "release",
+      "allowedNow": "display runtime public-rollout readiness API status",
+      "blockedUntilBackend": ["public rollout", "production-ready claim"]
+    }
+  ],
+  "forbiddenAdditions": ["AI SDK", "payment provider", "fake verified data", "auto-public community", "user self-selects admin/moderator role"]
+}

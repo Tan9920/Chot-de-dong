@@ -1,0 +1,81 @@
+{
+  "batch": "Batch130",
+  "phase": "P1 Security & Data Protection Foundation",
+  "status": "source_level_foundation_guarded_by_runtime_proof",
+  "publicRolloutAllowed": false,
+  "hostedProofRequired": true,
+  "node24ProofRequired": true,
+  "scope": {
+    "noAiCore": true,
+    "noPayment": true,
+    "noMarketplaceCash": true,
+    "noFakeVerifiedData": true,
+    "noAutoPublicCommunity": true,
+    "jsonFallbackIsDemoOnly": true
+  },
+  "controls": [
+    {
+      "id": "p1-auth-real-account-save-export",
+      "area": "account_core",
+      "required": true,
+      "evidence": ["lib/runtime-security.ts", "app/api/lessons/route.ts", "app/api/export/docx/route.ts", "app/api/export/pdf/route.ts"],
+      "summary": "Save/export routes must require a real password account via authAccountId; anonymous demo sessions can only preview/create safe frames."
+    },
+    {
+      "id": "p1-csrf-same-origin-write-routes",
+      "area": "route_security",
+      "required": true,
+      "evidence": ["lib/runtime-security.ts", "app/api/auth/register/route.ts", "app/api/auth/login/route.ts"],
+      "summary": "Write routes require same-origin and CSRF where appropriate; auth routes rate-limit and log blocked attempts."
+    },
+    {
+      "id": "p1-role-elevation-invite-only",
+      "area": "role_governance",
+      "required": true,
+      "evidence": ["lib/membership.ts", "app/api/auth/login/route.ts", "app/api/auth/register/route.ts"],
+      "summary": "Teacher is the default public role; leader/admin require existing membership or a valid invite."
+    },
+    {
+      "id": "p1-demo-session-fallback-bounded",
+      "area": "session_security",
+      "required": true,
+      "evidence": ["lib/auth.ts", "app/api/auth/csrf/route.ts"],
+      "summary": "Fallback demo sessions are limited to session-demo-* cookies only; arbitrary session-* cookies must not become a user."
+    },
+    {
+      "id": "p1-security-audit-ledger",
+      "area": "audit_log",
+      "required": true,
+      "evidence": ["lib/security-audit-log.ts", "data/security-audit-events.json"],
+      "summary": "Auth and export events are logged with actor, outcome, target/scope, request path and bounded metadata."
+    },
+    {
+      "id": "p1-personal-data-minimization-map",
+      "area": "privacy",
+      "required": true,
+      "evidence": ["data/security-data-protection-foundation-policy.json"],
+      "summary": "Policy maps teacher account/session/lesson/community/audit data and blocks student personal data from public/community/export-by-default."
+    }
+  ],
+  "personalDataMap": [
+    { "data": "teacher_email", "defaultVisibility": "private", "productionRequirement": "privacy_policy_delete_export_request_flow", "publicAllowed": false },
+    { "data": "teacher_display_name", "defaultVisibility": "private_or_user_controlled", "productionRequirement": "profile_visibility_control", "publicAllowed": "only_if_user_chooses" },
+    { "data": "auth_session_cookie", "defaultVisibility": "httpOnly_cookie", "productionRequirement": "secure_cookie_db_session_rotation_lockout", "publicAllowed": false },
+    { "data": "saved_lesson_content", "defaultVisibility": "owner_private", "productionRequirement": "ownership_permission_audit_versioning_backup", "publicAllowed": false },
+    { "data": "student_name_image_score", "defaultVisibility": "do_not_collect_or_private", "productionRequirement": "explicit_need_anonymization_consent_access_log", "publicAllowed": false },
+    { "data": "community_resource", "defaultVisibility": "submitted_or_reviewed", "productionRequirement": "moderation_source_license_takedown", "publicAllowed": "only_after_review" },
+    { "data": "security_audit_event", "defaultVisibility": "admin_only", "productionRequirement": "retention_policy_privacy_notice", "publicAllowed": false }
+  ],
+  "releaseBlockers": [
+    "No hosted APP_URL strict smoke proof yet.",
+    "No Node24 CI/Vercel proof yet in this environment.",
+    "JSON fallback auth/session/ledger is demo/runtime foundation only, not production DB-backed security.",
+    "No legal-reviewed Privacy Policy/Terms/IP takedown flow has been verified in product runtime.",
+    "No real visual browser smoke across mobile/tablet/desktop has been completed here."
+  ],
+  "founderAbsenceSafeMode": {
+    "ownerAbsentLongPeriodAction": "reduce_risk_only",
+    "blockedAutomation": ["auto_publish", "auto_verify", "auto_grant_admin", "permanent_delete", "auto_deploy_production", "enable_ai_or_payment"],
+    "allowedAutomation": ["scan", "queue", "auto_hold", "draft_patch", "warning", "audit_report"]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "batch": "Batch127 - P0 Final Runtime Closure Hardening",
+  "version": "0.128.0",
+  "priority": "P0",
+  "goal": "Push P0 local/runtime/build confidence before P1 source work by requiring deterministic Node 24/Vercel configuration, strict raw Next build evidence, live smoke, auth smoke, source/data/type gates, and explicit hosted-rollout separation. Batch128 keeps this final gate compatible with newer P0 hardening versions.",
+  "localP0FinalRequired": [
+    "package version 0.127.0",
+    "Node engine target 24.x and .node-version 24.x",
+    "vercel.json uses npm ci and npm run build",
+    "source validators pass",
+    "JSON data validators pass",
+    "TypeScript typecheck passes",
+    "Next binary and platform SWC package are present",
+    "strict raw Next build exits 0",
+    "required .next artifacts exist after current build",
+    "production live HTTP smoke passes after current build",
+    "auth invite runtime smoke passes after current build",
+    "no AI/payment/verified-fake additions"
+  ],
+  "node24RuntimeProof": {
+    "requiredForP0FinalClaim": true,
+    "script": "GIAOAN_REQUIRE_NODE24=1 npm run verify:p0-final",
+    "note": "Local sandbox may run Node 22, but CI/Vercel must prove Node 24 before stronger P0 closure is claimed."
+  },
+  "hostedRolloutProof": {
+    "requiredForPublicP1Rollout": true,
+    "script": "APP_URL=https://<vercel-url> npm run verify:release",
+    "blockedClaimsUntilHostedSmoke": [
+      "production-ready",
+      "public rollout ready",
+      "P1 public rollout allowed",
+      "hosted demo closed"
+    ]
+  },
+  "noAiPaymentVerifiedFakeAdded": true
+}

@@ -1,0 +1,173 @@
+{
+  "version": "0.101.0",
+  "updatedAt": "2026-05-02T12:00:00.000Z",
+  "purpose": "Batch101 no-AI operating runtime foundation: plan limits, usage ledger actions, export policy and source-level guardrails. This is not payment, not marketplace, not cash reward, and not production billing.",
+  "noAiCore": true,
+  "paymentEnabled": false,
+  "marketplaceCashEnabled": false,
+  "cashFundEnabled": false,
+  "multiLevelReferralEnabled": false,
+  "ledgerMode": "json_demo_runtime_with_memory_fallback",
+  "monthlyWindow": "calendar_month",
+  "defaultPlanId": "free_community",
+  "rolePlanMap": {
+    "teacher": "free_community",
+    "leader": "team_workspace_demo",
+    "admin": "school_workspace_demo"
+  },
+  "actions": {
+    "save_lesson": {
+      "label": "Lưu giáo án",
+      "unit": "lesson_save",
+      "requiresRealAccount": true,
+      "ledgerRequired": true
+    },
+    "export_docx": {
+      "label": "Xuất DOCX",
+      "unit": "docx_export",
+      "requiresRealAccount": true,
+      "ledgerRequired": true
+    },
+    "export_pdf": {
+      "label": "Xuất PDF",
+      "unit": "pdf_export",
+      "requiresRealAccount": true,
+      "ledgerRequired": true
+    },
+    "template_lesson": {
+      "label": "Tạo khung giáo án từ mẫu",
+      "unit": "template_lesson",
+      "requiresRealAccount": false,
+      "ledgerRequired": false
+    },
+    "worksheet_template": {
+      "label": "Phiếu học tập từ mẫu",
+      "unit": "worksheet_template",
+      "requiresRealAccount": true,
+      "ledgerRequired": true
+    },
+    "outline_slide_template": {
+      "label": "Slide dàn ý từ mẫu",
+      "unit": "outline_slide_template",
+      "requiresRealAccount": true,
+      "ledgerRequired": true
+    }
+  },
+  "plans": [
+    {
+      "id": "free_community",
+      "label": "Free Cộng Đồng",
+      "audience": "Giáo viên mới, sinh viên sư phạm, người dùng thử có thể dùng thật nhưng bị giới hạn xuất/lưu.",
+      "limits": {
+        "template_lesson": 50,
+        "save_lesson": 30,
+        "export_docx": 5,
+        "export_pdf": 10,
+        "worksheet_template": 10,
+        "outline_slide_template": 3
+      },
+      "exportPolicy": {
+        "pdfWatermark": true,
+        "docxWatermark": false,
+        "watermarkText": "Bản Free/demo — giáo viên kiểm tra nguồn và nội dung trước khi dùng chính thức",
+        "mustShowDataTruthLabel": true
+      },
+      "workflow": {
+        "teamApproval": false,
+        "complianceBoard": false,
+        "versioning": "basic"
+      }
+    },
+    {
+      "id": "teacher_pro_demo",
+      "label": "Giáo viên Pro demo",
+      "audience": "Giáo viên dùng thường xuyên; cấu hình demo để kiểm soát quyền lợi, chưa bật thu tiền thật.",
+      "limits": {
+        "template_lesson": 1000,
+        "save_lesson": 2000,
+        "export_docx": 300,
+        "export_pdf": 300,
+        "worksheet_template": 300,
+        "outline_slide_template": 150
+      },
+      "exportPolicy": {
+        "pdfWatermark": false,
+        "docxWatermark": false,
+        "watermarkText": "",
+        "mustShowDataTruthLabel": true
+      },
+      "workflow": {
+        "teamApproval": false,
+        "complianceBoard": "basic",
+        "versioning": "full"
+      }
+    },
+    {
+      "id": "team_workspace_demo",
+      "label": "Tổ chuyên môn demo",
+      "audience": "Tổ 5–10 giáo viên cần kho tổ, duyệt, comment và compliance board.",
+      "limits": {
+        "template_lesson": 5000,
+        "save_lesson": 8000,
+        "export_docx": 1200,
+        "export_pdf": 1200,
+        "worksheet_template": 1200,
+        "outline_slide_template": 600
+      },
+      "exportPolicy": {
+        "pdfWatermark": false,
+        "docxWatermark": false,
+        "watermarkText": "",
+        "mustShowDataTruthLabel": true
+      },
+      "workflow": {
+        "teamApproval": true,
+        "complianceBoard": true,
+        "versioning": "full"
+      }
+    },
+    {
+      "id": "school_workspace_demo",
+      "label": "Trường học demo",
+      "audience": "Nhà trường/pilot nội bộ; chưa phải hợp đồng triển khai thật.",
+      "limits": {
+        "template_lesson": 20000,
+        "save_lesson": 30000,
+        "export_docx": 5000,
+        "export_pdf": 5000,
+        "worksheet_template": 5000,
+        "outline_slide_template": 3000
+      },
+      "exportPolicy": {
+        "pdfWatermark": false,
+        "docxWatermark": false,
+        "watermarkText": "",
+        "mustShowDataTruthLabel": true
+      },
+      "workflow": {
+        "teamApproval": true,
+        "complianceBoard": true,
+        "versioning": "full",
+        "schoolDashboard": true
+      }
+    }
+  ],
+  "pointsPolicy": {
+    "enabled": true,
+    "cashRedemptionEnabled": false,
+    "allowedRedemptions": [
+      { "points": 100, "benefit": "+5 lượt DOCX", "action": "export_docx", "quantity": 5 },
+      { "points": 150, "benefit": "+10 phiếu học tập", "action": "worksheet_template", "quantity": 10 },
+      { "points": 200, "benefit": "+5 slide dàn ý", "action": "outline_slide_template", "quantity": 5 },
+      { "points": 300, "benefit": "7 ngày Pro trial", "action": "teacher_pro_trial_days", "quantity": 7 }
+    ]
+  },
+  "guardrails": [
+    "Không bán lượt AI/token/model trong giai đoạn đầu.",
+    "Quota chỉ kiểm soát lưu trữ/export/tính năng template, không phải thanh toán thật.",
+    "Không quy đổi điểm thành tiền mặt.",
+    "Không mở referral nhiều tầng.",
+    "Export vẫn phải giữ nhãn dữ liệu seed/scaffold/reviewed/verified và cảnh báo giáo viên kiểm tra.",
+    "JSON ledger chỉ là demo/runtime foundation; production cần database, migration, locking, backup và audit thật."
+  ]
+}

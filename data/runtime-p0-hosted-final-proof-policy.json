@@ -1,0 +1,126 @@
+{
+  "batch": "Batch143 — P0/P1 Final Closure Candidate & Visual Smoke Contract Harmonization",
+  "version": "0.143.0",
+  "phase": "P0 hosted/public proof",
+  "status": "source_level_gate_ready_hosted_public_still_blocked",
+  "publicRolloutAllowed": false,
+  "scope": [
+    "Node24 CI/Vercel proof chain",
+    "real hosted APP_URL strict smoke",
+    "browser visual smoke evidence for mobile/tablet/desktop",
+    "release claim blocker board",
+    "no feature expansion beyond proof tooling",
+    "Batch143 canonical visual viewport ids aligned with hosted proof/public rollout gates"
+  ],
+  "requiredGates": [
+    {
+      "id": "node24_ci",
+      "label": "Node 24 CI/Vercel runtime proof",
+      "required": true,
+      "command": "npm run verify:p0-deepest-node24-ci",
+      "evidenceArtifact": "artifacts/verify-p0-deepest-last-run.json",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "hosted_app_url_strict_smoke",
+      "label": "Hosted APP_URL strict smoke",
+      "required": true,
+      "command": "APP_URL=https://<vercel-url> npm run verify:release:strict",
+      "evidenceArtifact": "artifacts/smoke-url-strict-last-run.json",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "hosted_save_export_smoke",
+      "label": "Hosted real account save/export smoke",
+      "required": true,
+      "command": "GIAOAN_DEMO_URL=https://<vercel-url> npm run hosted:url-smoke",
+      "evidenceArtifact": "artifacts/hosted-demo-url-smoke-last-run.json",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "visual_smoke_breakpoints",
+      "label": "Visual smoke evidence at required breakpoints",
+      "required": true,
+      "command": "npm run visual:smoke:evidence-validate",
+      "evidenceArtifact": "artifacts/visual-smoke-evidence.json",
+      "blocksPublicRollout": true
+    },
+    {
+      "id": "release_final_chain",
+      "label": "Full P0 public release proof chain",
+      "required": true,
+      "command": "APP_URL=https://<vercel-url> npm run verify:p0-100-release",
+      "evidenceArtifact": "artifacts/verify-release-last-run.json",
+      "blocksPublicRollout": true
+    }
+  ],
+  "visualSmoke": {
+    "requiredViewports": [
+      {
+        "id": "mobile-360",
+        "width": 360,
+        "height": 740,
+        "deviceClass": "mobile"
+      },
+      {
+        "id": "mobile-390",
+        "width": 390,
+        "height": 844,
+        "deviceClass": "mobile"
+      },
+      {
+        "id": "mobile-430",
+        "width": 430,
+        "height": 932,
+        "deviceClass": "mobile"
+      },
+      {
+        "id": "tablet-768",
+        "width": 768,
+        "height": 1024,
+        "deviceClass": "tablet"
+      },
+      {
+        "id": "desktop-1366",
+        "width": 1366,
+        "height": 768,
+        "deviceClass": "desktop"
+      },
+      {
+        "id": "desktop-1440",
+        "width": 1440,
+        "height": 900,
+        "deviceClass": "desktop"
+      }
+    ],
+    "requiredFlows": [
+      "home_visible_no_horizontal_overflow",
+      "sidebar_or_bottom_nav_can_open_and_close",
+      "lesson_authoring_flow_visible",
+      "save_export_controls_visible_or_gated_clear",
+      "governance_labels_visible"
+    ],
+    "forbiddenVisualClaimsWithoutEvidence": [
+      "mobile_fixed",
+      "desktop_polished",
+      "teacher_ready_ui",
+      "hosted_demo_ready"
+    ],
+    "captureCommand": "APP_URL=https://<vercel-url> npm run visual:smoke:evidence-capture",
+    "canonicalViewportIds": "hyphenated: mobile-360/mobile-390/mobile-430/tablet-768/desktop-1366/desktop-1440"
+  },
+  "claimPolicy": {
+    "allowedWhenSourceOnly": [
+      "Có Batch131 source-level proof gate và evidence template",
+      "Biết rõ còn thiếu hosted/Node24/visual proof nếu chưa có artifact thật"
+    ],
+    "forbiddenUntilAllGatesPass": [
+      "production-ready",
+      "100%",
+      "public rollout ready",
+      "hosted demo closed",
+      "mobile/desktop visual smoke pass"
+    ]
+  },
+  "noAiPaymentVerifiedFakeAdded": true
+}

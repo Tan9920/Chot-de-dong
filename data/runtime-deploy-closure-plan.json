@@ -1,0 +1,101 @@
+{
+  "version": "batch105-runtime-deploy-closure-breakthrough-v1",
+  "batch": "Batch105 — Runtime/Hosted Closure Breakthrough",
+  "principle": "Không claim demo chạy thật/production-ready khi install, Next SWC, build, live smoke, auth runtime smoke và hosted URL smoke chưa pass bằng chứng thật.",
+  "scope": "Đóng lỗ hổng runtime/deploy bằng evidence board + gate + lệnh rõ ràng. Không nâng dữ liệu verified giả, không thêm AI, không thêm payment.",
+  "sourceOfTruthOrder": [
+    "repo code thật",
+    "artifact runtime report",
+    "lệnh verify trực tiếp",
+    "hosted URL smoke",
+    "prompt/audit cũ",
+    "chiến lược dài hạn"
+  ],
+  "requiredProofChain": [
+    {
+      "id": "registry_diagnose",
+      "command": "npm run registry:diagnose",
+      "mustPassBefore": "dependency_install",
+      "teacherMeaning": "Máy/CI phải truy cập được npm public registry."
+    },
+    {
+      "id": "install_clean",
+      "command": "npm run install:clean",
+      "mustPassBefore": "next_swc_ready",
+      "teacherMeaning": "Cài đủ dependency, gồm optional Next SWC."
+    },
+    {
+      "id": "next_swc_ready",
+      "command": "npm run next:swc-ready",
+      "mustPassBefore": "build",
+      "teacherMeaning": "Next binary và SWC phù hợp nền tảng đã có."
+    },
+    {
+      "id": "build_clean",
+      "command": "npm run build:clean",
+      "mustPassBefore": "runtime_smoke",
+      "teacherMeaning": "Tạo được bản build .next thật."
+    },
+    {
+      "id": "live_smoke",
+      "command": "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+      "mustPassBefore": "hosted_share",
+      "teacherMeaning": "Route quan trọng phản hồi trong môi trường production local."
+    },
+    {
+      "id": "auth_invite_smoke",
+      "command": "npm run auth-invite:runtime-smoke",
+      "mustPassBefore": "hosted_share",
+      "teacherMeaning": "Login/invite/session demo không lỗi cơ bản."
+    },
+    {
+      "id": "hosted_url_smoke",
+      "command": "GIAOAN_DEMO_URL=https://... npm run hosted:url-smoke",
+      "mustPassBefore": "teacher_test",
+      "teacherMeaning": "Link host thật phản hồi được, không chỉ source-level."
+    }
+  ],
+  "teacherSafeShareGate": {
+    "allowedWhen": [
+      "runtime report ok=true",
+      "hosted URL smoke pass",
+      "auth runtime smoke pass",
+      "academic deep content remains blocked unless reviewed/verified",
+      "demo warning visible"
+    ],
+    "blockedWhen": [
+      "registry unreachable",
+      "install timeout",
+      "next binary missing",
+      "SWC missing",
+      "build missing .next/BUILD_ID",
+      "live smoke fail",
+      "hosted URL absent/fail"
+    ]
+  },
+  "nonGoals": [
+    "Không tạo verified giả",
+    "Không thêm OpenAI/Gemini/Anthropic SDK",
+    "Không thêm payment thật",
+    "Không mở community public tự do",
+    "Không thay JSON demo thành DB production trong batch này"
+  ],
+  "runtimeArtifacts": [
+    "artifacts/runtime-closure-report-last-run.json",
+    "artifacts/runtime-deploy-closure-last-run.json",
+    "artifacts/hosted-demo-url-smoke-last-run.json"
+  ],
+  "currentKnownBlockers": [
+    "npm registry/DNS có thể fail trong môi trường audit",
+    "node_modules không nằm trong ZIP",
+    "Next binary/SWC chỉ có sau npm install clean",
+    "hosted URL cần user/Vercel cung cấp"
+  ],
+  "statusLabels": {
+    "source_level_runtime_gate_ready": "Source đã có gate/evidence board nhưng chưa chứng minh runtime thật.",
+    "dependency_blocked": "Chưa cài được dependency; không được claim build/deploy.",
+    "build_blocked": "Dependency có thể có nhưng chưa build pass.",
+    "hosted_smoke_required": "Build/local smoke pass nhưng cần hosted URL smoke.",
+    "teacher_test_candidate": "Có thể mời nhóm nhỏ test có kiểm soát, vẫn không claim production-ready."
+  }
+}

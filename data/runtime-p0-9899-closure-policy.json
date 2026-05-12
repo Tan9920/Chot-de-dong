@@ -1,0 +1,36 @@
+{
+  "batch": "Batch128 - P0 98-99 Local Runtime Closure Hardening",
+  "version": "0.128.0",
+  "priority": "P0 before P1",
+  "goal": "Raise P0 local runtime/build proof quality by adding a loopback hosted-route smoke over next start, while keeping Node24 CI and real hosted APP_URL as separate non-fake gates.",
+  "localP09899Required": [
+    "verify:p0-final passes with strict raw Next build exit 0",
+    "production live HTTP smoke passes after the current build",
+    "auth invite runtime smoke passes after the current build",
+    "loopback URL smoke starts next start from the current .next build",
+    "loopback URL smoke reuses the strict hosted URL suite against localhost",
+    "DOCX/PDF export, CSRF, registration, save lesson, metadata, and core demo routes pass through HTTP",
+    "stale .next and runtime artifacts are cleaned before strict build proof",
+    "no AI, payment, or fake verified-data additions"
+  ],
+  "node24Proof": {
+    "requiredFor99PercentOrHigherClaim": true,
+    "script": "npm run verify:p0-9899-node24-ci"
+  },
+  "hostedProof": {
+    "requiredFor100PercentOrPublicRolloutClaim": true,
+    "script": "APP_URL=https://<vercel-url> npm run verify:release:strict"
+  },
+  "allowedClaimsAfterLocalOnlyPass": [
+    "P0 local runtime/build is around 98% if loopback smoke passes",
+    "P1 source work may start carefully",
+    "public rollout remains blocked until Node24 CI and hosted URL smoke pass"
+  ],
+  "blockedClaimsUntilHostedPasses": [
+    "100% P0",
+    "production-ready",
+    "public rollout ready",
+    "hosted demo closed"
+  ],
+  "noAiPaymentVerifiedFakeAdded": true
+}

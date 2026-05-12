@@ -1,0 +1,35 @@
+{
+  "version": "0.114.0",
+  "batch": "Batch114 — Runtime Dependency Closure Board & Build Blocker Evidence",
+  "purpose": "Make build/runtime blockers visible and auditable before claiming deploy/hosted readiness.",
+  "principles": [
+    "Do not claim npm install, Next build, live HTTP smoke, auth runtime, or hosted demo pass unless the command actually passes.",
+    "Source-level validators may pass while runtime/build remains blocked; reports must label this honestly.",
+    "node_modules and .next are temporary local artifacts and must not be included in final ZIP artifacts.",
+    "No AI SDK, model call, API key, payment, cash marketplace, multi-level referral, fake verified academic data, or public community auto-publish is allowed in this batch."
+  ],
+  "requiredCommandsForRuntimeClosure": [
+    "npm run registry:diagnose",
+    "npm run install:clean",
+    "npm run next:swc-ready",
+    "npm run build:clean",
+    "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+    "npm run auth-invite:runtime-smoke",
+    "GIAOAN_DEMO_URL=https://<hosted-url> npm run hosted:url-smoke"
+  ],
+  "allowedClaimsWhenOnlySourcePasses": [
+    "Source-level runtime dependency closure board exists.",
+    "The repo can diagnose missing dependency/build/runtime evidence.",
+    "Build/runtime/hosted status remains unclaimed unless commands pass."
+  ],
+  "forbiddenClaimsWhenCommandsFail": [
+    "Do not say build-ready if next:swc-ready or build:clean fails.",
+    "Do not say hosted-ready if hosted URL smoke is skipped or missing.",
+    "Do not say auth/session/CSRF runtime is safe if auth runtime smoke fails or is not run.",
+    "Do not say production-ready while npm ci/build/live smoke are unresolved."
+  ],
+  "artifactHygiene": {
+    "forbiddenInFinalZip": ["node_modules/", ".next/"],
+    "allowedTemporaryLocalOnly": ["node_modules", ".next", ".vercel"]
+  }
+}

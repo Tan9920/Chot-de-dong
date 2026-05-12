@@ -1,0 +1,160 @@
+{
+  "version": "2026-04-29.batch75-lesson-drafting-quality",
+  "updatedAt": "2026-04-29T00:00:00.000Z",
+  "principles": [
+    "Soạn giáo án theo lớp/mục tiêu học tập, không dùng một mẫu máy móc cho toàn hệ 1–12.",
+    "Khi dữ liệu môn học chưa reviewed/foundation, chỉ tạo khung an toàn và yêu cầu giáo viên nhập nội dung từ nguồn hợp pháp.",
+    "Không tự sinh câu hỏi/đáp án sâu, Casio/máy tính cầm tay hoặc kiến thức môn học nếu chưa có dữ liệu được duyệt.",
+    "Mỗi hoạt động phải có mục tiêu, nội dung, sản phẩm và tổ chức thực hiện theo bốn bước."
+  ],
+  "profiles": [
+    {
+      "id": "primary-1-2",
+      "label": "Lớp 1–2 trực quan và thao tác",
+      "grades": ["1", "2"],
+      "defaultDurationMinutes": 35,
+      "activityTempo": "ngắn, rõ, nhiều hỗ trợ",
+      "teacherTone": "câu lệnh ngắn, thân thiện, một nhiệm vụ một lần",
+      "activityGuidance": [
+        "Ưu tiên tranh/đồ vật/thao tác trực tiếp.",
+        "Mỗi nhiệm vụ cần ví dụ mẫu và hỗ trợ từng bước.",
+        "Đánh giá bằng quan sát, sản phẩm nhỏ, câu trả lời ngắn."
+      ],
+      "avoid": [
+        "Không giao tự học dài hoặc yêu cầu lập luận trừu tượng.",
+        "Không dùng thuật ngữ nặng nếu giáo viên chưa tự nhập và kiểm tra."
+      ],
+      "differentiation": {
+        "support": "Nhiệm vụ 1 bước, có tranh/mẫu, giáo viên làm mẫu trước.",
+        "standard": "Hoàn thành nhiệm vụ chính với gợi ý ngắn.",
+        "advanced": "Nêu thêm ví dụ hoặc giải thích bằng lời của mình."
+      }
+    },
+    {
+      "id": "primary-3-4",
+      "label": "Lớp 3–4 tự học có hướng dẫn",
+      "grades": ["3", "4"],
+      "defaultDurationMinutes": 35,
+      "activityTempo": "vừa phải, tăng hợp tác nhẹ",
+      "teacherTone": "rõ nhiệm vụ, có ví dụ, khuyến khích trao đổi cặp/nhóm nhỏ",
+      "activityGuidance": [
+        "Dùng phiếu học tập đơn giản và câu hỏi gợi mở ngắn.",
+        "Có thời gian cá nhân trước khi chia sẻ nhóm.",
+        "Sản phẩm học tập nên cụ thể và dễ quan sát."
+      ],
+      "avoid": [
+        "Không chuyển sang phong cách THCS quá sớm.",
+        "Không yêu cầu học sinh tự tổng hợp nhiều nguồn phức tạp."
+      ],
+      "differentiation": {
+        "support": "Có khung trả lời/gợi ý từ khóa.",
+        "standard": "Hoàn thành nhiệm vụ chính và nêu lý do đơn giản.",
+        "advanced": "So sánh/đưa ví dụ mở rộng gần gũi."
+      }
+    },
+    {
+      "id": "primary-5-transition",
+      "label": "Lớp 5 chuyển tiếp lên THCS",
+      "grades": ["5"],
+      "defaultDurationMinutes": 35,
+      "activityTempo": "rõ yêu cầu, tăng vận dụng",
+      "teacherTone": "rõ tiêu chí, luyện nền tảng, hỗ trợ tự trình bày",
+      "activityGuidance": [
+        "Có bài tập phân tầng và nhiệm vụ vận dụng gần gũi.",
+        "Tăng yêu cầu giải thích nhưng vẫn cần mẫu/hướng dẫn.",
+        "Chuẩn bị thói quen ghi chép, trình bày, tự kiểm tra."
+      ],
+      "avoid": [
+        "Không nhảy thẳng sang nhiệm vụ phân tích dài như THCS.",
+        "Không bỏ qua hỗ trợ cho học sinh yếu nền."
+      ],
+      "differentiation": {
+        "support": "Làm nhiệm vụ chính với khung mẫu và ví dụ.",
+        "standard": "Hoàn thành nhiệm vụ và giải thích ngắn.",
+        "advanced": "Thêm nhiệm vụ vận dụng hoặc bài tập mở rộng."
+      }
+    },
+    {
+      "id": "secondary-6-9",
+      "label": "Lớp 6–9 khám phá, luyện tập, minh chứng",
+      "grades": ["6", "7", "8", "9"],
+      "defaultDurationMinutes": 45,
+      "activityTempo": "khám phá có kiểm soát, thảo luận, luyện tập",
+      "teacherTone": "nêu vấn đề, giao nhiệm vụ rõ, yêu cầu minh chứng sản phẩm",
+      "activityGuidance": [
+        "Dùng câu hỏi gợi mở, nhiệm vụ nhóm, sản phẩm học tập và tiêu chí đánh giá.",
+        "Kết luận kiến thức phải do giáo viên chuẩn hóa bằng nguồn đã kiểm tra.",
+        "Luyện tập nên có mức nhận biết, thông hiểu, vận dụng nhưng không tự bịa đáp án."
+      ],
+      "avoid": [
+        "Không để lớp 6 đại diện cho toàn THCS.",
+        "Không dùng câu hỏi demo Ngữ văn cho mọi môn."
+      ],
+      "differentiation": {
+        "support": "Gợi ý từng bước, nhiệm vụ ngắn, kiểm tra hiểu ngay.",
+        "standard": "Hoàn thành nhiệm vụ chính và trình bày minh chứng.",
+        "advanced": "Giải thích, phản biện, mở rộng hoặc vận dụng tình huống mới."
+      }
+    },
+    {
+      "id": "highschool-10-12",
+      "label": "Lớp 10–12 tự học, lập luận, dự án",
+      "grades": ["10", "11", "12"],
+      "defaultDurationMinutes": 45,
+      "activityTempo": "tăng tự học, lập luận, đánh giá sâu",
+      "teacherTone": "giao nhiệm vụ học thuật rõ tiêu chí, yêu cầu bằng chứng và phản hồi",
+      "activityGuidance": [
+        "Có nhiệm vụ phân tích/giải quyết vấn đề/dự án nhỏ nếu phù hợp.",
+        "Tăng phần tự học có hướng dẫn và phản biện kết quả.",
+        "Đánh giá bằng rubric/tiêu chí, không chỉ câu trả lời ngắn."
+      ],
+      "avoid": [
+        "Không dùng template tiểu học/THCS đơn giản cho lớp 10–12.",
+        "Không tự sinh kiến thức học thuật sâu nếu thiếu nguồn verified."
+      ],
+      "differentiation": {
+        "support": "Tóm tắt nhiệm vụ, gợi ý nguồn, chia nhỏ sản phẩm.",
+        "standard": "Hoàn thành phân tích/vận dụng theo tiêu chí.",
+        "advanced": "Mở rộng, phản biện, liên hệ học thuật/nghề nghiệp."
+      }
+    },
+    {
+      "id": "exam-grade-10",
+      "label": "Ôn thi vào 10 theo dạng bài và lỗi sai",
+      "examMode": "grade10_entrance",
+      "defaultDurationMinutes": 45,
+      "activityTempo": "dạng bài, chiến thuật, chữa lỗi",
+      "teacherTone": "rõ dạng, rõ lỗi, rõ cách tự kiểm tra",
+      "activityGuidance": [
+        "Tách mục tiêu theo dạng bài/kĩ năng/lỗi thường gặp.",
+        "Không biến thành giáo án bài mới thông thường.",
+        "Đề/câu hỏi/đáp án phải do giáo viên nhập hoặc lấy từ nguồn được phép."
+      ],
+      "avoid": ["Không tự sinh đề/đáp án nếu chưa có ngân hàng verified."],
+      "differentiation": {
+        "support": "Bài mẫu có bước làm và lỗi cần tránh.",
+        "standard": "Luyện dạng chính và tự chữa theo đáp án giáo viên cung cấp.",
+        "advanced": "Bài biến thể, chiến thuật thời gian, giải thích cách chọn phương pháp."
+      }
+    },
+    {
+      "id": "exam-thpt",
+      "label": "Ôn thi THPT theo chuyên đề, luyện đề và thống kê lỗi",
+      "examMode": "thpt_exam",
+      "defaultDurationMinutes": 45,
+      "activityTempo": "chuyên đề, luyện đề, phân tích lỗi",
+      "teacherTone": "chính xác, có tiêu chí, tập trung chiến thuật và bằng chứng lỗi sai",
+      "activityGuidance": [
+        "Tổ chức theo chuyên đề/dạng đề/mức độ nhận thức.",
+        "Có bảng lỗi sai và kế hoạch luyện lại.",
+        "Không tự sinh đáp án/kiến thức khi chưa verified."
+      ],
+      "avoid": ["Không quảng cáo dự đoán đề hoặc bảo đảm điểm số."],
+      "differentiation": {
+        "support": "Ôn nền tảng và dạng cơ bản.",
+        "standard": "Luyện dạng chính, chữa lỗi có tiêu chí.",
+        "advanced": "Bài tổng hợp, chiến thuật thời gian, câu phân hóa."
+      }
+    }
+  ]
+}

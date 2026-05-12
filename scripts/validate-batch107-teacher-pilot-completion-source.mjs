@@ -1,0 +1,43 @@
+import fs from 'node:fs';
+function read(file) { return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : ''; }
+function readJson(file, fallback = {}) { try { return JSON.parse(read(file) || JSON.stringify(fallback)); } catch { return fallback; } }
+const issues = [];
+function check(label, condition, detail = '') { if (!condition) issues.push(detail ? `${label}: ${detail}` : label); }
+const pkg = readJson('package.json');
+const lock = readJson('package-lock.json');
+const pack = readJson('data/teacher-pilot-completion-pack.json');
+const registry = readJson('data/subject-data-registry.json', { records: [] });
+const lib = read('lib/teacher-pilot-completion.ts');
+const workspace = read('components/workspace.tsx');
+const css = read('app/globals.css');
+const demoBreakthrough = read('lib/demo-breakthrough.ts');
+const runValidators = read('scripts/run-source-validators.mjs');
+const html = read('public/teacher-pilot-demo.html');
+const notes = read('BATCH107_NOTES.md') + '\n' + read('docs/BATCH107_TEACHER_PILOT_COMPLETION_SLICE.md');
+const artifact = readJson('artifacts/runtime-hosted-closure-last-run.json', {});
+check('package.json version must be 0.107.0', ['0.107.0', '0.108.0'].includes(pkg.version), pkg.version);
+check('package-lock top-level version must be 0.107.0', ['0.107.0', '0.108.0'].includes(lock.version), lock.version);
+check('package-lock root package version must be 0.107.0', ['0.107.0', '0.108.0'].includes(lock.packages?.['']?.version), lock.packages?.['']?.version);
+for (const script of ['batch107:teacher-pilot-completion-validate','teacher-pilot:completion-validate','teacher-pilot:completion-report','smoke:batch107','verify:batch107']) check(`package.json missing script ${script}`, Boolean(pkg.scripts?.[script]));
+for (const file of ['BATCH107_NOTES.md','docs/BATCH107_TEACHER_PILOT_COMPLETION_SLICE.md','data/teacher-pilot-completion-pack.json','lib/teacher-pilot-completion.ts','public/teacher-pilot-demo.html','app/api/teacher-pilot/completion/route.ts','app/api/admin/teacher-pilot-completion-board/route.ts','scripts/teacher-pilot-completion-report.mjs','scripts/validate-batch107-teacher-pilot-completion-source.mjs']) check(`missing ${file}`, fs.existsSync(file));
+check('pack must be Batch107', String(pack.version || '').includes('batch107') || String(pack.version || '').includes('batch108'), pack.version);
+check('pack must include offline artifact', pack.offlineArtifact === 'public/teacher-pilot-demo.html', pack.offlineArtifact);
+check('pack must include completion criteria', Array.isArray(pack.completionCriteria) && pack.completionCriteria.length >= 8, String(pack.completionCriteria?.length || 0));
+check('pack must include teacher modes', JSON.stringify(pack.teacherModes || []).includes('Dễ dùng') && JSON.stringify(pack.teacherModes || []).includes('Nâng cao'));
+check('pack must include grade profiles 1-12', JSON.stringify(pack.gradeProfiles || []).includes('Lớp 1-2') && JSON.stringify(pack.gradeProfiles || []).includes('Lớp 10-12'));
+for (const marker of ['Batch107','Không cần npm/build','KẾ HOẠCH BÀI DẠY','YÊU CẦU CẦN ĐẠT','PHÂN HÓA ĐỐI TƯỢNG HỌC SINH','data-mode="advanced"','deepContentGenerated:false','hostedRuntimeClaimed:false']) check(`offline HTML missing marker ${marker}`, html.includes(marker));
+for (const marker of ['buildTeacherPilotCompletionBoard','buildTeacherPilotSafeLessonFrame','resolveTeacherPilotGradeProfile','safe_frame_only','deepContentGenerated: false','hostedRuntimeStillGuarded']) check(`teacher pilot lib missing marker ${marker}`, lib.includes(marker));
+for (const marker of ['/api/teacher-pilot/completion','teacherPilotCompletion','teacher-pilot-completion-card','Batch108 · Chọn lớp/môn/chủ đề đúng','teacherPilotCompletionPercent']) check(`workspace missing marker ${marker}`, workspace.includes(marker));
+for (const marker of ['.teacher-pilot-completion-card','.teacher-pilot-completion-grid','Batch107 Teacher Pilot Completion Slice']) check(`CSS missing marker ${marker}`, css.includes(marker));
+for (const marker of ['buildTeacherPilotCompletionBoard','teacherPilotCompletion','Batch107']) check(`demo breakthrough missing marker ${marker}`, demoBreakthrough.includes(marker));
+check('run-source-validators must register Batch107 validator', runValidators.includes('validate-batch107-teacher-pilot-completion-source.mjs'));
+check('run-source-validators must know smoke/verify batch107 scripts', runValidators.includes('smoke:batch107') && runValidators.includes('verify:batch107'));
+check('runtime hosted artifact must not be ok=true unless hosted really passed', artifact.ok !== true, `artifact ok=${artifact.ok}`);
+const fakeVerified = (registry.records || []).filter((item) => ['verified','approved_for_release'].includes(item.sourceStatus) || item.contentDepthAllowed);
+check('Batch107 must not create fake verified/contentDepthAllowed records', fakeVerified.length === 0, `${fakeVerified.length} found`);
+const pkgText = JSON.stringify(pkg).toLowerCase();
+for (const forbidden of ['openai','@google/generative-ai','@anthropic-ai/sdk','anthropic','langchain']) check(`forbidden AI dependency ${forbidden}`, !pkgText.includes(`"${forbidden}`));
+check('notes must state no AI/no fake verified/no hosted overclaim', notes.includes('không thêm AI') && notes.includes('không tạo verified giả') && notes.includes('không claim hosted/runtime pass'));
+const result = { ok: issues.length === 0, packageVersion: pkg.version, offlineArtifact: pack.offlineArtifact, fakeVerifiedRecords: fakeVerified.length, completionCriteria: Array.isArray(pack.completionCriteria) ? pack.completionCriteria.length : 0, issues, note: 'Batch107 validates an offline teacher-pilot completion slice. It does not prove hosted runtime pass.' };
+console.log(JSON.stringify(result, null, 2));
+process.exit(result.ok ? 0 : 1);

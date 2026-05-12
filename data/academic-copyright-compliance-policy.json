@@ -1,0 +1,140 @@
+{
+  "version": "2026-05-04.batch112-academic-copyright-compliance-policy",
+  "updatedAt": "2026-05-04T00:00:00.000+07:00",
+  "batch": "Batch112 — Legal/Copyright-Safe Academic Verification Pipeline",
+  "purpose": "Khóa rủi ro bản quyền/pháp lý trước khi nâng Verified học thuật thật 1–12. Batch112 không nhập nội dung SGK/sách giáo viên dài, không dùng ngoại lệ giáo dục để public sản phẩm thương mại, không tự nâng verified/contentDepthAllowed.",
+  "researchedLegalBasis": [
+    {
+      "id": "vn-ip-law-50-2005-as-amended",
+      "title": "Luật Sở hữu trí tuệ 50/2005/QH11 và các sửa đổi liên quan",
+      "locator": "https://vbpl.vn/TW/Pages/vbpq-toanvan.aspx?ItemID=16748",
+      "relevance": "Định nghĩa quyền tác giả, đối tượng bảo hộ, trường hợp sử dụng tác phẩm, hành vi xâm phạm và nghĩa vụ tôn trọng quyền SHTT.",
+      "productRule": "Sách giáo khoa/giáo trình/tác phẩm chữ viết là đối tượng có thể được bảo hộ; sản phẩm chỉ lưu metadata/mapping/trích yếu ngắn, không sao chép dài hoặc phân phối lại nội dung có bản quyền."
+    },
+    {
+      "id": "gov-nd17-2023-copyright-neighboring-rights",
+      "title": "Nghị định 17/2023/NĐ-CP quy định chi tiết một số điều và biện pháp thi hành Luật SHTT về quyền tác giả, quyền liên quan",
+      "locator": "https://vanban.chinhphu.vn/?docid=207842&pageid=27160",
+      "relevance": "Văn bản hướng dẫn chi tiết về quyền tác giả/quyền liên quan.",
+      "productRule": "Mọi học liệu/ảnh/âm thanh/video/tài nguyên cộng đồng cần license, attribution, permission basis và takedown path trước khi public hoặc dùng trong export."
+    },
+    {
+      "id": "gov-nd134-2026-amends-nd17",
+      "title": "Nghị định 134/2026/NĐ-CP sửa đổi, bổ sung một số điều của Nghị định 17/2023/NĐ-CP",
+      "locator": "https://vanban.chinhphu.vn/?classid=1&docid=217833&pageid=27160&typegroupid=4",
+      "relevance": "Cập nhật mới năm 2026 liên quan quyền tác giả/quyền liên quan; cần kiểm tra trước khi release chính thức.",
+      "productRule": "Dossier pháp lý phải ghi currentEffectCheckRequired=true trước mọi release verified/public lớn."
+    },
+    {
+      "id": "moet-tt32-2018-ctgdpt",
+      "title": "Thông tư 32/2018/TT-BGDĐT ban hành Chương trình giáo dục phổ thông",
+      "locator": "https://moet.gov.vn/content/vanban/Lists/VBPQ/Attachments/1301/TT%2032.2018%20CTGDPT.pdf",
+      "relevance": "Nguồn chương trình chính thống để đối chiếu scope 1–12.",
+      "productRule": "Chỉ dùng làm source spine/mapping; không copy dài phụ lục/chương trình vào giáo án/export."
+    },
+    {
+      "id": "moet-tt17-2025-ctgdpt-amendment",
+      "title": "Thông tư 17/2025/TT-BGDĐT sửa đổi, bổ sung một số nội dung trong Chương trình giáo dục phổ thông",
+      "locator": "https://moet.gov.vn/tintuc/Pages/chi-tiet.aspx?ItemID=11110",
+      "relevance": "Nguồn cập nhật chương trình hiện hành cần đối chiếu cho một số môn/lớp.",
+      "productRule": "Môn/lớp chịu ảnh hưởng sửa đổi phải current-check trước khi release verified."
+    }
+  ],
+  "nonNegotiables": [
+    "Không copy dài SGK, sách giáo viên, giáo trình, đề thi thương mại, sách tham khảo, ảnh/học liệu có bản quyền vào database/export.",
+    "Không dựa vào ngoại lệ giảng dạy/cá nhân để công khai nội dung trong một web/app có gói trả phí hoặc phân phối đại trà.",
+    "Không dùng câu 'trích dẫn hợp lý' để hợp thức hóa việc tạo lại bài đọc, đề, đáp án, ảnh, bảng biểu hoặc đoạn dài từ sách.",
+    "Chỉ lưu metadata, mapping, citation locator, mô tả ngắn, trích yếu ngắn thật sự cần thiết, hoặc nội dung do giáo viên/trường sở hữu quyền sử dụng.",
+    "Mọi tài nguyên public/export phải có license, attribution, permissionBasis, takedownContact, legalCheckStatus và reviewer signoff.",
+    "Thiếu một trong các gate pháp lý thì scope phải ở safe_frame_only; không reviewed, không verified, không contentDepthAllowed.",
+    "Community uploads mặc định legal_hold/submitted; không auto-public.",
+    "Ảnh, âm thanh, video, worksheet, slide, câu hỏi/đáp án cần check riêng; không kế thừa verified từ curriculum source spine."
+  ],
+  "allowedUseCategories": [
+    {
+      "category": "official_public_metadata_only",
+      "allowed": true,
+      "deepContentAllowed": false,
+      "description": "Lưu số/ký hiệu văn bản, ngày ban hành, phạm vi, link/locator, mapping tổng quát.",
+      "mustNotStore": ["full_text_long", "appendix_long_copy", "sgk_chapter_copy"]
+    },
+    {
+      "category": "teacher_owned",
+      "allowed": true,
+      "deepContentAllowed": "requires_reviewer_and_release_gate",
+      "description": "Nội dung giáo viên tự tạo và cam kết quyền sử dụng.",
+      "requiredEvidence": ["ownerDeclaration", "attribution", "takedownContact", "reviewerSignoff"]
+    },
+    {
+      "category": "school_internal_resource",
+      "allowed": true,
+      "deepContentAllowed": "internal_scope_only",
+      "description": "Tài nguyên nội bộ trường/tổ; không public rộng nếu chưa có quyền.",
+      "requiredEvidence": ["schoolPermission", "visibilityScope", "takedownContact"]
+    },
+    {
+      "category": "licensed_resource",
+      "allowed": true,
+      "deepContentAllowed": "within_license_scope_only",
+      "description": "Tài nguyên có license/hợp đồng rõ phạm vi sử dụng.",
+      "requiredEvidence": ["licenseTextOrContract", "allowedTerritory", "allowedAudience", "allowedDuration", "attribution"]
+    },
+    {
+      "category": "public_domain_or_open_license",
+      "allowed": true,
+      "deepContentAllowed": "requires_license_compatibility_check",
+      "description": "Tài nguyên hết hạn bảo hộ hoặc license mở phù hợp.",
+      "requiredEvidence": ["licenseName", "licenseUrl", "compatibilityCheck", "attribution"]
+    },
+    {
+      "category": "commercial_textbook_or_teacher_book",
+      "allowed": false,
+      "deepContentAllowed": false,
+      "description": "SGK/SGV/sách tham khảo thương mại không được nhập nội dung dài; chỉ dùng metadata/locator/mapping nếu hợp pháp.",
+      "blockedUntil": ["writtenPermissionOrLicense", "limitedScope", "legalReview"]
+    },
+    {
+      "category": "unknown_or_unattributed",
+      "allowed": false,
+      "deepContentAllowed": false,
+      "description": "Nguồn không rõ tác giả/quyền/license phải bị giữ lại."
+    }
+  ],
+  "copyrightRiskSignals": [
+    "textbook_page_number_without_permission",
+    "copied_reading_passage",
+    "copied_exercise_set_or_answer_key",
+    "publisher_owned_image_or_diagram",
+    "teacher_book_instruction_copy",
+    "exam_bank_or_paid_resource",
+    "missing_author_or_publisher",
+    "missing_license",
+    "no_takedown_path",
+    "community_upload_claims_official_without_evidence"
+  ],
+  "releaseGate": {
+    "requiresNoLongCopyrightCopy": true,
+    "requiresLicenseAndAttribution": true,
+    "requiresPermissionBasis": true,
+    "requiresTakedownPath": true,
+    "requiresReviewerSignoff": true,
+    "requiresCurrentLawCheck": true,
+    "requiresExportCopyrightLabel": true,
+    "requiresSeparateAssessmentReview": true,
+    "requiresSeparateMediaReview": true,
+    "batch112DoesNotMutateRegistry": true
+  },
+  "teacherFacingSafeMessages": {
+    "safeFrameOnly": "Chưa có nguồn/học liệu đã được thẩm định pháp lý. Hệ thống chỉ dựng khung giáo án; giáo viên cần nhập/chọn nội dung hợp pháp.",
+    "legalHold": "Tài nguyên đang chờ kiểm tra bản quyền/nguồn. Chưa được công khai hoặc xuất kèm nội dung.",
+    "metadataOnly": "Nguồn này chỉ dùng để đối chiếu chương trình; không phải nội dung bài học đã được phép sao chép.",
+    "teacherOwned": "Nội dung do giáo viên/trường cung cấp cần cam kết quyền sử dụng và có thể bị gỡ nếu có khiếu nại hợp lệ."
+  },
+  "forbiddenClaims": [
+    "Không nói app có quyền dùng/copy SGK hoặc sách giáo viên nếu chưa có license/hợp đồng.",
+    "Không nói 'dùng cho giáo dục nên được phép' với nội dung public/commercial app.",
+    "Không nói đã verified học thuật chỉ vì có văn bản chương trình hoặc metadata nguồn.",
+    "Không tạo giáo án/phiếu/câu hỏi/đáp án sâu từ tài liệu bản quyền thiếu quyền sử dụng.",
+    "Không public community resource thiếu nguồn/license/attribution/takedown."
+  ]
+}

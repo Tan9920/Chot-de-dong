@@ -1,0 +1,12 @@
+{
+  "version": "2026-04-30.batch88-demo-feedback-evidence-dossier",
+  "updatedAt": "2026-04-30T21:55:00.000Z",
+  "policy": {
+    "publicRawFeedback": false,
+    "studentPersonalDataAllowed": false,
+    "expandDemoRequiresNoOpenP0": true,
+    "expandDemoRequiresNoOpenP1": true,
+    "nonAiPositioningRequired": true
+  },
+  "submissions": []
+}

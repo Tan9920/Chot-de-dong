@@ -1,0 +1,431 @@
+{
+  "version": "batch110_curriculum_matrix_v1",
+  "batch": "Batch110 — Curriculum Matrix, Primary Bookset Mode & Safer Lesson Composer",
+  "purpose": "Tạo ma trận tương thích lớp–môn–bộ sách–chủ đề/bài để giảm lỗi chọn sai, không nhầm legacy/custom thành verified, và hạ cấp về khung an toàn khi thiếu dữ liệu duyệt.",
+  "status": "source_level_matrix_ready_hosted_runtime_still_guarded",
+  "primaryBookset": "ket_noi_tri_thuc",
+  "teacherDefaultBookset": "ket_noi_tri_thuc",
+  "rules": [
+    "Luồng giáo viên thường chỉ hiển thị trục chính Kết nối tri thức; không khóa cứng vào một năm học.",
+    "Cánh Diều và Chân trời sáng tạo được giữ ở trạng thái legacy_reference/reference-only, ẩn khỏi luồng giáo viên thường.",
+    "Backend tự tính dataStatus, recordType, supportLevel, contentDepthAllowed và releaseAllowed; không tin input của người dùng.",
+    "official_lesson/topic_strand/review_lesson/supplementary_activity/teacher_input/legacy_reference/unmapped phải được phân biệt rõ.",
+    "legacy/custom/unmapped không bao giờ được gắn verified hoặc contentDepthAllowed.",
+    "Nếu bài/chủ đề chưa có registry đủ rõ, chỉ dựng khung giáo án an toàn, không sinh kiến thức sâu/câu hỏi/đáp án/Casio.",
+    "Export/print preview phải ghi rõ trạng thái dữ liệu và trách nhiệm giáo viên kiểm tra."
+  ],
+  "booksets": [
+    {
+      "id": "ket_noi_tri_thuc",
+      "label": "Kết nối tri thức",
+      "mode": "primary",
+      "teacherVisible": true,
+      "referenceOnly": false,
+      "releasePolicy": "default_teacher_axis",
+      "note": "Trục dữ liệu ưu tiên để tránh rối lựa chọn; vẫn cần nguồn/reviewer thật trước khi verified."
+    },
+    {
+      "id": "canh_dieu",
+      "label": "Cánh Diều",
+      "mode": "legacy_reference",
+      "teacherVisible": false,
+      "referenceOnly": true,
+      "releasePolicy": "hidden_from_teacher_flow",
+      "note": "Không xóa khỏi hệ thống nhưng ẩn khỏi luồng giáo viên thường để tránh nhầm trong giai đoạn pilot."
+    },
+    {
+      "id": "chan_troi_sang_tao",
+      "label": "Chân trời sáng tạo",
+      "mode": "legacy_reference",
+      "teacherVisible": false,
+      "referenceOnly": true,
+      "releasePolicy": "hidden_from_teacher_flow",
+      "note": "Chỉ dùng đối chiếu/admin/reference nếu sau này cần; không tự coi là trục chính."
+    }
+  ],
+  "recordTypes": {
+    "official_lesson": "Bài học cụ thể trong registry/trục dữ liệu, nhưng chỉ sinh sâu nếu đủ verified/release.",
+    "topic_strand": "Mạch/chủ đề rộng, chưa chắc là tên bài thật trong sách.",
+    "review_lesson": "Bài đã qua review nội bộ nhưng chưa đủ điều kiện official/verified.",
+    "supplementary_activity": "Hoạt động/trò chơi/phiếu bổ trợ, không thay thế bài chính thức.",
+    "teacher_input": "Giáo viên tự nhập; hệ thống chỉ dựng khung và ghi trách nhiệm kiểm tra.",
+    "legacy_reference": "Nguồn/bộ sách cũ hoặc không phải trục chính; ẩn khỏi teacher flow.",
+    "unmapped": "Không map được vào ma trận; chặn sinh sâu và yêu cầu chọn lại hoặc tự nhập có cảnh báo."
+  },
+  "contentDepthPolicy": {
+    "allowedOnlyWhen": [
+      "dataStatus in verified|approved_for_release",
+      "recordType in official_lesson|review_lesson",
+      "sourceCount > 0",
+      "reviewerCount > 0",
+      "releaseGate == open"
+    ],
+    "forceFalseFor": [
+      "seed",
+      "scaffold",
+      "community",
+      "custom_teacher_input",
+      "teacher_input",
+      "legacy_reference",
+      "unmapped"
+    ],
+    "casioPolicy": "Máy tính cầm tay/Casio chỉ hiện khi có dữ liệu được duyệt hoặc giáo viên tự nhập chịu trách nhiệm; demo không tự sinh."
+  },
+  "contextDimensions": {
+    "classSize": [
+      "ít",
+      "trung bình",
+      "đông"
+    ],
+    "space": [
+      "lớp thường",
+      "phòng bộ môn",
+      "ngoài trời",
+      "online"
+    ],
+    "equipment": [
+      "bảng",
+      "máy chiếu",
+      "phiếu giấy",
+      "điện thoại",
+      "máy tính",
+      "học liệu tự chuẩn bị"
+    ],
+    "learnerLevel": [
+      "cần hỗ trợ",
+      "chuẩn",
+      "khá",
+      "nâng cao",
+      "chuyên sâu"
+    ],
+    "lessonGoal": [
+      "bài mới",
+      "luyện tập",
+      "ôn tập",
+      "kiểm tra nhanh",
+      "phụ đạo",
+      "bồi dưỡng"
+    ]
+  },
+  "subjectGradeMatrix": [
+    {
+      "grade": "5",
+      "level": "Tiểu học",
+      "subjects": [
+        "Tiếng Việt",
+        "Toán",
+        "Khoa học",
+        "Công nghệ"
+      ],
+      "supportLevel": "developing",
+      "teacherVisible": true
+    },
+    {
+      "grade": "generic_primary",
+      "level": "Tiểu học",
+      "subjects": [
+        "Tiếng Việt",
+        "Toán",
+        "Đạo đức",
+        "Tự nhiên và Xã hội",
+        "Khoa học",
+        "Lịch sử và Địa lí",
+        "Công nghệ",
+        "Tin học",
+        "Mĩ thuật",
+        "Âm nhạc",
+        "Giáo dục thể chất",
+        "Hoạt động trải nghiệm"
+      ],
+      "supportLevel": "starter",
+      "teacherVisible": true
+    },
+    {
+      "grade": "generic_lower_secondary",
+      "level": "THCS",
+      "subjects": [
+        "Ngữ văn",
+        "Toán",
+        "Tiếng Anh",
+        "Khoa học tự nhiên",
+        "Lịch sử và Địa lí",
+        "Công nghệ",
+        "Tin học",
+        "Giáo dục công dân",
+        "Mĩ thuật",
+        "Âm nhạc",
+        "Giáo dục thể chất",
+        "Hoạt động trải nghiệm, hướng nghiệp"
+      ],
+      "supportLevel": "starter",
+      "teacherVisible": true
+    },
+    {
+      "grade": "generic_upper_secondary",
+      "level": "THPT",
+      "subjects": [
+        "Ngữ văn",
+        "Toán",
+        "Tiếng Anh",
+        "Vật lí",
+        "Hóa học",
+        "Sinh học",
+        "Lịch sử",
+        "Địa lí",
+        "Giáo dục kinh tế và pháp luật",
+        "Công nghệ",
+        "Tin học",
+        "Giáo dục thể chất",
+        "Hoạt động trải nghiệm, hướng nghiệp"
+      ],
+      "supportLevel": "starter",
+      "teacherVisible": true
+    }
+  ],
+  "records": [
+    {
+      "id": "g5-kntt-toan-phan-so-y-nghia",
+      "aliases": [
+        "g5-toan-phan-so",
+        "Phân số và ý nghĩa của phân số",
+        "Phân số"
+      ],
+      "grade": "5",
+      "subject": "Toán",
+      "bookset": "ket_noi_tri_thuc",
+      "booksetMode": "primary",
+      "recordType": "official_lesson",
+      "title": "Phân số và ý nghĩa của phân số",
+      "strand": "Số và phép tính",
+      "dataStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "developing",
+      "teacherVisible": true,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "safe_frame_only",
+      "riskFlags": [
+        "needs_official_source_mapping",
+        "needs_reviewer",
+        "no_deep_exercises_or_answers"
+      ]
+    },
+    {
+      "id": "g5-kntt-toan-so-sanh-phan-so",
+      "aliases": [
+        "g5-toan-so-sanh-phan-so",
+        "So sánh và sắp xếp phân số"
+      ],
+      "grade": "5",
+      "subject": "Toán",
+      "bookset": "ket_noi_tri_thuc",
+      "booksetMode": "primary",
+      "recordType": "topic_strand",
+      "title": "So sánh và sắp xếp phân số",
+      "strand": "Số và phép tính",
+      "dataStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "developing",
+      "teacherVisible": true,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "safe_frame_only",
+      "riskFlags": [
+        "topic_strand_not_confirmed_lesson",
+        "needs_source"
+      ]
+    },
+    {
+      "id": "g5-kntt-tieng-viet-doc-hieu",
+      "aliases": [
+        "g5-tv-doc-hieu",
+        "Đọc hiểu văn bản theo chủ đề gần gũi"
+      ],
+      "grade": "5",
+      "subject": "Tiếng Việt",
+      "bookset": "ket_noi_tri_thuc",
+      "booksetMode": "primary",
+      "recordType": "topic_strand",
+      "title": "Đọc hiểu văn bản theo chủ đề gần gũi",
+      "strand": "Đọc",
+      "dataStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "developing",
+      "teacherVisible": true,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "safe_frame_only",
+      "riskFlags": [
+        "no_long_text_generation",
+        "teacher_must_supply_text"
+      ]
+    },
+    {
+      "id": "g5-kntt-tieng-viet-luyen-tu-cau",
+      "aliases": [
+        "g5-tv-luyen-tu-cau",
+        "Luyện từ và câu trong ngữ cảnh"
+      ],
+      "grade": "5",
+      "subject": "Tiếng Việt",
+      "bookset": "ket_noi_tri_thuc",
+      "booksetMode": "primary",
+      "recordType": "topic_strand",
+      "title": "Luyện từ và câu trong ngữ cảnh",
+      "strand": "Luyện từ và câu",
+      "dataStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "developing",
+      "teacherVisible": true,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "safe_frame_only",
+      "riskFlags": [
+        "no_long_examples_without_source"
+      ]
+    },
+    {
+      "id": "g5-kntt-tieng-viet-viet-doan",
+      "aliases": [
+        "g5-tv-viet-doan",
+        "Viết đoạn/bài ngắn có hướng dẫn"
+      ],
+      "grade": "5",
+      "subject": "Tiếng Việt",
+      "bookset": "ket_noi_tri_thuc",
+      "booksetMode": "primary",
+      "recordType": "topic_strand",
+      "title": "Viết đoạn/bài ngắn có hướng dẫn",
+      "strand": "Viết",
+      "dataStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "developing",
+      "teacherVisible": true,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "safe_frame_only",
+      "riskFlags": [
+        "no_sample_essay_generation"
+      ]
+    },
+    {
+      "id": "g5-kntt-tieng-viet-noi-nghe",
+      "aliases": [
+        "g5-tv-noi-nghe",
+        "Nói và nghe: trình bày, trao đổi ý kiến"
+      ],
+      "grade": "5",
+      "subject": "Tiếng Việt",
+      "bookset": "ket_noi_tri_thuc",
+      "booksetMode": "primary",
+      "recordType": "topic_strand",
+      "title": "Nói và nghe: trình bày, trao đổi ý kiến",
+      "strand": "Nói và nghe",
+      "dataStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "developing",
+      "teacherVisible": true,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "safe_frame_only",
+      "riskFlags": [
+        "teacher_context_required"
+      ]
+    },
+    {
+      "id": "g5-canh-dieu-toan-phan-so-legacy",
+      "aliases": [
+        "Cánh Diều phân số lớp 5",
+        "canh-dieu-g5-toan-phan-so"
+      ],
+      "grade": "5",
+      "subject": "Toán",
+      "bookset": "canh_dieu",
+      "booksetMode": "legacy_reference",
+      "recordType": "legacy_reference",
+      "title": "Phân số — tham chiếu legacy/reference-only",
+      "strand": "Số và phép tính",
+      "dataStatus": "legacy_reference",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "reference_only",
+      "teacherVisible": false,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "admin_reference_only",
+      "riskFlags": [
+        "hidden_from_teacher_flow",
+        "not_primary_axis",
+        "no_release"
+      ]
+    },
+    {
+      "id": "g5-chan-troi-toan-phan-so-legacy",
+      "aliases": [
+        "Chân trời sáng tạo phân số lớp 5",
+        "chan-troi-g5-toan-phan-so"
+      ],
+      "grade": "5",
+      "subject": "Toán",
+      "bookset": "chan_troi_sang_tao",
+      "booksetMode": "legacy_reference",
+      "recordType": "legacy_reference",
+      "title": "Phân số — tham chiếu legacy/reference-only",
+      "strand": "Số và phép tính",
+      "dataStatus": "legacy_reference",
+      "reviewStatus": "not_reviewed",
+      "supportLevel": "reference_only",
+      "teacherVisible": false,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "admin_reference_only",
+      "riskFlags": [
+        "hidden_from_teacher_flow",
+        "not_primary_axis",
+        "no_release"
+      ]
+    },
+    {
+      "id": "blocked-g5-tv-phan-so",
+      "aliases": [
+        "Tiếng Việt Phân số",
+        "g5-tv-phan-so"
+      ],
+      "grade": "5",
+      "subject": "Tiếng Việt",
+      "bookset": "ket_noi_tri_thuc",
+      "booksetMode": "primary",
+      "recordType": "unmapped",
+      "title": "Phân số trong Tiếng Việt — tổ hợp bị chặn",
+      "strand": "unmapped",
+      "dataStatus": "unmapped",
+      "reviewStatus": "blocked_mismatch",
+      "supportLevel": "blocked",
+      "teacherVisible": false,
+      "sourceCount": 0,
+      "reviewerCount": 0,
+      "releaseGate": "closed",
+      "contentDepthAllowed": false,
+      "exportMode": "blocked",
+      "riskFlags": [
+        "subject_topic_mismatch",
+        "switch_to_math_or_choose_valid_vietnamese_topic"
+      ]
+    }
+  ]
+}

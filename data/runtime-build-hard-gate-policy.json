@@ -1,0 +1,45 @@
+{
+  "version": "0.118.0",
+  "batch": "Batch118 — Runtime Build Hard Gate & Future Blocker Prevention",
+  "purpose": "Convert the Batch117 runtime/build blocker into a permanent release gate so future batches cannot claim hosted/demo/production readiness without raw build and smoke evidence.",
+  "hardBlockers": [
+    {
+      "id": "raw-next-build-exit-zero",
+      "requiredEvidence": "artifacts/raw-next-build-diagnostic-last-run.json with ok=true and rawNextBuildExitCode=0 from a current run",
+      "blocksClaims": ["rawBuildClosed", "productionReady", "hostedClosed"]
+    },
+    {
+      "id": "startable-artifact-build-id",
+      "requiredEvidence": ".next/BUILD_ID plus required Next server manifests from the same run",
+      "blocksClaims": ["demoRuntimeClosed", "liveSmokeReady"]
+    },
+    {
+      "id": "production-live-smoke",
+      "requiredEvidence": "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean must pass after a build artifact exists",
+      "blocksClaims": ["teacherPilotReady", "hostedDemoReady"]
+    },
+    {
+      "id": "hosted-url-smoke",
+      "requiredEvidence": "GIAOAN_DEMO_URL=https://<hosted-url> npm run hosted:url-smoke must pass",
+      "blocksClaims": ["hostedClosed", "publicDemoReady"]
+    }
+  ],
+  "permanentRules": [
+    "No feature batch may mark runtime/build/hosted as closed from stale artifacts.",
+    "Guarded build artifacts can support local demo triage but cannot replace raw Next build exit 0.",
+    "If raw build is unresolved, next batch priority remains runtime/build closure instead of AI/payment/marketplace/community-public expansion.",
+    "Seed/scaffold/reviewed/verified labels must not be upgraded by UI copy or notes; only real review evidence may upgrade them."
+  ],
+  "nextConfigHardening": {
+    "removeStaticGenerationRetryOverrides": true,
+    "why": "Batch117 observed a .next/export/500.html rename failure under over-constrained static generation settings. Batch118 removes those overrides and keeps build worker constraints only.",
+    "traceScope": "outputFileTracingRoot is locked to process.cwd() and obvious non-runtime folders are excluded to reduce trace work."
+  },
+  "forbiddenWhileBlocked": [
+    "AI SDK/API/model call",
+    "payment gateway or cash marketplace",
+    "fake verified academic data",
+    "public community auto-publish",
+    "role self-escalation by user signup"
+  ]
+}

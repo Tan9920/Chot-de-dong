@@ -1,0 +1,119 @@
+{
+  "batch": "Batch137 — P0 Hosted Evidence Capture Pack",
+  "version": "0.137.0",
+  "phase": "P0 hosted proof execution support before P1 feature expansion",
+  "sourceLevelOnly": true,
+  "purpose": "Make the next real hosted proof run explicit, repeatable, auditable, and hard to overclaim. This pack does not deploy to Vercel by itself and does not turn missing Node24/APP_URL/visual proof into a pass.",
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "selectedBecause": "Batch136 showed local P0/P1 source stability can be clean while hosted/public proof remains blocked. The next blocker is collecting real Node24 CI, APP_URL hosted smoke, hosted save/export and visual evidence without adding new teacher-facing features.",
+  "requiredEvidence": [
+    {
+      "id": "node24_ci",
+      "label": "Node24 CI/deploy proof",
+      "command": "npm run verify:p0-deepest-node24-ci",
+      "artifact": "artifacts/verify-p0-deepest-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "howToCapture": "Run in GitHub Actions or another Node 24 environment, not local Node 22."
+    },
+    {
+      "id": "hosted_release_strict",
+      "label": "APP_URL strict release smoke",
+      "command": "APP_URL=https://<vercel-url> npm run verify:release:strict",
+      "artifact": "artifacts/verify-release-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "howToCapture": "Use the real Vercel URL after deploy. Optional/empty URL smoke is not enough."
+    },
+    {
+      "id": "hosted_save_export_smoke",
+      "label": "Hosted real account save/export smoke",
+      "command": "GIAOAN_DEMO_URL=https://<vercel-url> npm run hosted:url-smoke",
+      "artifact": "artifacts/hosted-demo-url-smoke-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "howToCapture": "Must register/login, save a lesson and export DOCX/PDF against the hosted URL."
+    },
+    {
+      "id": "visual_smoke_evidence",
+      "label": "Real browser visual smoke evidence",
+      "command": "npm run visual:smoke:evidence-validate",
+      "artifact": "artifacts/visual-smoke-evidence.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "howToCapture": "Capture mobile/tablet/desktop screenshots or evidence entries from a real browser. Template alone is not a pass."
+    },
+    {
+      "id": "public_rollout_readiness",
+      "label": "Public rollout readiness board",
+      "command": "npm run public-rollout:readiness-report",
+      "artifact": "artifacts/public-rollout-readiness-report-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "howToCapture": "Run after all proof artifacts exist; board must keep productionReady false unless full production controls are actually reviewed."
+    },
+    {
+      "id": "p0_p1_stability",
+      "label": "P0/P1 stability board",
+      "command": "npm run p0-p1:stability-report",
+      "artifact": "artifacts/p0-p1-stability-report-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "howToCapture": "Run after local P0 evidence and P1 security source evidence."
+    }
+  ],
+  "runOrder": [
+    "npm ci --ignore-scripts --no-audit --no-fund",
+    "npm run source:validate",
+    "npm run data:validate",
+    "npm run typecheck",
+    "npm run next:swc-ready",
+    "npm run build",
+    "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+    "npm run auth-invite:runtime-smoke",
+    "npm run runtime:p0-loopback-url-smoke",
+    "npm run verify:p0-deepest-node24-ci",
+    "APP_URL=https://<vercel-url> npm run verify:release:strict",
+    "GIAOAN_DEMO_URL=https://<vercel-url> npm run hosted:url-smoke",
+    "npm run visual:smoke:evidence-template",
+    "npm run visual:smoke:evidence-validate",
+    "npm run public-rollout:readiness-report",
+    "npm run p0:hosted-evidence-capture-report"
+  ],
+  "githubActions": {
+    "workflowFile": ".github/workflows/p0-hosted-final-proof.yml",
+    "nodeVersion": "24",
+    "requiredInputOrSecret": "workflow_dispatch app_url or secret GIAOAN_DEMO_URL",
+    "optionalSecret": "VERCEL_AUTOMATION_BYPASS_SECRET",
+    "artifactUploadExpected": true,
+    "mustNotPassStrictWhenMissingVisualEvidence": true
+  },
+  "visualEvidence": {
+    "templateCommand": "npm run visual:smoke:evidence-template",
+    "validationCommand": "npm run visual:smoke:evidence-validate",
+    "requiredViewports": ["mobile-360", "mobile-390", "mobile-430", "tablet-768", "desktop-1366", "desktop-1440"],
+    "requiredSignals": [
+      "home/app shell visible",
+      "lesson authoring visible",
+      "safe data/governance labels visible",
+      "save/export controls visible or clearly gated",
+      "mobile navigation/sidebar can close"
+    ]
+  },
+  "claimPolicy": {
+    "allowed": [
+      "Batch137 creates a hosted evidence capture pack and board.",
+      "Local P0/P1 can be described only with the commands actually run.",
+      "Hosted/public proof remains blocked until real Node24, APP_URL and visual artifacts pass."
+    ],
+    "blocked": [
+      "Không nói production-ready.",
+      "Không nói hosted-demo-closed khi APP_URL strict smoke chưa pass.",
+      "Không nói visual smoke pass nếu chỉ có template.",
+      "Không nói public rollout allowed nếu public-rollout board vẫn false.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  }
+}

@@ -1,0 +1,1 @@
+export function getGradeLessonBlueprint(grade: string | number = '6', ..._args: any[]) { return { grade: String(grade), sections: ['Mục tiêu', 'Thiết bị/học liệu', 'Tiến trình dạy học', 'Đánh giá', 'Phân hóa'], activitySteps: ['Mục tiêu', 'Nội dung', 'Sản phẩm', 'Tổ chức thực hiện'] }; }

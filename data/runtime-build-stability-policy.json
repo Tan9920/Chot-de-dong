@@ -1,0 +1,65 @@
+{
+  "version": "0.115.0",
+  "batch": "Batch115 — Runtime Build Stability Closure",
+  "purpose": "Convert Batch114 dependency evidence into a safer, lower-concurrency build attempt path and record build-timeout blockers honestly.",
+  "observedBlocker": {
+    "command": "npm run build",
+    "status": "timeout_in_audit_environment",
+    "phaseReached": "Collecting page data",
+    "impact": "A compiled app still cannot be called build-ready if the build command does not exit 0 inside the verification window."
+  },
+  "stabilityGuardrails": [
+    "Limit Next build worker pressure in constrained CI/ChatGPT/Termux/Vercel-like environments.",
+    "Avoid static prerender claims for the demo shell until build and live smoke pass.",
+    "Run npm run typecheck separately before build:clean, then let Next build focus on production compilation/static generation instead of duplicating type validation in constrained environments.",
+    "Keep source-level validators separate from build/runtime proof.",
+    "Do not add product features while build/runtime closure is the blocker."
+  ],
+  "requiredSourceMarkers": {
+    "nextConfig": [
+      "experimental.cpus=1",
+      "experimental.workerThreads=false",
+      "experimental.staticGenerationMaxConcurrency=1",
+      "experimental.staticGenerationRetryCount=0",
+      "typescript.ignoreBuildErrors=true with separate typecheck required"
+    ],
+    "homePage": [
+      "dynamic=force-dynamic",
+      "revalidate=0",
+      "fetchCache=force-no-store"
+    ],
+    "artifactHygiene": [
+      "node_modules/ must not enter final ZIP",
+      ".next/ must not enter final ZIP"
+    ]
+  },
+  "requiredCommandsForBuildClosure": [
+    "npm ci --ignore-scripts --no-audit --no-fund",
+    "npm run source:validate",
+    "npm run typecheck",
+    "npm run next:swc-ready",
+    "npm run runtime:build-stability-report",
+    "npm run build:clean",
+    "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+    "npm run auth-invite:runtime-smoke",
+    "GIAOAN_DEMO_URL=https://<hosted-url> npm run hosted:url-smoke"
+  ],
+  "allowedClaimsWhenOnlySourcePasses": [
+    "Source-level build stability guardrails exist.",
+    "The repo has a lower-concurrency build configuration and a report for build-timeout blockers.",
+    "Build/runtime/hosted remain unclaimed unless the commands exit 0."
+  ],
+  "forbiddenClaimsWhenCommandsFailOrTimeout": [
+    "Do not say build-ready if npm run build or npm run build:clean times out.",
+    "Do not say runtime-ready if live smoke is not run or fails.",
+    "Do not say hosted-ready without GIAOAN_DEMO_URL smoke pass.",
+    "Do not say production-ready while auth/session/CSRF runtime smoke is missing or failed."
+  ],
+  "forbiddenProductChanges": [
+    "AI SDK/API/model call/key",
+    "payment/marketplace/cash fund/multi-level referral",
+    "fake verified academic data",
+    "deep academic content enablement",
+    "public community auto-publish"
+  ]
+}

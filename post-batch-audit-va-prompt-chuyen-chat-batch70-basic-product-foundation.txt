@@ -1,0 +1,178 @@
+POST-BATCH AUDIT — BATCH70 LONG-TERM BASIC PRODUCT FOUNDATION
+
+Dự án: Nền tảng soạn giáo án / thiết kế bài dạy Việt Nam lớp 1–12.
+
+KẾT LUẬN RẤT QUAN TRỌNG:
+Batch70 sửa hướng Batch69. Batch69 đã làm luồng demo dễ dùng hơn, nhưng nếu chỉ dừng ở demo thì vẫn thiếu nền móng sản phẩm dài hạn. Batch70 bổ sung Product Foundation để phần cơ bản không chỉ là UI demo mà có đường đi đến web thật: storage bền vững, export nâng cấp được, plan/usage, data truth, community moderation, runtime gates và Team/School path.
+
+ZIP mới nhất sau batch:
+giao-an-mvp-vn-batch70-long-term-basic-product-foundation.zip
+
+FILE ĐÃ ĐỌC / Ý ĐÃ GIỮ:
+1. post-batch-audit-va-prompt-chuyen-chat-batch67-recovered-full.txt
+- Giữ: repo/code là nguồn sự thật cao nhất; không tin README/BATCH_NOTES/prompt nếu chưa đối chiếu code.
+- Giữ: Batch67 blocker thật là npm ci/typecheck/build/Prisma/live HTTP/browser smoke chưa pass thật.
+- Giữ: không AI, không cash payment, không marketplace/quỹ/referral nhiều tầng, không verified giả, không public cộng đồng tự do.
+
+2. chien-luoc-giao-an-khong-ai-giai-doan-dau-ban-chuan-chinh-xac-tong-hop-bo-sung-dien-dan-game-activity.docx
+- Giữ: giai đoạn đầu không lấy AI làm lõi.
+- Giữ: định vị là nền tảng soạn giáo án, kho học liệu, xuất Word/PDF, cộng đồng giáo viên và workspace tổ chuyên môn/trường học.
+- Giữ: Free dùng được thật, Pro dùng sướng hơn, Team quản lý được, School triển khai được.
+- Giữ: template giáo án, export DOCX/PDF, checklist rule-based, phiếu học tập, slide dàn ý, ngân hàng câu hỏi/rubric, kho cộng đồng, versioning, workflow tổ, dashboard, nhật ký sau tiết dạy.
+- Giữ: community moderation, điểm/huy hiệu/creator hub, game/activity library, report/takedown, anti-spam.
+- Giữ: dữ liệu phải có nhãn seed/scaffold/community/reviewed/verified/approved_for_release; chưa verified thì chỉ dựng khung an toàn.
+
+MỤC TIÊU BATCH70:
+- Không thêm feature rời rạc.
+- Không chỉ làm demo UI.
+- Tạo lớp Product Foundation versioned bằng code/data.
+- Nối workspace và basic-flow board vào Product Foundation.
+- Thêm validator để giảm thiếu sót ở các batch sau.
+- Không claim production-ready nếu chưa chạy install/typecheck/build/live smoke thật.
+
+FILE TẠO MỚI:
+- data/product-foundation.json
+- lib/product-foundation.ts
+- app/api/product/foundation/route.ts
+- scripts/validate-product-foundation-source.mjs
+- docs/BASIC_PRODUCT_FOUNDATION.md
+- BATCH70_NOTES.md
+- post-batch-audit-va-prompt-chuyen-chat-batch70-basic-product-foundation.txt
+
+FILE SỬA:
+- components/workspace.tsx
+- lib/demo-basic-flow.ts
+- package.json
+- README.md
+- DEPLOYMENT_DEMO_GUIDE.md
+
+API MỚI:
+GET /api/product/foundation
+
+API này trả Product Foundation Board gồm:
+- định vị không-AI;
+- core user flow;
+- mô hình dữ liệu seed/scaffold/community/reviewed/verified/approved_for_release;
+- giao diện Dễ dùng/Tiêu chuẩn/Nâng cao;
+- plan foundation Free/Pro/Team/School;
+- community moderation states;
+- runtime gates;
+- đề xuất batch tiếp theo.
+
+SCRIPT MỚI:
+- npm run product:foundation-validate
+- npm run smoke:batch70
+- npm run verify:batch70
+
+VERIFY ĐÃ PASS TRỰC TIẾP BẰNG NODE:
+- node scripts/validate-product-foundation-source.mjs: PASS.
+- node scripts/validate-basic-flow-source.mjs: PASS.
+- node scripts/validate-internal-imports.mjs: PASS.
+- node scripts/validate-json-data.mjs: PASS, checked 12 JSON, failed 0.
+- node scripts/validate-demo-readiness-source.mjs: PASS.
+
+VERIFY CHƯA CLAIM:
+- npm run product:foundation-validate: trong môi trường này có in kết quả PASS nhưng tiến trình npm không thoát sạch trước timeout tool, nên không claim npm-script pass hoàn toàn.
+- npm install / npm ci: chưa chạy pass thật.
+- npm run typecheck: chưa chạy pass thật.
+- npm run build: chưa chạy pass thật.
+- npm run start: chưa chạy pass thật.
+- Live HTTP smoke: chưa chạy thật.
+- Browser/mobile UI QA: chưa chạy thật.
+
+TRẠNG THÁI THẬT SAU BATCH70:
+- Đây là source-level long-term basic product foundation.
+- Tốt hơn Batch69 vì không chỉ có demo flow mà đã có foundation board/validator/config/doc/API.
+- Chưa production-ready.
+- Chưa đủ để đưa người dùng thật quy mô lớn.
+- Có thể dùng làm bản tốt hơn để deploy demo có định hướng lâu dài, sau khi chạy lại install/typecheck/build/live smoke.
+
+RỦI RO CÒN LẠI:
+1. Runtime/build:
+- Chưa có npm install/typecheck/build pass thật.
+- Chưa live HTTP smoke.
+
+2. Storage:
+- Lưu nháp vẫn là localStorage demo.
+- Cần Batch71 để có SavedLesson/SavedLessonVersion repository và migration path.
+
+3. Export:
+- DOCX/PDF đã có fallback nhưng chưa phải export chất lượng production.
+- Cần header/footer, watermark, trạng thái dữ liệu, compliance packet, test mở trong Word/Google Docs.
+
+4. Dữ liệu/học thuật:
+- Dữ liệu 1–12 chưa verified đầy đủ.
+- Không được sinh kiến thức sâu nếu thiếu reviewed/verified data.
+
+5. Cộng đồng:
+- Foundation có trạng thái moderation nhưng chưa phải live moderation workflow production.
+- Không public tự do.
+
+6. Plan/usage:
+- Có foundation config nhưng chưa phải billing/quota runtime hoàn chỉnh.
+- Không thanh toán thật.
+
+PROMPT CHUYỂN CHAT MỚI — BẢN ĐẦY ĐỦ:
+Bạn là senior full-stack engineer + product architect + governance/compliance-minded technical lead.
+
+Tôi đang làm nền tảng soạn giáo án / thiết kế bài dạy cho Việt Nam lớp 1–12.
+
+ZIP mới nhất phải dùng:
+giao-an-mvp-vn-batch70-long-term-basic-product-foundation.zip
+
+Trạng thái mới nhất:
+Batch70 — Long-Term Basic Product Foundation.
+
+Nhiệm vụ khi tiếp quản:
+1. Mở và unzip ZIP mới nhất trước.
+2. Audit code thật trước.
+3. Sau đó mới đọc BATCH70_NOTES.md, docs/BASIC_PRODUCT_FOUNDATION.md, README.md, DEPLOYMENT_DEMO_GUIDE.md và prompt/audit cũ.
+4. Không tin README/BATCH_NOTES/prompt nếu chưa đối chiếu code.
+5. Không claim xong/hoàn thiện/production-ready/100% nếu chưa verify thật.
+6. Không thêm AI/API/model/agent.
+7. Không thêm thanh toán thật/marketplace tiền mặt/quỹ/referral nhiều tầng.
+8. Không verified giả.
+9. Không public cộng đồng tự do.
+10. Không copy dài SGK/sách giáo viên/tài liệu bản quyền.
+11. Không làm workspace giáo viên thường quá kỹ thuật.
+
+Các file Batch70 cần kiểm tra:
+- data/product-foundation.json
+- lib/product-foundation.ts
+- app/api/product/foundation/route.ts
+- scripts/validate-product-foundation-source.mjs
+- docs/BASIC_PRODUCT_FOUNDATION.md
+- components/workspace.tsx
+- lib/demo-basic-flow.ts
+- package.json
+
+Các route cần smoke sau khi chạy server:
+- /
+- /api/health
+- /api/demo/readiness
+- /api/demo/basic-flow
+- /api/product/foundation
+- /api/metadata
+
+Các lệnh cần chạy lại:
+- npm install
+- npm run imports:validate
+- npm run data:validate
+- npm run demo:readiness-validate
+- npm run basic-flow:validate
+- npm run product:foundation-validate
+- npm run smoke:batch70
+- npm run typecheck
+- npm run build
+- npm run start
+
+Nếu lệnh nào fail/timeout/chưa chạy, phải ghi rõ. Không che lỗi.
+
+Batch tiếp theo nên làm:
+Batch71 — Persistence & Real Saved Lesson Foundation.
+
+Lý do:
+Sau Batch70, foundation đã được model hóa nhưng lưu nháp vẫn là localStorage demo. Muốn web tiến gần sản phẩm thật thì phải có saved lesson repository, versioning tối thiểu, storage mode rõ, API save/list/update/export by saved id, migration path sang database hoặc JSON persistence rõ, và guards không-AI/không verified giả.
+
+Đánh giá thật:
+Batch70 là bước đúng hướng để phần cơ bản không bị demo-only. Nhưng nó vẫn là source-level foundation, chưa phải production-ready.

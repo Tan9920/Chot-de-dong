@@ -1,0 +1,2146 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import type {
+  AcademicDossierSummary,
+  AcademicQualitySummary,
+  ContentAuditLog,
+  ContentEntityKind,
+  ContentImportBatch,
+  ContentImportPreview,
+  ContentReviewRecord,
+  ContentSourceStatusAction,
+  ContentValidationIssue,
+  ManagedTemplateRecord,
+  OrganizationMembership,
+  PackImportPreview,
+  PackImportSelection,
+  PackReleaseBoardSummary,
+  PackAcademicCockpitSummary,
+  AcademicSourceAuthoritySummary,
+  OfficialCurriculumPortfolioSummary,
+  AcademicSourceBundleSummary,
+  AcademicPackExecutionSummary,
+  AcademicEvidenceLedgerSummary,
+  AcademicEvidenceReviewSummary,
+  AcademicEvidenceReviewWorkbenchSummary,
+  AcademicEvidenceReviewFieldDetail,
+  AcademicEvidenceReviewMutationResult,
+  AcademicEvidenceReviewPackDetail,
+  AcademicEvidenceReviewPackMutationResult,
+  AcademicRolloutPortfolioSummary,
+  AcademicRolloutWaveSummary,
+  PackAcademicWorkbenchSummary,
+  AcademicComplianceSummary,
+  AcademicCurationQueueSummary,
+  AcademicPackCurationDetail,
+  AcademicPackCurationMutationResult,
+  AcademicPackCurationSummary,
+  PackReleaseManifest,
+  SessionUser,
+  VerificationQueueSummary
+} from '@/lib/types';
+import { defaultOrganizationContext } from '@/lib/governance';
+
+type AdminSummaryResponse = {
+  overview: {
+    sourceMode: string;
+    topics: number;
+    programs: number;
+    resources: number;
+    questions: number;
+    rubrics: number;
+    grades: string[];
+    subjects: string[];
+    books: string[];
+    sourceStatusSummary?: { seed: number; reviewed: number; verified: number };
+  };
+  summary: {
+    grades: number;
+    subjects: number;
+    books: number;
+    topics: number;
+  };
+  adminSummary: {
+    templates: number;
+    recentAudits: ContentAuditLog[];
+    recentImports: ContentImportBatch[];
+  };
+  audits: ContentAuditLog[];
+  imports: ContentImportBatch[];
+  recentReviews: ContentReviewRecord[];
+  membershipSummary: {
+    total: number;
+    active: number;
+    invited: number;
+    inactive: number;
+    leaders: number;
+    admins: number;
+    byDepartment: Array<{ name: string; value: number }>;
+  };
+  memberships: OrganizationMembership[];
+  verificationQueue: VerificationQueueSummary;
+  academicQuality: AcademicQualitySummary;
+  releaseBoard: PackReleaseBoardSummary;
+  dossierSummary: AcademicDossierSummary;
+  packCockpit: PackAcademicCockpitSummary;
+  bundleSummary: AcademicSourceBundleSummary;
+  sourceAuthoritySummary: AcademicSourceAuthoritySummary;
+  officialPortfolioSummary: OfficialCurriculumPortfolioSummary;
+  executionSummary: AcademicPackExecutionSummary;
+  curationSummary: AcademicPackCurationSummary;
+  evidenceLedgerSummary: AcademicEvidenceLedgerSummary;
+  evidenceReviewSummary: AcademicEvidenceReviewSummary;
+  evidenceReviewWorkbench: AcademicEvidenceReviewWorkbenchSummary;
+  packWorkbench: PackAcademicWorkbenchSummary;
+  rolloutWaveSummary: AcademicRolloutWaveSummary;
+  rolloutPortfolio: AcademicRolloutPortfolioSummary;
+  complianceSummary: AcademicComplianceSummary;
+  curationQueue: AcademicCurationQueueSummary;
+};
+
+type EntityListResponse = {
+  items: Array<Record<string, unknown> | ManagedTemplateRecord>;
+};
+
+type ImportResponse = {
+  preview?: ContentImportPreview;
+  batch?: ContentImportBatch;
+  error?: string;
+};
+
+type PackResponse = {
+  packPreview?: PackImportPreview;
+  preview?: import('@/lib/types').ContentImportPreview;
+  error?: string;
+};
+
+type MembershipResponse = {
+  items: OrganizationMembership[];
+  summary: AdminSummaryResponse['membershipSummary'];
+  error?: string;
+};
+
+type ReviewResponse = {
+  items?: ContentReviewRecord[];
+  reviews?: ContentReviewRecord[];
+  error?: string;
+};
+type EvidenceReviewDetailResponse = AcademicEvidenceReviewFieldDetail & { error?: string };
+type EvidenceReviewMutationResponse = AcademicEvidenceReviewMutationResult & { error?: string };
+type EvidenceReviewPackDetailResponse = AcademicEvidenceReviewPackDetail & { error?: string };
+type EvidenceReviewPackMutationResponse = AcademicEvidenceReviewPackMutationResult & { error?: string };
+type PackCurationDetailResponse = AcademicPackCurationDetail & { error?: string };
+type PackCurationMutationResponse = AcademicPackCurationMutationResult & { error?: string };
+
+
+const entityOptions: Array<{ value: ContentEntityKind; label: string }> = [
+  { value: 'topics', label: 'Chủ đề / bài' },
+  { value: 'programs', label: 'Phân phối chương trình' },
+  { value: 'questions', label: 'Question bank' },
+  { value: 'rubrics', label: 'Rubric bank' },
+  { value: 'resources', label: 'Học liệu / thiết bị' },
+  { value: 'templates', label: 'Mẫu giáo án' }
+];
+
+function createDefaultDraft(kind: ContentEntityKind, scope: { level: string; grade: string; subject: string; book: string; topic: string }) {
+  switch (kind) {
+    case 'topics':
+      return {
+        level: scope.level,
+        grade: scope.grade,
+        subject: scope.subject,
+        book: scope.book,
+        title: scope.topic,
+        code: '',
+        duration: '1 tiết',
+        outcomes: [],
+        qualities: [],
+        coreCompetencies: [],
+        subjectCompetencies: [],
+        materials: [],
+        devices: [],
+        lessonFlow: { khoiDong: [], hinhThanh: [], luyenTap: [], vanDung: [] },
+        assessments: { observation: [], product: [], quick: [] },
+        suggestedQuestions: { nhanBiet: [], thongHieu: [], vanDung: [] },
+        rubric: [],
+        worksheet: [],
+        quickCheck: [],
+        differentiation: { yeu: [], trungBinh: [], khaGioi: [] },
+        keywords: [],
+        recommendedMethodIds: [],
+        recommendedTechniqueIds: [],
+        recommendedModes: [],
+        sourceMeta: { status: 'seed', sourceLabel: 'Biên tập nội bộ', updatedAt: new Date().toISOString() }
+      };
+    case 'programs':
+      return {
+        level: scope.level,
+        grade: scope.grade,
+        subject: scope.subject,
+        book: scope.book,
+        units: [],
+        sourceMeta: { status: 'seed', sourceLabel: 'Biên tập nội bộ', updatedAt: new Date().toISOString() }
+      };
+    case 'questions':
+      return {
+        level: 'nhận biết',
+        grade: scope.grade,
+        subject: scope.subject,
+        book: scope.book,
+        topic: scope.topic,
+        text: '',
+        answerHint: '',
+        sourceMeta: { status: 'seed', sourceLabel: 'Biên tập nội bộ', updatedAt: new Date().toISOString() }
+      };
+    case 'rubrics':
+      return {
+        grade: scope.grade,
+        subject: scope.subject,
+        book: scope.book,
+        topic: scope.topic,
+        title: '',
+        criteria: [],
+        sourceMeta: { status: 'seed', sourceLabel: 'Biên tập nội bộ', updatedAt: new Date().toISOString() }
+      };
+    case 'resources':
+      return {
+        title: '',
+        type: 'học liệu',
+        grade: scope.grade,
+        subject: scope.subject,
+        book: scope.book,
+        topic: scope.topic,
+        description: '',
+        tags: [],
+        audience: 'giáo viên',
+        sourceMeta: { status: 'seed', sourceLabel: 'Biên tập nội bộ', updatedAt: new Date().toISOString() }
+      };
+    case 'templates':
+      return {
+        name: '',
+        description: '',
+        useCases: [],
+        recommendedModes: ['cả lớp'],
+        assessmentFocus: [],
+        sections: []
+      };
+  }
+}
+
+function createDefaultPackSelection(scope: { level: string; grade: string; subject: string }) {
+  return {
+    level: scope.level as any,
+    grade: scope.grade,
+    subject: scope.subject,
+    sourceStatus: 'seed',
+    sourceLabel: `Pack rollout ${scope.grade} - ${scope.subject}`,
+    sourceNote: 'Import pack sinh tự động từ registry; dữ liệu vẫn là seed/demo có cấu trúc.'
+  } satisfies PackImportSelection;
+}
+
+function createDefaultMembership(user: SessionUser | null) {
+  return {
+    name: '',
+    email: '',
+    role: 'teacher',
+    status: 'active',
+    schoolName: user?.schoolName || defaultOrganizationContext.schoolName,
+    departmentName: user?.departmentName || defaultOrganizationContext.departmentName,
+    canReviewLessons: false,
+    canManageContent: false,
+    canPublishContent: false,
+    isPrimary: true
+  };
+}
+
+function formatDate(value: string) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return `${date.toLocaleDateString('vi-VN')} ${date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}`;
+}
+
+function labelSourceStatus(value: unknown) {
+  return value === 'verified' ? 'verified' : value === 'reviewed' ? 'reviewed' : 'seed/demo';
+}
+
+function sourceBadgeClass(value: unknown) {
+  if (value === 'verified') return 'border-emerald-200 bg-emerald-50 text-emerald-700';
+  if (value === 'reviewed') return 'border-blue-200 bg-blue-50 text-blue-700';
+  return 'border-amber-200 bg-amber-50 text-amber-800';
+}
+
+function qualityBadgeClass(value: unknown) {
+  return value === 'critical'
+    ? 'border-rose-200 bg-rose-50 text-rose-700'
+    : 'border-amber-200 bg-amber-50 text-amber-800';
+}
+
+function getSourceMeta(item: Record<string, unknown> | null | undefined) {
+  const meta = item && typeof item === 'object' ? (item as any).sourceMeta : null;
+  return meta && typeof meta === 'object' ? meta as Record<string, unknown> : null;
+}
+
+export default function ContentAdminPanel(props: {
+  user: SessionUser | null;
+  level: string;
+  grade: string;
+  subject: string;
+  book: string;
+  topic: string;
+  onChanged?: () => void;
+}) {
+  const { user, level, grade, subject, book, topic, onChanged } = props;
+  const [entity, setEntity] = useState<ContentEntityKind>('topics');
+  const [items, setItems] = useState<Array<Record<string, unknown>>>([]);
+  const [selectedId, setSelectedId] = useState('');
+  const [editor, setEditor] = useState('');
+  const [keyword, setKeyword] = useState('');
+  const [lifecycleFilter, setLifecycleFilter] = useState('');
+  const [visibilityFilter, setVisibilityFilter] = useState('');
+  const [message, setMessage] = useState('');
+  const [summary, setSummary] = useState<AdminSummaryResponse | null>(null);
+  const [preview, setPreview] = useState<ContentImportPreview | null>(null);
+  const [previewIssues, setPreviewIssues] = useState<ContentValidationIssue[]>([]);
+  const [releaseManifestPackId, setReleaseManifestPackId] = useState('');
+  const [releaseManifest, setReleaseManifest] = useState<PackReleaseManifest | null>(null);
+  const [manifestText, setManifestText] = useState(() => JSON.stringify({
+    sourceLabel: 'Manifest scope mặc định - verified workflow sample',
+    sourceStatus: 'seed',
+    sourceNote: 'Manifest mẫu cho pipeline reviewed/verified, không phải nội dung chuẩn thật.',
+    sourceDefaults: {
+      status: 'seed',
+      sourceLabel: 'Biên tập nội bộ',
+      references: []
+    },
+    scopeDefaults: {
+      level: level || 'Tiểu học',
+      grade: grade || 'Lớp 1',
+      subject: subject || 'Tiếng Việt',
+      book: book || 'Kết nối tri thức với cuộc sống'
+    },
+    topics: []
+  }, null, 2));
+  const [importTarget, setImportTarget] = useState<'auto' | 'json' | 'database'>('auto');
+  const [sourceStatusFilter, setSourceStatusFilter] = useState('');
+  const [packSelectionText, setPackSelectionText] = useState(() => JSON.stringify(createDefaultPackSelection({ level: level || 'Tiểu học', grade: grade || 'Lớp 1', subject: subject || 'Tiếng Việt' }), null, 2));
+  const [packPreview, setPackPreview] = useState<PackImportPreview | null>(null);
+
+  const [reviewItems, setReviewItems] = useState<ContentReviewRecord[]>([]);
+  const [reviewNote, setReviewNote] = useState('');
+
+  const [membershipItems, setMembershipItems] = useState<OrganizationMembership[]>([]);
+  const [membershipSearch, setMembershipSearch] = useState('');
+  const [membershipStatusFilter, setMembershipStatusFilter] = useState('');
+  const [membershipEditor, setMembershipEditor] = useState(() => JSON.stringify(createDefaultMembership(user), null, 2));
+  const [selectedMembershipId, setSelectedMembershipId] = useState('');
+
+  const [selectedEvidenceReviewId, setSelectedEvidenceReviewId] = useState('');
+  const [selectedEvidenceReviewPackId, setSelectedEvidenceReviewPackId] = useState('');
+  const [evidenceReviewPackDetail, setEvidenceReviewPackDetail] = useState<AcademicEvidenceReviewPackDetail | null>(null);
+  const [evidenceReviewDetail, setEvidenceReviewDetail] = useState<AcademicEvidenceReviewFieldDetail | null>(null);
+  const [evidenceReviewDecision, setEvidenceReviewDecision] = useState<'approved' | 'changes_requested' | 'commented'>('approved');
+  const [evidenceReviewNote, setEvidenceReviewNote] = useState('');
+  const [citationLocatorVerified, setCitationLocatorVerified] = useState(true);
+  const [legalSafeVerified, setLegalSafeVerified] = useState(true);
+  const [evidenceReviewBusy, setEvidenceReviewBusy] = useState(false);
+  const [evidenceReviewPackBusy, setEvidenceReviewPackBusy] = useState(false);
+
+  const [selectedCurationPackId, setSelectedCurationPackId] = useState('');
+  const [curationDetail, setCurationDetail] = useState<AcademicPackCurationDetail | null>(null);
+  const [curationDecision, setCurationDecision] = useState<'approved' | 'changes_requested' | 'commented'>('approved');
+  const [curationRecommendation, setCurationRecommendation] = useState<'hold' | 'school_release_candidate' | 'verified_release'>('hold');
+  const [curationNote, setCurationNote] = useState('');
+  const [curationBusy, setCurationBusy] = useState(false);
+
+  const scope = useMemo(() => ({ level, grade, subject, book, topic }), [level, grade, subject, book, topic]);
+  const selectedItem = useMemo(() => items.find((item) => String(item.id || '') === selectedId) || null, [items, selectedId]);
+  const selectedSourceMeta = useMemo(() => getSourceMeta(selectedItem), [selectedItem]);
+  const manifestPackOptions = useMemo(() => {
+    const board = summary?.releaseBoard.items || [];
+    const scoped = board.filter((item) => item.grade === grade && item.subject === subject);
+    return (scoped.length ? scoped : board).slice(0, 24);
+  }, [summary, grade, subject]);
+  const curationPackOptions = useMemo(() => {
+    const queueItems = summary?.curationQueue.items || [];
+    const deduped = new Map<string, { packId: string; label: string }>();
+    queueItems.forEach((item) => {
+      if (!deduped.has(item.packId)) deduped.set(item.packId, { packId: item.packId, label: `${item.grade} · ${item.subject} · ${item.book}` });
+    });
+    manifestPackOptions.forEach((item) => {
+      if (!deduped.has(item.packId)) deduped.set(item.packId, { packId: item.packId, label: `${item.grade} · ${item.subject} · ${item.book}` });
+    });
+    return Array.from(deduped.values()).slice(0, 24);
+  }, [summary, manifestPackOptions]);
+  const evidenceReviewPackOptions = useMemo(() => {
+    const grouped = new Map<string, { packId: string; label: string; total: number; pendingReview: number; readyForLeaderApproval: number; leaderApproved: number }>();
+    for (const item of summary?.evidenceReviewWorkbench.items || []) {
+      const current = grouped.get(item.packId) || {
+        packId: item.packId,
+        label: `${item.grade} · ${item.subject} · ${item.book}`,
+        total: 0,
+        pendingReview: 0,
+        readyForLeaderApproval: 0,
+        leaderApproved: 0
+      };
+      current.total += 1;
+      if (!item.hasReviewRecord || !(item.reviewConsensus?.totalDecisions)) current.pendingReview += 1;
+      if (item.reviewConsensus?.readyForLeaderApproval && !item.reviewConsensus?.hasLeaderApproval) current.readyForLeaderApproval += 1;
+      if (item.reviewConsensus?.hasLeaderApproval) current.leaderApproved += 1;
+      grouped.set(item.packId, current);
+    }
+    return Array.from(grouped.values()).sort((a, b) => a.label.localeCompare(b.label, 'vi'));
+  }, [summary]);
+  const evidenceReviewItemsInPack = useMemo(() => {
+    const items = summary?.evidenceReviewWorkbench.items || [];
+    return selectedEvidenceReviewPackId ? items.filter((item) => item.packId === selectedEvidenceReviewPackId) : items;
+  }, [summary, selectedEvidenceReviewPackId]);
+  const selectedEvidenceReviewItem = useMemo(() => evidenceReviewItemsInPack.find((item) => item.id === selectedEvidenceReviewId) || null, [evidenceReviewItemsInPack, selectedEvidenceReviewId]);
+  const selectedCurationQueueItems = useMemo(() => (summary?.curationQueue.items || []).filter((item) => item.packId === selectedCurationPackId), [summary, selectedCurationPackId]);
+  const isAllowed = user?.role === 'leader' || user?.role === 'admin';
+
+  useEffect(() => {
+    if (!isAllowed) return;
+    void Promise.all([loadSummary(), loadItems(entity), loadMemberships()]);
+  }, [entity, isAllowed]);
+
+  useEffect(() => {
+    if (!isAllowed || !selectedId) {
+      setReviewItems([]);
+      return;
+    }
+    void loadReviews(entity, selectedId);
+  }, [entity, selectedId, isAllowed]);
+
+  useEffect(() => {
+    setMembershipEditor(JSON.stringify(createDefaultMembership(user), null, 2));
+  }, [user]);
+
+  useEffect(() => {
+    setPackSelectionText(JSON.stringify(createDefaultPackSelection(scope), null, 2));
+  }, [scope.level, scope.grade, scope.subject]);
+
+  useEffect(() => {
+    if (!isAllowed) return;
+    if (!evidenceReviewPackOptions.length) {
+      setSelectedEvidenceReviewPackId('');
+      setEvidenceReviewPackDetail(null);
+      return;
+    }
+    const nextPackId = evidenceReviewPackOptions.some((item) => item.packId === selectedEvidenceReviewPackId) ? selectedEvidenceReviewPackId : evidenceReviewPackOptions[0].packId;
+    if (nextPackId !== selectedEvidenceReviewPackId) {
+      setSelectedEvidenceReviewPackId(nextPackId);
+      return;
+    }
+    void loadEvidenceReviewPackDetail(nextPackId);
+  }, [evidenceReviewPackOptions, selectedEvidenceReviewPackId, isAllowed]);
+
+  useEffect(() => {
+    const workItems = evidenceReviewItemsInPack;
+    if (!workItems.length) {
+      setSelectedEvidenceReviewId('');
+      setEvidenceReviewDetail(null);
+      return;
+    }
+    if (selectedEvidenceReviewId && workItems.some((item) => item.id === selectedEvidenceReviewId)) return;
+    const preferred = workItems.find((item) => !item.reviewConsensus?.hasLeaderApproval) || workItems[0];
+    setSelectedEvidenceReviewId(preferred.id);
+  }, [evidenceReviewItemsInPack, selectedEvidenceReviewId]);
+
+  useEffect(() => {
+    if (!isAllowed || !selectedEvidenceReviewItem) {
+      setEvidenceReviewDetail(null);
+      return;
+    }
+    void loadEvidenceReviewDetail(selectedEvidenceReviewItem);
+  }, [isAllowed, selectedEvidenceReviewItem]);
+
+  useEffect(() => {
+    if (!selectedEvidenceReviewItem) return;
+    setEvidenceReviewDecision(selectedEvidenceReviewItem.reviewConsensus?.hasUnresolvedChanges ? 'changes_requested' : 'approved');
+    setEvidenceReviewNote('');
+    setCitationLocatorVerified(selectedEvidenceReviewItem.mappingStatus !== 'pending');
+    setLegalSafeVerified(true);
+  }, [selectedEvidenceReviewId]);
+
+  useEffect(() => {
+    if (!isAllowed) return;
+    if (!curationPackOptions.length) {
+      setSelectedCurationPackId('');
+      setCurationDetail(null);
+      return;
+    }
+    const nextPackId = curationPackOptions.some((item) => item.packId === selectedCurationPackId) ? selectedCurationPackId : curationPackOptions[0].packId;
+    if (nextPackId !== selectedCurationPackId) {
+      setSelectedCurationPackId(nextPackId);
+      return;
+    }
+    void loadCurationDetail(nextPackId);
+  }, [curationPackOptions, selectedCurationPackId, isAllowed]);
+
+  useEffect(() => {
+    if (!curationDetail?.consensus) return;
+    setCurationDecision(curationDetail.consensus.hasUnresolvedChanges ? 'changes_requested' : 'approved');
+    setCurationRecommendation(curationDetail.consensus.releaseRecommendation);
+    setCurationNote('');
+  }, [curationDetail?.packId, curationDetail?.consensus?.latestReviewAt, curationDetail?.consensus?.releaseRecommendation, curationDetail?.consensus?.hasLeaderApproval, curationDetail?.consensus?.hasAdminApproval]);
+
+  useEffect(() => {
+    if (!isAllowed) return;
+    if (!manifestPackOptions.length) {
+      setReleaseManifestPackId('');
+      setReleaseManifest(null);
+      return;
+    }
+    const nextPackId = manifestPackOptions.some((item) => item.packId === releaseManifestPackId) ? releaseManifestPackId : manifestPackOptions[0].packId;
+    if (nextPackId !== releaseManifestPackId) {
+      setReleaseManifestPackId(nextPackId);
+      return;
+    }
+    void loadReleaseManifest(nextPackId);
+  }, [manifestPackOptions, releaseManifestPackId, isAllowed]);
+
+  async function loadSummary() {
+    const res = await fetch('/api/admin/content');
+    const json = await res.json() as AdminSummaryResponse & { error?: string };
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được tổng quan quản trị nội dung.');
+      return;
+    }
+    setSummary(json);
+  }
+
+  async function loadReleaseManifest(packId: string) {
+    if (!packId) {
+      setReleaseManifest(null);
+      return;
+    }
+    const res = await fetch(`/api/admin/content/packs/release-manifest?packId=${encodeURIComponent(packId)}`);
+    const json = await res.json() as PackReleaseManifest & { error?: string };
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được release manifest.');
+      setReleaseManifest(null);
+      return;
+    }
+    setReleaseManifest(json);
+  }
+
+  async function loadEvidenceReviewPackDetail(packId: string) {
+    if (!packId) {
+      setEvidenceReviewPackDetail(null);
+      return;
+    }
+    const res = await fetch(`/api/admin/content/packs/evidence-review-pack-actions?packId=${encodeURIComponent(packId)}`);
+    const json = await res.json() as EvidenceReviewPackDetailResponse;
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được chi tiết evidence review theo pack.');
+      setEvidenceReviewPackDetail(null);
+      return;
+    }
+    setEvidenceReviewPackDetail(json);
+  }
+
+  async function loadEvidenceReviewDetail(item: NonNullable<typeof selectedEvidenceReviewItem>) {
+    const params = new URLSearchParams({
+      packId: item.packId,
+      entityType: item.entityType,
+      entityId: item.entityId,
+      field: item.field
+    });
+    const res = await fetch(`/api/admin/content/packs/evidence-review-actions?${params.toString()}`);
+    const json = await res.json() as EvidenceReviewDetailResponse;
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được chi tiết field evidence review.');
+      return;
+    }
+    setEvidenceReviewDetail(json);
+  }
+
+  async function submitEvidenceReviewAction(action: 'review' | 'leader_approval' | 'leader_revoke') {
+    if (!selectedEvidenceReviewItem) {
+      setMessage('Chưa chọn field evidence review để thao tác.');
+      return;
+    }
+    setEvidenceReviewBusy(true);
+    try {
+      const res = await fetch('/api/admin/content/packs/evidence-review-actions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          packId: selectedEvidenceReviewItem.packId,
+          entityType: selectedEvidenceReviewItem.entityType,
+          entityId: selectedEvidenceReviewItem.entityId,
+          field: selectedEvidenceReviewItem.field,
+          decision: evidenceReviewDecision,
+          note: evidenceReviewNote,
+          citationLocatorVerified,
+          legalSafeVerified
+        })
+      });
+      const json = await res.json() as EvidenceReviewMutationResponse;
+      if (!res.ok) {
+        setMessage(json.error || 'Không cập nhật được evidence review workflow.');
+        return;
+      }
+      setEvidenceReviewDetail(json);
+      setSummary((current) => current ? {
+        ...current,
+        evidenceReviewSummary: json.summary,
+        evidenceReviewWorkbench: json.workbench
+      } : current);
+      if (selectedEvidenceReviewPackId) {
+        await loadEvidenceReviewPackDetail(selectedEvidenceReviewPackId);
+      }
+      setMessage(json.summaryText || 'Đã cập nhật evidence review workflow.');
+      setEvidenceReviewNote('');
+    } finally {
+      setEvidenceReviewBusy(false);
+    }
+  }
+
+  async function submitEvidenceReviewPackAction(action: 'review_missing_my_decision' | 'leader_approve_ready' | 'leader_revoke_all') {
+    if (!selectedEvidenceReviewPackId) {
+      setMessage('Chưa chọn pack evidence review để thao tác hàng loạt.');
+      return;
+    }
+    setEvidenceReviewPackBusy(true);
+    try {
+      const res = await fetch('/api/admin/content/packs/evidence-review-pack-actions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          packId: selectedEvidenceReviewPackId,
+          decision: evidenceReviewDecision,
+          note: evidenceReviewNote,
+          citationLocatorVerified,
+          legalSafeVerified
+        })
+      });
+      const json = await res.json() as EvidenceReviewPackMutationResponse;
+      if (!res.ok) {
+        setMessage(json.error || 'Không cập nhật được evidence review stage ở cấp pack.');
+        return;
+      }
+      setEvidenceReviewPackDetail(json);
+      await loadSummary();
+      setMessage([json.summaryText, json.errors.length ? `Có ${json.errors.length} lỗi/field bị bỏ qua.` : '', json.skippedFields ? `Skipped ${json.skippedFields} field.` : ''].filter(Boolean).join(' '));
+      setEvidenceReviewNote('');
+    } finally {
+      setEvidenceReviewPackBusy(false);
+    }
+  }
+
+  async function loadCurationDetail(packId: string) {
+    if (!packId) {
+      setCurationDetail(null);
+      return;
+    }
+    const res = await fetch(`/api/admin/content/packs/curation-actions?packId=${encodeURIComponent(packId)}`);
+    const json = await res.json() as PackCurationDetailResponse;
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được chi tiết pack curation.');
+      setCurationDetail(null);
+      return;
+    }
+    setCurationDetail(json);
+  }
+
+  async function submitCurationAction(action: 'review' | 'leader_approval' | 'leader_revoke' | 'admin_approval' | 'admin_revoke' | 'release_recommendation') {
+    if (!selectedCurationPackId) {
+      setMessage('Chưa chọn pack để thao tác curation.');
+      return;
+    }
+    setCurationBusy(true);
+    try {
+      const res = await fetch('/api/admin/content/packs/curation-actions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          packId: selectedCurationPackId,
+          decision: curationDecision,
+          recommendation: curationRecommendation,
+          note: curationNote
+        })
+      });
+      const json = await res.json() as PackCurationMutationResponse;
+      if (!res.ok) {
+        setMessage(json.error || 'Không cập nhật được pack curation.');
+        return;
+      }
+      setCurationDetail(json);
+      setSummary((current) => current ? {
+        ...current,
+        curationSummary: {
+          ...current.curationSummary,
+          total: Math.max(current.curationSummary.total, json.summary.total),
+          withConflict: json.summary.withConflict,
+          readyForLeaderApproval: json.summary.readyForLeaderApproval,
+          readyForAdminApproval: json.summary.readyForAdminApproval,
+          readyForVerifiedRelease: json.summary.readyForVerifiedRelease,
+          items: (() => {
+            const nextItems = current.curationSummary.items.filter((item) => item.packId !== selectedCurationPackId);
+            if (json.consensus) nextItems.unshift(json.consensus);
+            return nextItems;
+          })()
+        }
+      } : current);
+      setMessage(json.summaryText || 'Đã cập nhật pack curation.');
+      setCurationNote('');
+      await Promise.all([loadSummary(), loadReleaseManifest(selectedCurationPackId)]);
+    } finally {
+      setCurationBusy(false);
+    }
+  }
+
+  async function loadItems(nextEntity = entity) {
+    const params = new URLSearchParams({
+      q: keyword,
+      grade: nextEntity === 'templates' ? '' : grade,
+      subject: nextEntity === 'templates' ? '' : subject,
+      book: nextEntity === 'templates' ? '' : book,
+      topic: nextEntity === 'templates' ? '' : topic,
+      lifecycleStatus: lifecycleFilter,
+      visibilityScope: visibilityFilter,
+      sourceStatus: nextEntity === 'templates' ? '' : sourceStatusFilter
+    });
+    const res = await fetch(`/api/admin/content/${nextEntity}?${params.toString()}`);
+    const json = await res.json() as EntityListResponse & { error?: string };
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được danh sách nội dung.');
+      return;
+    }
+    const list = (json.items || []) as Array<Record<string, unknown>>;
+    setItems(list);
+    if (!list.length) {
+      setSelectedId('');
+      setEditor(JSON.stringify(createDefaultDraft(nextEntity, scope), null, 2));
+      return;
+    }
+    selectItem(list[0]);
+  }
+
+  function selectItem(item: Record<string, unknown>) {
+    const itemId = String(item.id || '');
+    setSelectedId(itemId);
+    setEditor(JSON.stringify(item, null, 2));
+  }
+
+  function resetDraft(nextEntity = entity) {
+    setSelectedId('');
+    setReviewItems([]);
+    setReviewNote('');
+    setEditor(JSON.stringify(createDefaultDraft(nextEntity, scope), null, 2));
+  }
+
+  async function saveCurrent() {
+    try {
+      const parsed = JSON.parse(editor);
+      const res = await fetch(`/api/admin/content/${entity}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item: parsed })
+      });
+      const json = await res.json() as { item?: Record<string, unknown>; error?: string };
+      if (!res.ok || !json.item) {
+        setMessage(json.error || 'Không lưu được bản ghi nội dung.');
+        return;
+      }
+      setSelectedId(String(json.item.id || ''));
+      setEditor(JSON.stringify(json.item, null, 2));
+      setMessage('Đã lưu kho nội dung.');
+      await Promise.all([loadItems(), loadSummary()]);
+      onChanged?.();
+    } catch {
+      setMessage('JSON không hợp lệ. Hãy kiểm tra lại phần chỉnh sửa.');
+    }
+  }
+
+  async function deleteCurrent() {
+    if (!selectedId) {
+      setMessage('Chưa có bản ghi nào được chọn để xóa.');
+      return;
+    }
+    const res = await fetch(`/api/admin/content/${entity}?id=${encodeURIComponent(selectedId)}`, { method: 'DELETE' });
+    const json = await res.json().catch(() => ({ error: 'Không xóa được bản ghi.' })) as { error?: string };
+    if (!res.ok) {
+      setMessage(json.error || 'Không xóa được bản ghi.');
+      return;
+    }
+    setMessage('Đã xóa bản ghi khỏi kho nội dung.');
+    resetDraft();
+    await Promise.all([loadItems(), loadSummary()]);
+    onChanged?.();
+  }
+
+  async function changeLifecycle(action: 'submit' | 'publish' | 'archive' | 'restore-draft') {
+    if (!selectedId) {
+      setMessage('Chưa chọn bản ghi để chuyển trạng thái.');
+      return;
+    }
+    const res = await fetch(`/api/admin/content/${entity}/lifecycle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: selectedId, action })
+    });
+    const json = await res.json().catch(() => ({ error: 'Không chuyển được trạng thái.' })) as { error?: string; item?: Record<string, unknown> };
+    if (!res.ok) {
+      setMessage(json.error || 'Không chuyển được trạng thái nội dung.');
+      return;
+    }
+    setMessage(`Đã chuyển trạng thái nội dung sang ${action}.`);
+    if (json.item) setEditor(JSON.stringify(json.item, null, 2));
+    await Promise.all([loadItems(), loadSummary(), loadReviews(entity, selectedId)]);
+    onChanged?.();
+  }
+
+  async function changeSourceStatus(action: ContentSourceStatusAction) {
+    if (!selectedId) {
+      setMessage('Chưa chọn bản ghi để cập nhật source status.');
+      return;
+    }
+    const res = await fetch(`/api/admin/content/${entity}/source-status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: selectedId, action, note: reviewNote })
+    });
+    const json = await res.json().catch(() => ({ error: 'Không cập nhật được source status.' })) as { error?: string; item?: Record<string, unknown> };
+    if (!res.ok) {
+      setMessage(json.error || 'Không cập nhật được source status.');
+      return;
+    }
+    if (json.item) setEditor(JSON.stringify(json.item, null, 2));
+    setMessage(action === 'mark-reviewed' ? 'Đã chuyển source status sang reviewed.' : action === 'mark-verified' ? 'Đã chuyển source status sang verified.' : 'Đã reset source status về seed/demo.');
+    await Promise.all([loadItems(), loadSummary(), loadReviews(entity, selectedId)]);
+    onChanged?.();
+  }
+
+  async function loadReviews(nextEntity = entity, id = selectedId) {
+    if (!id) {
+      setReviewItems([]);
+      return;
+    }
+    const res = await fetch(`/api/admin/content/${nextEntity}/reviews?id=${encodeURIComponent(id)}`);
+    const json = await res.json() as ReviewResponse;
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được lịch sử review nội dung.');
+      return;
+    }
+    setReviewItems(json.items || json.reviews || []);
+  }
+
+  async function submitReview(decision: 'approved' | 'changes_requested' | 'commented') {
+    if (!selectedId) {
+      setMessage('Chưa chọn bản ghi để review.');
+      return;
+    }
+    const res = await fetch(`/api/admin/content/${entity}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: selectedId, decision, note: reviewNote })
+    });
+    const json = await res.json() as ReviewResponse & { item?: Record<string, unknown> };
+    if (!res.ok) {
+      setMessage(json.error || 'Không thực hiện được review nội dung.');
+      return;
+    }
+    if (json.item) setEditor(JSON.stringify(json.item, null, 2));
+    setReviewItems(json.reviews || []);
+    setReviewNote('');
+    setMessage(decision === 'approved' ? 'Đã ghi nhận review approved.' : decision === 'changes_requested' ? 'Đã yêu cầu chỉnh sửa nội dung.' : 'Đã lưu ghi chú review.');
+    await Promise.all([loadItems(), loadSummary()]);
+    onChanged?.();
+  }
+
+  async function submitImport(dryRun: boolean) {
+    try {
+      const manifest = JSON.parse(manifestText);
+      const res = await fetch('/api/admin/content/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target: importTarget, dryRun, manifest })
+      });
+      const json = await res.json() as ImportResponse;
+      setPreview(json.preview || null);
+      setPreviewIssues(json.preview?.issues || []);
+      if (!res.ok && !json.preview) {
+        setMessage(json.error || 'Không thực hiện được import manifest.');
+        return;
+      }
+      setMessage(dryRun ? 'Đã chạy dry-run manifest.' : 'Đã import manifest vào kho nội dung.');
+      await Promise.all([loadItems(), loadSummary()]);
+      onChanged?.();
+    } catch {
+      setMessage('Manifest JSON không hợp lệ.');
+    }
+  }
+
+  async function submitPackImport(dryRun: boolean) {
+    try {
+      const selection = JSON.parse(packSelectionText) as PackImportSelection;
+      const res = await fetch('/api/admin/content/packs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target: importTarget, dryRun, selection })
+      });
+      const json = await res.json() as PackResponse & { packPreview?: PackImportPreview };
+      if (!res.ok) {
+        setMessage(json.error || 'Không preview/import được pack rollout.');
+        return;
+      }
+      const nextPreview = json.packPreview || null;
+      setPackPreview(nextPreview);
+      if (nextPreview) {
+        setPreview(nextPreview.preview);
+        setPreviewIssues(nextPreview.preview.issues || []);
+      }
+      setMessage(dryRun ? 'Đã preview pack rollout.' : 'Đã import pack rollout vào kho nội dung.');
+      await Promise.all([loadItems(), loadSummary()]);
+      onChanged?.();
+    } catch {
+      setMessage('Pack selection JSON không hợp lệ.');
+    }
+  }
+
+  async function loadMemberships() {
+    const params = new URLSearchParams({ q: membershipSearch, status: membershipStatusFilter });
+    const res = await fetch(`/api/admin/memberships?${params.toString()}`);
+    const json = await res.json() as MembershipResponse;
+    if (!res.ok) {
+      setMessage(json.error || 'Không tải được membership directory.');
+      return;
+    }
+    setMembershipItems(json.items || []);
+    if (json.items?.length && !selectedMembershipId) {
+      setSelectedMembershipId(json.items[0].id);
+      setMembershipEditor(JSON.stringify(json.items[0], null, 2));
+    }
+  }
+
+  function resetMembershipDraft() {
+    setSelectedMembershipId('');
+    setMembershipEditor(JSON.stringify(createDefaultMembership(user), null, 2));
+  }
+
+  async function saveMembership() {
+    try {
+      const parsed = JSON.parse(membershipEditor);
+      const res = await fetch('/api/admin/memberships', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item: parsed })
+      });
+      const json = await res.json() as { item?: OrganizationMembership; error?: string };
+      if (!res.ok || !json.item) {
+        setMessage(json.error || 'Không lưu được membership.');
+        return;
+      }
+      setSelectedMembershipId(json.item.id);
+      setMembershipEditor(JSON.stringify(json.item, null, 2));
+      setMessage('Đã lưu membership directory.');
+      await Promise.all([loadMemberships(), loadSummary()]);
+    } catch {
+      setMessage('Membership JSON không hợp lệ.');
+    }
+  }
+
+  async function deleteCurrentMembership() {
+    if (!selectedMembershipId) {
+      setMessage('Chưa chọn membership để xóa.');
+      return;
+    }
+    const res = await fetch(`/api/admin/memberships?id=${encodeURIComponent(selectedMembershipId)}`, { method: 'DELETE' });
+    const json = await res.json().catch(() => ({ error: 'Không xóa được membership.' })) as { error?: string };
+    if (!res.ok) {
+      setMessage(json.error || 'Không xóa được membership.');
+      return;
+    }
+    setMessage('Đã xóa membership khỏi directory.');
+    resetMembershipDraft();
+    await Promise.all([loadMemberships(), loadSummary()]);
+  }
+
+  if (!isAllowed) {
+    return <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">Tab này chỉ dành cho tổ trưởng/chuyên môn hoặc quản trị.</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      {message ? <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">{message}</div> : null}
+
+      <div className="grid gap-4 md:grid-cols-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Mode hiện tại</div>
+          <div className="mt-2 text-lg font-semibold text-slate-900">{summary?.overview.sourceMode || '—'}</div>
+          <div className="mt-2 text-xs text-slate-500">seed {summary?.overview.sourceStatusSummary?.seed ?? 0} · reviewed {summary?.overview.sourceStatusSummary?.reviewed ?? 0} · verified {summary?.overview.sourceStatusSummary?.verified ?? 0}</div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Chủ đề</div>
+          <div className="mt-2 text-lg font-semibold text-slate-900">{summary?.overview.topics ?? 0}</div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Question / rubric</div>
+          <div className="mt-2 text-lg font-semibold text-slate-900">{(summary?.overview.questions ?? 0) + (summary?.overview.rubrics ?? 0)}</div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Template DB/local</div>
+          <div className="mt-2 text-lg font-semibold text-slate-900">{summary?.adminSummary.templates ?? 0}</div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Membership active</div>
+          <div className="mt-2 text-lg font-semibold text-slate-900">{summary?.membershipSummary.active ?? 0}</div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[0.95fr,1.05fr]">
+        <div className="space-y-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex flex-wrap gap-2">
+            {entityOptions.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => { setEntity(option.value); setKeyword(''); setPreview(null); setPreviewIssues([]); resetDraft(option.value); }}
+                className={`rounded-xl px-3 py-2 text-sm ${entity === option.value ? 'bg-slate-900 text-white' : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100'}`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2">
+            <input value={keyword} onChange={(event: any) => setKeyword(event.target.value)} placeholder="Tìm theo id, tiêu đề, mô tả..." className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+            <button onClick={() => void loadItems()} className="rounded-xl bg-slate-900 px-4 py-2 text-white">Lọc</button>
+          </div>
+
+          <div className="grid gap-2 md:grid-cols-2">
+            <select value={lifecycleFilter} onChange={(event: any) => setLifecycleFilter(event.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm">
+              <option value="">Tất cả lifecycle</option>
+              <option value="draft">draft</option>
+              <option value="review">review</option>
+              <option value="published">published</option>
+              <option value="archived">archived</option>
+            </select>
+            <select value={visibilityFilter} onChange={(event: any) => setVisibilityFilter(event.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm">
+              <option value="">Tất cả phạm vi</option>
+              <option value="department">department</option>
+              <option value="school">school</option>
+              <option value="system">system</option>
+            </select>
+            <select value={sourceStatusFilter} onChange={(event: any) => setSourceStatusFilter(event.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm">
+              <option value="">Tất cả source</option>
+              <option value="seed">seed</option>
+              <option value="reviewed">reviewed</option>
+              <option value="verified">verified</option>
+            </select>
+          </div>
+
+          <div className="flex gap-2">
+            <button onClick={() => resetDraft()} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-100">Bản ghi mới</button>
+            <button onClick={() => void loadItems()} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-100">Tải lại</button>
+          </div>
+
+          <div className="max-h-[520px] space-y-3 overflow-y-auto pr-1">
+            {items.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">Chưa có bản ghi phù hợp bộ lọc hiện tại.</div>
+            ) : items.map((item) => {
+              const itemId = String(item.id || '');
+              const itemTitle = String((item as any).title || (item as any).name || (item as any).text || itemId);
+              const itemMeta = [item.grade, item.subject, item.topic, item.book].filter(Boolean).join(' · ');
+              const governance = (item as any).governance;
+              const sourceMeta = getSourceMeta(item);
+              return (
+                <button key={itemId} onClick={() => selectItem(item)} className={`block w-full rounded-2xl border p-4 text-left ${selectedId === itemId ? 'border-slate-900 bg-slate-100' : 'border-slate-200 bg-slate-50 hover:bg-slate-100'}`}>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="font-medium text-slate-900">{itemTitle}</div>
+                    {sourceMeta ? <span className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] ${sourceBadgeClass(sourceMeta.status)}`}>{labelSourceStatus(sourceMeta.status)}</span> : null}
+                  </div>
+                  <div className="mt-1 text-xs text-slate-600">{itemId}</div>
+                  {itemMeta ? <div className="mt-1 text-xs text-blue-700">{itemMeta}</div> : null}
+                  {sourceMeta ? <div className="mt-1 text-[11px] text-slate-500">{String(sourceMeta.sourceLabel || 'Không có sourceLabel')} · refs {Array.isArray(sourceMeta.references) ? sourceMeta.references.length : 0}</div> : null}
+                  {governance ? <div className="mt-1 text-[11px] text-slate-500">{governance.lifecycleStatus} · {governance.visibilityScope} · {governance.departmentName || governance.schoolName}</div> : null}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Chỉnh sửa JSON trực tiếp</div>
+                <div className="text-sm text-slate-600">CRUD mức admin/leader cho toàn bộ kho nội dung và mẫu giáo án.</div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button onClick={() => void saveCurrent()} className="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white">Lưu bản ghi</button>
+                <button onClick={() => void changeLifecycle('submit')} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm">Chuyển review</button>
+                <button onClick={() => void changeLifecycle('publish')} className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700">Publish</button>
+                {entity !== 'templates' ? <button onClick={() => void changeSourceStatus('mark-reviewed')} className="rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 text-sm text-blue-700">Đánh dấu reviewed</button> : null}
+                {entity !== 'templates' ? <button onClick={() => void changeSourceStatus('mark-verified')} className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700">Đánh dấu verified</button> : null}
+                {entity !== 'templates' ? <button onClick={() => void changeSourceStatus('reset-seed')} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800">Reset seed</button> : null}
+                <button onClick={() => void changeLifecycle('archive')} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800">Archive</button>
+                <button onClick={() => void changeLifecycle('restore-draft')} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm">Về draft</button>
+                <button onClick={() => void deleteCurrent()} className="rounded-xl border border-rose-300 bg-rose-50 px-4 py-2 text-sm text-rose-700">Xóa</button>
+              </div>
+            </div>
+            {selectedId && selectedSourceMeta ? (
+              <div className="mb-3 flex flex-wrap gap-2 text-xs">
+                <span className={`inline-flex rounded-full border px-2 py-1 ${sourceBadgeClass(selectedSourceMeta.status)}`}>{labelSourceStatus(selectedSourceMeta.status)}</span>
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-slate-600">label: {String(selectedSourceMeta.sourceLabel || '—')}</span>
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-slate-600">refs: {Array.isArray(selectedSourceMeta.references) ? selectedSourceMeta.references.length : 0}</span>
+              </div>
+            ) : null}
+            <textarea value={editor} onChange={(event: any) => setEditor(event.target.value)} className="min-h-[420px] w-full rounded-2xl border border-slate-300 bg-slate-950 p-4 font-mono text-sm text-slate-100" spellCheck={false} />
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Moderation / review history</div>
+                <div className="text-sm text-slate-600">Publish nội dung giờ cần review hợp lệ sau lần submit gần nhất.</div>
+              </div>
+              <div className="text-xs text-slate-500">{selectedId ? `Entity: ${entity} · ${selectedId}` : 'Chưa chọn bản ghi'}</div>
+            </div>
+            <textarea value={reviewNote} onChange={(event: any) => setReviewNote(event.target.value)} placeholder="Ghi chú review, nhận xét cần chỉnh sửa, căn cứ duyệt..." className="min-h-[100px] w-full rounded-2xl border border-slate-300 bg-white p-4 text-sm text-slate-900" />
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button onClick={() => void submitReview('approved')} className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700">Review approved</button>
+              <button onClick={() => void submitReview('changes_requested')} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800">Yêu cầu chỉnh sửa</button>
+              <button onClick={() => void submitReview('commented')} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm">Ghi chú</button>
+            </div>
+            <div className="mt-4 space-y-3 text-sm">
+              {reviewItems.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-slate-600">Chưa có lịch sử moderation cho bản ghi hiện tại.</div> : reviewItems.map((item) => (
+                <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="font-medium text-slate-900">{item.decision} · {item.reviewerName}</div>
+                  <div className="mt-1 text-slate-700">{item.note || 'Không có ghi chú.'}</div>
+                  <div className="mt-1 text-xs text-slate-500">{item.departmentName} · {formatDate(item.createdAt)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Import manifest chuẩn</div>
+                <div className="text-sm text-slate-600">Dùng cho đợt nạp dữ liệu lớp 6 thật sau này mà không phải sửa code cứng.</div>
+              </div>
+              <div className="flex gap-2">
+                <select value={importTarget} onChange={(event: any) => setImportTarget(event.target.value as 'auto' | 'json' | 'database')} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm">
+                  <option value="auto">auto</option>
+                  <option value="json">json_store</option>
+                  <option value="database">database</option>
+                </select>
+                <button onClick={() => void submitImport(true)} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Dry-run</button>
+                <button onClick={() => void submitImport(false)} className="rounded-xl bg-emerald-600 px-4 py-2 text-sm text-white">Import</button>
+              </div>
+            </div>
+            <textarea value={manifestText} onChange={(event: any) => setManifestText(event.target.value)} className="min-h-[220px] w-full rounded-2xl border border-slate-300 bg-slate-950 p-4 font-mono text-sm text-slate-100" spellCheck={false} />
+            {preview ? (
+              <div className="mt-4 space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="flex flex-wrap gap-3 text-sm text-slate-700">
+                  <span><strong>Nguồn:</strong> {preview.sourceLabel}</span>
+                  <span><strong>Target:</strong> {preview.target}</span>
+                  <span><strong>Hợp lệ:</strong> {preview.valid ? 'Có' : 'Không'}</span>
+                </div>
+                <div className="grid gap-2 text-sm text-slate-700 md:grid-cols-3">
+                  <div>Topics: {preview.counts.topics}</div>
+                  <div>Programs: {preview.counts.programs}</div>
+                  <div>Questions: {preview.counts.questions}</div>
+                  <div>Rubrics: {preview.counts.rubrics}</div>
+                  <div>Resources: {preview.counts.resources}</div>
+                  <div>Templates: {preview.counts.templates}</div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  {previewIssues.length === 0 ? (
+                    <div className="text-emerald-700">Không phát hiện issue trong preview hiện tại.</div>
+                  ) : previewIssues.map((issue, index) => (
+                    <div key={`${issue.entityId}-${index}`} className={`rounded-xl px-3 py-2 ${issue.level === 'error' ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-800'}`}>
+                      <strong>{issue.level.toUpperCase()}</strong> · {issue.entityType} · {issue.entityId}: {issue.message}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Pack rollout import</div>
+                <div className="text-sm text-slate-600">Import theo pack registry để nạp coverage kỹ thuật theo lớp/môn mà không phải dán manifest thủ công.</div>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => void submitPackImport(true)} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Preview pack</button>
+                <button onClick={() => void submitPackImport(false)} className="rounded-xl bg-blue-600 px-4 py-2 text-sm text-white">Import pack</button>
+                <a href="/api/admin/content/report" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải report JSON</a>
+              </div>
+            </div>
+            <textarea value={packSelectionText} onChange={(event: any) => setPackSelectionText(event.target.value)} className="min-h-[180px] w-full rounded-2xl border border-slate-300 bg-slate-950 p-4 font-mono text-sm text-slate-100" spellCheck={false} />
+            {packPreview ? (
+              <div className="mt-4 space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
+                <div className="flex flex-wrap gap-3 text-slate-700">
+                  <span><strong>Pack match:</strong> {packPreview.matchedPacks.length}</span>
+                  <span><strong>Topics:</strong> {packPreview.preview.counts.topics}</span>
+                  <span><strong>Programs:</strong> {packPreview.preview.counts.programs}</span>
+                  <span><strong>Questions:</strong> {packPreview.preview.counts.questions}</span>
+                </div>
+                <div className="grid gap-2 md:grid-cols-2">
+                  {packPreview.matchedPacks.slice(0, 8).map((item) => (
+                    <div key={item.id} className="rounded-xl border border-slate-200 bg-white p-3">
+                      <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                      <div className="mt-1 text-xs text-slate-600">{item.rolloutStage} · topics {item.topics} · questions {item.questions}</div>
+                      <div className="mt-1 text-xs text-slate-500">{item.id}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Academic dossier board</div>
+                <div className="text-sm text-slate-600">Board chuẩn hóa hồ sơ học thuật theo pack để lớp 6 trở thành pack chuẩn và lớp 1–5, 7–12 bám cùng template trace/review.</div>
+              </div>
+              <div className="flex gap-2">
+                <a href="/api/admin/content/dossiers" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải dossier board JSON</a>
+                {summary?.dossierSummary.priorityPacks?.[0]?.packId ? <a href={`/api/admin/content/dossiers/template?packId=${encodeURIComponent(summary.dossierSummary.priorityPacks[0].packId)}`} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Mở template pack ưu tiên đầu</a> : null}
+              </div>
+            </div>
+            <div className="grid gap-3 md:grid-cols-4 text-sm">
+              {(summary?.dossierSummary.byScopeGroup || []).map((item) => (
+                <div key={item.scopeGroup} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-slate-500">{item.scopeGroup === 'primary_1_5' ? 'Khối 1–5' : item.scopeGroup === 'grade6' ? 'Lớp 6' : item.scopeGroup === 'middle_7_9' ? 'Khối 7–9' : 'Khối 10–12'}</div>
+                  <div className="mt-1 text-lg font-semibold text-slate-900">{item.value}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-3 text-sm">
+              {(summary?.dossierSummary.byPriority || []).map((item) => (
+                <div key={item.priority} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-slate-500">Ưu tiên {item.priority.toUpperCase()}</div>
+                  <div className="mt-1 text-lg font-semibold text-slate-900">{item.value}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 max-h-[320px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.dossierSummary.priorityPacks || []).length === 0 ? <div className="text-slate-600">Chưa sinh được dossier board từ pack registry.</div> : summary?.dossierSummary.priorityPacks.slice(0, 12).map((item) => (
+                <div key={item.packId} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.priority.toUpperCase()}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.status}</span>
+                    {item.releaseStatus ? <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">release {item.releaseStatus}</span> : null}
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">Pack {item.packId} · Trace targets {item.traceTargets.length} · T{item.expected.topics}/P{item.expected.programs}/Q{item.expected.questions}</div>
+                  <div className="mt-2 space-y-1 text-xs text-slate-600">
+                    {item.nextActions.slice(0, 3).map((entry, index) => <div key={index}>• {entry}</div>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Pack academic cockpit</div>
+                <div className="text-sm text-slate-600">Bảng điều phối tác chiến theo pack: pack nào phủ đủ entity, pack nào đã có nhiều entity sẵn sàng reviewed/verified để ưu tiên chuyển từ seed sang corpus thật.</div>
+              </div>
+              <a href="/api/admin/content/packs/cockpit" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải cockpit JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-5 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">P0</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packCockpit.p0 ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">P1</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packCockpit.p1 ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">P2</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packCockpit.p2 ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Entity ready reviewed</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packCockpit.readyForReviewed ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Entity ready verified</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packCockpit.readyForVerified ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[320px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.packCockpit.items || []).length === 0 ? <div className="text-slate-600">Chưa dựng được cockpit theo pack.</div> : summary?.packCockpit.items.slice(0, 12).map((item) => (
+                <div key={item.packId} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.priority.toUpperCase()}</span>
+                    {item.releaseStatus ? <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">release {item.releaseStatus}</span> : null}
+                  </div>
+                  <div className="mt-2 grid gap-2 md:grid-cols-3 text-xs text-slate-700">
+                    <div>Coverage {item.coveragePercent}%</div>
+                    <div>Verified {item.verifiedPercent}%</div>
+                    <div>Published {item.publishedPercent}%</div>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">Entity total {item.entityTotals.total} · ready reviewed {item.entityTotals.readyForReviewed} · ready verified {item.entityTotals.readyForVerified}</div>
+                  <div className="mt-2 space-y-1 text-xs text-slate-600">{item.blockers.length ? item.blockers.slice(0, 3).map((entry, index) => <div key={index}>• {entry}</div>) : <div className="text-emerald-700">Pack đang sạch blocker ở mức cockpit hiện tại.</div>}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Source authority registry</div>
+                <div className="text-sm text-slate-600">Danh mục cơ quan/bộ sách/domain chính thống dùng để chặn nguồn không đủ chuẩn khi dữ liệu được đẩy sang reviewed hoặc verified.</div>
+              </div>
+              <a href="/api/admin/content/source-authorities" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải authority JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-5 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Total authorities</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.sourceAuthoritySummary.total ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Active</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.sourceAuthoritySummary.active ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Ministry</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.sourceAuthoritySummary.ministry ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Gov portals</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.sourceAuthoritySummary.governmentPortals ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Domains</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.sourceAuthoritySummary.uniqueDomains ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[220px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.sourceAuthoritySummary.items || []).length === 0 ? <div className="text-slate-600">Chưa có authority registry. Khi đó reviewed/verified vẫn có nguy cơ nhận nguồn không chính thống.</div> : summary?.sourceAuthoritySummary.items.slice(0, 10).map((item) => (
+                <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.title}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.kind}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.isActive ? 'active' : 'inactive'}</span>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">Domains {item.domains.join(', ') || '—'} · types {item.allowedReferenceTypes.join(', ') || '—'}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Academic source bundle registry</div>
+                <div className="text-sm text-slate-600">Registry nguồn CTGDPT / SGK / hướng dẫn chính thức theo pack để không phải gắn nguồn rời rạc ở từng entity khi mở rộng lớp 1–12.</div>
+              </div>
+              <a href="/api/admin/content/reference-bundles" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải bundle JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-5 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Total bundles</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.bundleSummary.total ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Official core</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.bundleSummary.officialCore ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Textbook</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.bundleSummary.textbook ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Verified bundles</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.bundleSummary.verified ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Missing pages</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.bundleSummary.missingPages ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[280px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.bundleSummary.items || []).length === 0 ? <div className="text-slate-600">Chưa có source bundle nào trong registry. Đây là điểm nghẽn thật để chuyển pack từ seed sang verified.</div> : summary?.bundleSummary.items.slice(0, 12).map((item) => (
+                <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.scope}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.status}</span>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">{item.title} · refs {item.references.length} · pack {item.packId}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Official curriculum portfolio</div>
+                <div className="text-sm text-slate-600">Hồ sơ nguồn công khai/canonical ở cấp pack. Dùng để biết pack nào đã có CTGDPT, hướng dẫn chính thức, nền tảng SGK chuẩn và đã đủ citation-ready hay chưa.</div>
+              </div>
+              <a href="/api/admin/content/packs/official-portfolio" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải portfolio JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-5 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Packs</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.officialPortfolioSummary.total ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Citation ready</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.officialPortfolioSummary.citationReady ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có CTGDPT</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.officialPortfolioSummary.withCtgdpt ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có guidance</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.officialPortfolioSummary.withGuidance ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có SGK platform</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.officialPortfolioSummary.withTextbookPlatform ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[260px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.officialPortfolioSummary.items || []).length === 0 ? <div className="text-slate-600">Chưa có portfolio nguồn chính thống/citation-ready theo pack.</div> : summary?.officialPortfolioSummary.items.slice(0, 10).map((item) => (
+                <div key={item.packId} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.coverage.citationReady ? 'citation-ready' : 'not-ready'}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">docs {item.documentCounts.canonical}/{item.documentCounts.total}</span>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">CTGDPT {item.coverage.hasCtgdpt ? '✓' : '✗'} · guidance {item.coverage.hasGuidance ? '✓' : '✗'} · textbook {item.coverage.hasTextbookPlatform ? '✓' : '✗'} · missing pages {item.documentCounts.missingPages}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Pack execution registry</div>
+                <div className="text-sm text-slate-600">Lớp điều phối thật để kéo 1–2 pack đi qua verified corpus workflow: khai báo tài liệu bắt buộc, bước review, approval và release snapshot, không chỉ dừng ở bundle scaffold.</div>
+              </div>
+              <a href="/api/admin/content/packs/execution-registry" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải execution JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-4 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Total records</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.executionSummary.total ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Release ready</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.executionSummary.releaseReady ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có CTGDPT</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.executionSummary.withCtgdpt ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Blocked steps</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.executionSummary.blocked ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[280px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.executionSummary.items || []).length === 0 ? <div className="text-slate-600">Chưa có execution record nào. Vì vậy pack vẫn thiếu lớp điều phối thật để đi từ scaffold sang verified workflow có kiểm soát.</div> : summary?.executionSummary.items.slice(0, 10).map((item) => (
+                <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.status}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">target {item.targetTier}</span>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">Docs {item.requiredDocuments.length} · steps {item.steps.length} · pack {item.packId}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Multi-grade rollout waves</div>
+                <div className="text-sm text-slate-600">Lớp điều phối để không còn dồn hết vào lớp 6: khai báo wave theo dải lớp/môn, rồi bootstrap execution plan và source bundle scaffold hàng loạt cho các lớp còn lại.</div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <a href="/api/admin/content/rollout-waves" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải waves JSON</a>
+                <a href="/api/admin/content/rollout-bootstrap" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Xem bootstrap kit</a>
+              </div>
+            </div>
+            <div className="grid gap-3 md:grid-cols-6 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Waves</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.rolloutWaveSummary.total ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Packs toàn hệ</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.rolloutPortfolio.totalPacks ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có execution</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.rolloutPortfolio.withExecution ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có bundles</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.rolloutPortfolio.withBundles ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có ledger</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.rolloutPortfolio.withLedger ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Release ready</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.rolloutPortfolio.releaseReady ?? 0}</div></div>
+            </div>
+            <div className="mt-4 grid gap-4 xl:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <div className="text-sm font-semibold text-slate-900">Rollout waves</div>
+                <div className="mt-3 space-y-3 text-sm">
+                  {(summary?.rolloutWaveSummary.items || []).length === 0 ? <div className="text-slate-600">Chưa khai báo wave nào cho rollout đa lớp.</div> : summary?.rolloutWaveSummary.items.map((item) => (
+                    <div key={item.id} className="rounded-2xl border border-slate-200 bg-white p-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="font-medium text-slate-900">{item.title}</div>
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">{item.status}</span>
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">tier {item.targetTier}</span>
+                      </div>
+                      <div className="mt-2 text-xs text-slate-600">Packs {item.resolvedPackCount} · grades {item.resolvedGrades.join(', ') || '—'} · subjects {item.resolvedSubjects.slice(0, 4).join(', ')}{item.resolvedSubjects.length > 4 ? '…' : ''}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <div className="text-sm font-semibold text-slate-900">Rollout portfolio theo lớp</div>
+                <div className="mt-3 max-h-[280px] space-y-2 overflow-y-auto pr-1 text-sm">
+                  {(summary?.rolloutPortfolio.items || []).length === 0 ? <div className="text-slate-600">Chưa có ma trận rollout theo lớp.</div> : summary?.rolloutPortfolio.items.map((item) => (
+                    <div key={item.grade} className="rounded-2xl border border-slate-200 bg-white p-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="font-medium text-slate-900">{item.grade}</div>
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">{item.level}</span>
+                      </div>
+                      <div className="mt-2 grid gap-2 md:grid-cols-3 text-xs text-slate-700">
+                        <div>Packs {item.packCount}</div>
+                        <div>Execution {item.executionCount}</div>
+                        <div>Bundles {item.bundlePackCount}</div>
+                        <div>Ledger {item.ledgerPackCount}</div>
+                        <div>Reviewed/verified {item.reviewedPacks + item.verifiedPacks}</div>
+                        <div>Ready {item.releaseReadyCount}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-2">
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div className="text-lg font-semibold text-slate-900">Compliance & curation center</div>
+                  <div className="text-sm text-slate-600">Lớp điều phối lớn hơn hẳn các batch trước: nhìn toàn hệ theo compliance thật, rồi biến blocker thành task cụ thể theo owner/stage thay vì chỉ xem snapshot rời rạc.</div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <a href="/api/admin/content/compliance-report" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải compliance JSON</a>
+                  <a href="/api/admin/content/curation-queue" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải curation queue</a>
+                  <a href="/api/admin/content/packs/curation-registry" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải curation registry</a>
+                </div>
+              </div>
+              <div className="grid gap-3 md:grid-cols-4 text-sm">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Packs</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.complianceSummary.total ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Critical packs</div><div className="mt-1 text-lg font-semibold text-rose-700">{summary?.complianceSummary.critical ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Verified release ready</div><div className="mt-1 text-lg font-semibold text-emerald-700">{summary?.complianceSummary.verifiedReleaseReady ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Official-looking eligible</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.complianceSummary.officialLookingEligible ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Curation tasks</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.curationQueue.total ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Blocked tasks</div><div className="mt-1 text-lg font-semibold text-rose-700">{summary?.curationQueue.blocked ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Owner teacher</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.curationQueue.byOwnerRole.find((item) => item.role === 'teacher')?.value ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Owner leader/admin</div><div className="mt-1 text-lg font-semibold text-slate-900">{(summary?.curationQueue.byOwnerRole.find((item) => item.role === 'leader')?.value ?? 0) + (summary?.curationQueue.byOwnerRole.find((item) => item.role === 'admin')?.value ?? 0)}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Pack curation records</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.curationSummary.total ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Ready leader approval</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.curationSummary.readyForLeaderApproval ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Ready admin approval</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.curationSummary.readyForAdminApproval ?? 0}</div></div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Curation conflicts</div><div className="mt-1 text-lg font-semibold text-amber-700">{summary?.curationSummary.withConflict ?? 0}</div></div>
+              </div>
+              <div className="mt-4 grid gap-4 xl:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-sm font-semibold text-slate-900">Top blockers toàn hệ</div>
+                  <div className="mt-3 space-y-2 text-sm text-slate-700">
+                    {(summary?.complianceSummary.topBlockers || []).length === 0 ? <div className="text-slate-600">Chưa có blocker nổi trội ở phạm vi hiện tại.</div> : summary?.complianceSummary.topBlockers.slice(0, 8).map((item, index) => (
+                      <div key={index} className="rounded-xl border border-slate-200 bg-white px-3 py-2">• {item}</div>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="text-sm font-semibold text-slate-900">Curation queue ưu tiên</div>
+                  <div className="mt-3 max-h-[280px] space-y-2 overflow-y-auto pr-1 text-sm">
+                    {(summary?.curationQueue.items || []).length === 0 ? <div className="text-slate-600">Chưa phát sinh curation task nào.</div> : summary?.curationQueue.items.slice(0, 8).map((item) => (
+                      <div key={item.id} className="rounded-2xl border border-slate-200 bg-white p-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                          <span className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] ${qualityBadgeClass(item.severity)}`}>{item.severity}</span>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">{item.priority.toUpperCase()}</span>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">{item.stage}</span>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">owner {item.suggestedOwnerRole}</span>
+                        </div>
+                        <div className="mt-2 text-xs text-slate-700">{item.title}</div>
+                        <div className="mt-1 text-xs text-slate-600">{item.summary}</div>
+                        <div className="mt-2 text-[11px] text-slate-500">pending fields {item.metrics.pendingLedgerFields} · missing pages {item.metrics.missingPages} · unresolved links {item.metrics.unresolvedEntityLinks}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <div className="text-sm font-semibold text-slate-900">Pack curation actions</div>
+                    <div className="text-xs text-slate-600">Hoàn thiện bước khó còn thiếu: thao tác reviewer/leader/admin ở cấp pack và đồng bộ lại execution/release gate theo trạng thái mới.</div>
+                  </div>
+                  {selectedCurationPackId ? <a href={`/api/admin/content/packs/curation-actions?packId=${encodeURIComponent(selectedCurationPackId)}`} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs hover:bg-slate-100">Tải detail JSON</a> : null}
+                </div>
+                <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(220px,0.9fr)_minmax(0,1.1fr)]">
+                  <div>
+                    <label className="text-xs font-medium text-slate-700">Pack curation</label>
+                    <select value={selectedCurationPackId} onChange={(event: any) => setSelectedCurationPackId(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500">
+                      {curationPackOptions.map((item) => <option key={item.packId} value={item.packId}>{item.label}</option>)}
+                    </select>
+                    <div className="mt-3 space-y-2 text-xs text-slate-600">
+                      {(selectedCurationQueueItems.length ? selectedCurationQueueItems : curationDetail?.queueItems || []).slice(0, 4).map((item) => (
+                        <div key={item.id} className="rounded-xl border border-slate-200 bg-white p-3">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className={`inline-flex rounded-full border px-2 py-0.5 ${qualityBadgeClass(item.severity)}`}>{item.severity}</span>
+                            <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5">{item.stage}</span>
+                            <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5">owner {item.suggestedOwnerRole}</span>
+                          </div>
+                          <div className="mt-2 font-medium text-slate-900">{item.title}</div>
+                          <div className="mt-1">{item.summary}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {!curationDetail ? <div className="rounded-2xl border border-slate-200 bg-white p-4 text-slate-600">Chưa tải được chi tiết pack curation.</div> : (
+                    <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className="text-base font-semibold text-slate-900">{curationDetail.snapshot?.grade || '—'} · {curationDetail.snapshot?.subject || curationDetail.record?.subject || 'Môn học'}</div>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">{curationDetail.packId}</span>
+                          {curationDetail.consensus?.hasLeaderApproval ? <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-700">leader approved</span> : null}
+                          {curationDetail.consensus?.hasAdminApproval ? <span className="rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] text-blue-700">admin approved</span> : null}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-600">Release recommendation {curationDetail.consensus?.releaseRecommendation || 'hold'} · latest review {formatDate(curationDetail.consensus?.latestReviewAt || '')}</div>
+                      </div>
+                      <div className="grid gap-2 md:grid-cols-4 text-xs">
+                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Reviewer active</div><div className="mt-1 text-base font-semibold text-slate-900">{curationDetail.consensus?.uniqueReviewers ?? 0}</div></div>
+                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Approvals</div><div className="mt-1 text-base font-semibold text-slate-900">{curationDetail.consensus?.approvals ?? 0}</div></div>
+                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Ready leader</div><div className="mt-1 text-base font-semibold text-slate-900">{curationDetail.consensus?.readyForLeaderApproval ? 'Có' : 'Chưa'}</div></div>
+                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Manifest severity</div><div className={`mt-1 inline-flex rounded-full border px-2 py-0.5 ${curationDetail.manifest?.severity === 'ok' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : qualityBadgeClass(curationDetail.manifest?.severity === 'critical' ? 'critical' : 'warning')}`}>{curationDetail.manifest?.severity || '—'}</div></div>
+                      </div>
+                      <div>
+                        <div className="mb-2 font-medium text-slate-900">Blockers hiện hành</div>
+                        <div className="space-y-1 text-xs text-slate-600">{(curationDetail.consensus?.blockers || curationDetail.manifest?.blockers || []).length ? (curationDetail.consensus?.blockers || curationDetail.manifest?.blockers || []).slice(0, 6).map((entry, index) => <div key={index}>• {entry}</div>) : <div className="text-emerald-700">Pack này hiện không còn blocker curation chính.</div>}</div>
+                      </div>
+                      <div>
+                        <div className="mb-2 font-medium text-slate-900">Reviewer snapshots</div>
+                        <div className="space-y-2 text-xs text-slate-600 max-h-[180px] overflow-y-auto pr-1">
+                          {(curationDetail.consensus?.latestDecisions || []).length === 0 ? <div>Chưa có reviewer decision ở cấp pack.</div> : curationDetail.consensus?.latestDecisions.map((decision, index) => (
+                            <div key={`${decision.reviewerName}-${decision.createdAt}-${index}`} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <div className="font-medium text-slate-900">{decision.reviewerName}</div>
+                                <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5">{decision.reviewerRole}</span>
+                                <span className={`rounded-full border px-2 py-0.5 ${decision.decision === 'approved' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : decision.decision === 'changes_requested' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-slate-100 text-slate-700'}`}>{decision.decision}</span>
+                                <span>{formatDate(decision.createdAt)}</span>
+                              </div>
+                              {decision.note ? <div className="mt-1 whitespace-pre-wrap text-slate-700">{decision.note}</div> : null}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <label className="flex flex-col gap-1 text-xs text-slate-600">
+                          <span>Reviewer decision</span>
+                          <select className="rounded-xl border border-slate-300 px-3 py-2 text-sm" value={curationDecision} onChange={(event: any) => setCurationDecision(event.target.value as 'approved' | 'changes_requested' | 'commented')}>
+                            <option value="approved">approved</option>
+                            <option value="changes_requested">changes_requested</option>
+                            <option value="commented">commented</option>
+                          </select>
+                        </label>
+                        <label className="flex flex-col gap-1 text-xs text-slate-600">
+                          <span>Release recommendation</span>
+                          <select className="rounded-xl border border-slate-300 px-3 py-2 text-sm" value={curationRecommendation} onChange={(event: any) => setCurationRecommendation(event.target.value as 'hold' | 'school_release_candidate' | 'verified_release')}>
+                            <option value="hold">hold</option>
+                            <option value="school_release_candidate">school_release_candidate</option>
+                            <option value="verified_release">verified_release</option>
+                          </select>
+                        </label>
+                      </div>
+                      <label className="flex flex-col gap-1 text-xs text-slate-600">
+                        <span>Ghi chú</span>
+                        <textarea className="min-h-[88px] rounded-2xl border border-slate-300 px-3 py-2 font-mono text-xs" value={curationNote} onChange={(event: any) => setCurationNote(event.target.value)} placeholder="Nêu lý do decision / recommendation / approval ở cấp pack..." />
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        <button type="button" onClick={() => void submitCurationAction('review')} disabled={curationBusy} className="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800 disabled:opacity-60">{curationBusy ? 'Đang ghi...' : 'Ghi reviewer decision'}</button>
+                        <button type="button" onClick={() => void submitCurationAction('release_recommendation')} disabled={curationBusy || user?.role !== 'leader' && user?.role !== 'admin'} className="rounded-xl border border-sky-300 bg-sky-50 px-4 py-2 text-sm text-sky-700 hover:bg-sky-100 disabled:opacity-60">Cập nhật recommendation</button>
+                        {(user?.role === 'leader' || user?.role === 'admin') ? <>
+                          <button type="button" onClick={() => void submitCurationAction('leader_approval')} disabled={curationBusy || !curationDetail.consensus?.readyForLeaderApproval} className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-100 disabled:opacity-60">Ký leader approval</button>
+                          <button type="button" onClick={() => void submitCurationAction('leader_revoke')} disabled={curationBusy || !curationDetail.consensus?.hasLeaderApproval} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-700 hover:bg-amber-100 disabled:opacity-60">Gỡ leader approval</button>
+                        </> : null}
+                        {user?.role === 'admin' ? <>
+                          <button type="button" onClick={() => void submitCurationAction('admin_approval')} disabled={curationBusy || !curationDetail.consensus?.readyForAdminApproval || curationRecommendation !== 'verified_release'} className="rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 text-sm text-blue-700 hover:bg-blue-100 disabled:opacity-60">Ký admin approval</button>
+                          <button type="button" onClick={() => void submitCurationAction('admin_revoke')} disabled={curationBusy || !curationDetail.consensus?.hasAdminApproval} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-700 hover:bg-amber-100 disabled:opacity-60">Gỡ admin approval</button>
+                        </> : null}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div className="text-lg font-semibold text-slate-900">Release manifest</div>
+                  <div className="text-sm text-slate-600">Manifest pack-level để chốt tier phát hành, export guard, approval chain và tình trạng citation/evidence/legal-safe trước khi cho xuất bản nội bộ/trường.</div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {releaseManifestPackId ? <a href={`/api/admin/content/packs/release-manifest?packId=${encodeURIComponent(releaseManifestPackId)}`} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải manifest JSON</a> : null}
+                </div>
+              </div>
+              <div className="mb-3">
+                <label className="text-sm font-medium text-slate-700">Pack manifest</label>
+                <select value={releaseManifestPackId} onChange={(event: { target: { value: string } }) => setReleaseManifestPackId(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500">
+                  {manifestPackOptions.map((item) => <option key={item.packId} value={item.packId}>{item.grade} · {item.subject} · {item.packId}</option>)}
+                </select>
+              </div>
+              {!releaseManifest ? <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">Chưa tải được release manifest cho pack đang chọn.</div> : (
+                <>
+                  <div className="grid gap-3 md:grid-cols-4 text-sm">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Release tier</div><div className="mt-1 text-base font-semibold text-slate-900">{releaseManifest.releaseTier}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Severity</div><div className={`mt-1 inline-flex rounded-full border px-2 py-0.5 text-xs ${releaseManifest.severity === 'ok' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : qualityBadgeClass(releaseManifest.severity === 'critical' ? 'critical' : 'warning')}`}>{releaseManifest.severity}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Watermark</div><div className="mt-1 text-base font-semibold text-slate-900">{releaseManifest.policy.watermarkRequired ? 'Bắt buộc' : 'Không'}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Official-looking</div><div className="mt-1 text-base font-semibold text-slate-900">{releaseManifest.policy.officialLookingAllowed ? 'Cho phép' : 'Chặn'}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Citation ready</div><div className="mt-1 text-base font-semibold text-slate-900">{releaseManifest.policy.citationReady ? '✓' : '✗'}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Legal-safe</div><div className="mt-1 text-base font-semibold text-slate-900">{releaseManifest.policy.legalSafe ? '✓' : '✗'}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Evidence ready</div><div className="mt-1 text-base font-semibold text-slate-900">{releaseManifest.policy.evidenceReady ? '✓' : '✗'}</div></div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Verified ready</div><div className="mt-1 text-base font-semibold text-slate-900">{releaseManifest.policy.verifiedReleaseReady ? '✓' : '✗'}</div></div>
+                  </div>
+                  <div className="mt-4 grid gap-4 xl:grid-cols-2">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                      <div className="font-semibold text-slate-900">Approval chain</div>
+                      <div className="mt-3 space-y-2">
+                        {releaseManifest.requiredApprovals.map((item) => (
+                          <div key={item.kind} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-700">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div>{item.label}</div>
+                              <div className="text-xs text-slate-500">owner {item.ownerRole} · {item.satisfied ? 'done' : 'pending'}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                      <div className="font-semibold text-slate-900">Manifest notices</div>
+                      <div className="mt-3 space-y-2 text-slate-700">
+                        {releaseManifest.notices.slice(0, 8).map((item, index) => <div key={index} className="rounded-xl border border-slate-200 bg-white px-3 py-2">• {item}</div>)}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 grid gap-4 xl:grid-cols-2">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                      <div className="font-semibold text-slate-900">Critical blockers</div>
+                      <div className="mt-3 space-y-2 text-slate-700">
+                        {releaseManifest.blockers.length === 0 ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-700">Manifest hiện không còn blocker critical.</div> : releaseManifest.blockers.slice(0, 8).map((item, index) => <div key={index} className="rounded-xl border border-slate-200 bg-white px-3 py-2">• {item}</div>)}
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                      <div className="font-semibold text-slate-900">Citation entries</div>
+                      <div className="mt-3 max-h-[220px] space-y-2 overflow-y-auto pr-1 text-slate-700">
+                        {releaseManifest.citationEntries.length === 0 ? <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-600">Manifest chưa có citation entry nào.</div> : releaseManifest.citationEntries.slice(0, 8).map((item) => (
+                          <div key={item.id} className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                            <div className="font-medium text-slate-900">{item.label}</div>
+                            <div className="mt-1 text-xs text-slate-600">{item.scope} · {item.type} · {item.pages || 'chưa có pages'}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Academic evidence ledger</div>
+                <div className="text-sm text-slate-600">Ledger cấp entity-field để biết field nào đã map nguồn nào, trang nào, đang pending hay đã review/approve. Đây là lớp còn thiếu để pack verified có thể audit được thật.</div>
+              </div>
+              <a href="/api/admin/content/evidence-ledger" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải ledger JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-5 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Total records</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceLedgerSummary.total ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Packs</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceLedgerSummary.packs ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Approved fields</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceLedgerSummary.approvedFields ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Pending fields</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceLedgerSummary.pendingFields ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Missing pages</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceLedgerSummary.missingPages ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[280px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.evidenceLedgerSummary.items || []).length === 0 ? <div className="text-slate-600">Chưa có evidence ledger record nào. Vì vậy reviewed/verified hiện vẫn khó audit ở cấp field.</div> : summary?.evidenceLedgerSummary.items.slice(0, 10).map((item) => (
+                <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.entityType}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.sourceStatus}</span>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">{item.title} · fields {item.fields.length} · pack {item.packId}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Field evidence review workflow</div>
+                <div className="text-sm text-slate-600">Đợt này hoàn thiện hẳn một phase khó: reviewer/leader không chỉ bấm từng field, mà có thể vận hành evidence review ở cấp pack để đẩy pack đi hết giai đoạn review trước khi sang curation.</div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <a href="/api/admin/content/packs/evidence-review-registry" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải evidence review JSON</a>
+                {selectedEvidenceReviewPackId ? <a href={`/api/admin/content/packs/evidence-review-pack-actions?packId=${encodeURIComponent(selectedEvidenceReviewPackId)}`} target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải pack detail JSON</a> : null}
+              </div>
+            </div>
+            <div className="grid gap-3 md:grid-cols-6 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Required fields</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceReviewSummary.totalFields ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">With decisions</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceReviewSummary.withDecisions ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Coverage</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceReviewSummary.coveragePercent ?? 0}%</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Ready leader approval</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceReviewSummary.readyForLeaderApproval ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Leader approved</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.evidenceReviewSummary.leaderApproved ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Conflicts</div><div className="mt-1 text-lg font-semibold text-amber-700">{summary?.evidenceReviewSummary.conflicts ?? 0}</div></div>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
+              <div className="grid gap-3 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.2fr)]">
+                <div className="space-y-3">
+                  <label className="flex flex-col gap-1 text-xs text-slate-600">
+                    <span>Pack evidence review</span>
+                    <select value={selectedEvidenceReviewPackId} onChange={(event: any) => setSelectedEvidenceReviewPackId(event.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm">
+                      {evidenceReviewPackOptions.map((item) => <option key={item.packId} value={item.packId}>{item.label} · fields {item.total}</option>)}
+                    </select>
+                  </label>
+                  <div className="grid gap-2 md:grid-cols-2 text-xs text-slate-600">
+                    <div className="rounded-xl border border-slate-200 bg-white p-3"><div className="text-slate-500">Pending review</div><div className="mt-1 text-base font-semibold text-slate-900">{evidenceReviewPackDetail?.summary.pendingReview ?? evidenceReviewPackOptions.find((item) => item.packId === selectedEvidenceReviewPackId)?.pendingReview ?? 0}</div></div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-3"><div className="text-slate-500">Ready leader</div><div className="mt-1 text-base font-semibold text-slate-900">{evidenceReviewPackDetail?.summary.readyForLeaderApproval ?? evidenceReviewPackOptions.find((item) => item.packId === selectedEvidenceReviewPackId)?.readyForLeaderApproval ?? 0}</div></div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-3"><div className="text-slate-500">Leader approved</div><div className="mt-1 text-base font-semibold text-slate-900">{evidenceReviewPackDetail?.summary.leaderApproved ?? evidenceReviewPackOptions.find((item) => item.packId === selectedEvidenceReviewPackId)?.leaderApproved ?? 0}</div></div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-3"><div className="text-slate-500">Coverage</div><div className="mt-1 text-base font-semibold text-slate-900">{evidenceReviewPackDetail?.summary.coveragePercent ?? 0}%</div></div>
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  {!evidenceReviewPackDetail ? <div className="text-slate-600">Chọn pack để tải tiến độ phase evidence review.</div> : (
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className="text-base font-semibold text-slate-900">{evidenceReviewPackDetail.grade} · {evidenceReviewPackDetail.subject}</div>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">{evidenceReviewPackDetail.level}</span>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">{evidenceReviewPackDetail.book}</span>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] text-slate-600">pack {evidenceReviewPackDetail.packId}</span>
+                        </div>
+                        <div className="mt-2 space-y-1 text-xs text-slate-600">{evidenceReviewPackDetail.blockers.length ? evidenceReviewPackDetail.blockers.map((entry, index) => <div key={index}>• {entry}</div>) : <div className="text-emerald-700">Pack này hiện không còn blocker phase evidence review.</div>}</div>
+                        <div className="mt-2 space-y-1 text-xs text-slate-600">{evidenceReviewPackDetail.nextActions.map((entry, index) => <div key={index}>→ {entry}</div>)}</div>
+                      </div>
+                      <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
+                        <label className="flex flex-col gap-1 text-xs text-slate-600">
+                          <span>Ghi chú batch action</span>
+                          <textarea className="min-h-[88px] rounded-2xl border border-slate-300 px-3 py-2 font-mono text-xs" value={evidenceReviewNote} onChange={(event: any) => setEvidenceReviewNote(event.target.value)} placeholder="Ghi chú ngắn cho reviewer/leader batch action ở cấp pack..." />
+                        </label>
+                        <div className="grid gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">
+                          <label className="flex items-center gap-2"><input type="checkbox" checked={citationLocatorVerified} onChange={(event: any) => setCitationLocatorVerified(event.target.checked)} /> Citation locator đã kiểm tra</label>
+                          <label className="flex items-center gap-2"><input type="checkbox" checked={legalSafeVerified} onChange={(event: any) => setLegalSafeVerified(event.target.checked)} /> Legal-safe/source use đã kiểm tra</label>
+                          <div className="pt-1 text-[11px] text-slate-500">Batch reviewer chỉ áp dụng cho field hợp lệ chưa có quyết định hiện hành của chính bạn và chưa có leader approval.</div>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button type="button" onClick={() => void submitEvidenceReviewPackAction('review_missing_my_decision')} disabled={evidenceReviewPackBusy} className="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800 disabled:opacity-60">{evidenceReviewPackBusy ? 'Đang chạy...' : 'Reviewer batch cho pack'}</button>
+                        {(user?.role === 'leader' || user?.role === 'admin') ? <>
+                          <button type="button" onClick={() => void submitEvidenceReviewPackAction('leader_approve_ready')} disabled={evidenceReviewPackBusy || !(evidenceReviewPackDetail.summary.readyForLeaderApproval)} className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-100 disabled:opacity-60">Ký leader approval hàng loạt</button>
+                          <button type="button" onClick={() => void submitEvidenceReviewPackAction('leader_revoke_all')} disabled={evidenceReviewPackBusy || !(evidenceReviewPackDetail.summary.leaderApproved)} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-700 hover:bg-amber-100 disabled:opacity-60">Gỡ toàn bộ leader approval</button>
+                        </> : null}
+                        <button type="button" onClick={() => void loadEvidenceReviewPackDetail(selectedEvidenceReviewPackId)} disabled={evidenceReviewPackBusy} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100 disabled:opacity-60">Tải lại pack detail</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
+              <div className="max-h-[420px] space-y-3 overflow-y-auto pr-1 text-sm">
+                {evidenceReviewItemsInPack.length === 0 ? <div className="text-slate-600">Chưa có worklist field evidence review cho pack đang chọn. Vì vậy phase review này chưa có dữ liệu thao tác.</div> : evidenceReviewItemsInPack.slice(0, 36).map((item) => {
+                  const active = item.id === selectedEvidenceReviewId;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setSelectedEvidenceReviewId(item.id)}
+                      className={`w-full rounded-2xl border p-3 text-left transition ${active ? 'border-sky-300 bg-sky-50 shadow-sm' : 'border-slate-200 bg-slate-50 hover:bg-slate-100'}`}
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                        <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.entityType}</span>
+                        <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.fieldLabel}</span>
+                        {item.reviewConsensus?.hasLeaderApproval ? <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-700">leader approved</span> : null}
+                        {item.reviewConsensus?.hasConflict ? <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] text-amber-700">conflict</span> : null}
+                      </div>
+                      <div className="mt-2 text-xs text-slate-600">{item.title} · mapping {item.mappingStatus} · pages {item.pages || '—'} · refs {item.referenceIds.length}</div>
+                      <div className="mt-2 space-y-1 text-xs text-slate-600">{item.blockers.length ? item.blockers.slice(0, 2).map((entry, index) => <div key={index}>• {entry}</div>) : <div className="text-emerald-700">Field này đang sạch blocker review.</div>}</div>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
+                {!selectedEvidenceReviewItem ? <div className="text-slate-600">Chọn một field ở cột bên trái để thao tác reviewer/leader approval.</div> : (
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="text-base font-semibold text-slate-900">{selectedEvidenceReviewItem.fieldLabel}</div>
+                        <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{selectedEvidenceReviewItem.grade}</span>
+                        <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{selectedEvidenceReviewItem.subject}</span>
+                      </div>
+                      <div className="mt-1 text-xs text-slate-600">{selectedEvidenceReviewItem.title} · pack {selectedEvidenceReviewItem.packId}</div>
+                      <div className="mt-2 grid gap-2 md:grid-cols-2 text-xs text-slate-600">
+                        <div>Mapping {selectedEvidenceReviewItem.mappingStatus}</div>
+                        <div>Pages {selectedEvidenceReviewItem.pages || '—'}</div>
+                        <div>Refs {selectedEvidenceReviewItem.referenceIds.length}</div>
+                        <div>Reviewer active {evidenceReviewDetail?.consensus?.activeReviewerDecisions ?? selectedEvidenceReviewItem.reviewConsensus?.activeReviewerDecisions ?? 0}</div>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2 md:grid-cols-3 text-xs">
+                      <div className="rounded-xl border border-slate-200 bg-white p-3"><div className="text-slate-500">Decision events</div><div className="mt-1 text-base font-semibold text-slate-900">{evidenceReviewDetail?.consensus?.totalDecisions ?? selectedEvidenceReviewItem.reviewConsensus?.totalDecisions ?? 0}</div></div>
+                      <div className="rounded-xl border border-slate-200 bg-white p-3"><div className="text-slate-500">Approved reviewers</div><div className="mt-1 text-base font-semibold text-slate-900">{evidenceReviewDetail?.consensus?.approvals ?? selectedEvidenceReviewItem.reviewConsensus?.approvals ?? 0}</div></div>
+                      <div className="rounded-xl border border-slate-200 bg-white p-3"><div className="text-slate-500">Leader approval</div><div className="mt-1 text-base font-semibold text-slate-900">{evidenceReviewDetail?.consensus?.hasLeaderApproval ? 'Có' : 'Chưa'}</div></div>
+                    </div>
+
+                    <div>
+                      <div className="mb-2 font-medium text-slate-900">Blockers / next actions</div>
+                      <div className="space-y-1 text-xs text-slate-600">{selectedEvidenceReviewItem.blockers.length ? selectedEvidenceReviewItem.blockers.map((entry, index) => <div key={index}>• {entry}</div>) : <div className="text-emerald-700">Field này đang sạch blocker review.</div>}</div>
+                      <div className="mt-2 space-y-1 text-xs text-slate-600">{selectedEvidenceReviewItem.nextActions.map((entry, index) => <div key={index}>→ {entry}</div>)}</div>
+                    </div>
+
+                    <div>
+                      <div className="mb-2 font-medium text-slate-900">Quyết định reviewer hiện hành</div>
+                      <div className="space-y-2 text-xs text-slate-600">
+                        {(evidenceReviewDetail?.consensus?.reviewerSnapshots || []).length === 0 ? <div>Chưa có reviewer nào thao tác field này.</div> : evidenceReviewDetail?.consensus?.reviewerSnapshots.map((decision, index) => (
+                          <div key={`${decision.reviewerName}-${decision.latestAt}-${index}`} className="rounded-xl border border-slate-200 bg-white p-3">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <div className="font-medium text-slate-900">{decision.reviewerName}</div>
+                              <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5">{decision.reviewerRole}</span>
+                              <span className={`rounded-full border px-2 py-0.5 ${decision.decision === 'approved' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : decision.decision === 'changes_requested' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-slate-100 text-slate-700'}`}>{decision.decision}</span>
+                              <span>{new Date(decision.latestAt).toLocaleString('vi-VN')}</span>
+                            </div>
+                            <div className="mt-1">Lịch sử quyết định: {decision.decisionCount}</div>
+                            {decision.note ? <div className="mt-1 whitespace-pre-wrap text-slate-700">{decision.note}</div> : null}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+                      <div className="font-medium text-slate-900">Ghi reviewer decision từng field</div>
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <label className="flex flex-col gap-1 text-xs text-slate-600">
+                          <span>Decision</span>
+                          <select className="rounded-xl border border-slate-300 px-3 py-2 text-sm" value={evidenceReviewDecision} onChange={(event: any) => setEvidenceReviewDecision(event.target.value as 'approved' | 'changes_requested' | 'commented')}>
+                            <option value="approved">approved</option>
+                            <option value="changes_requested">changes_requested</option>
+                            <option value="commented">commented</option>
+                          </select>
+                        </label>
+                        <div className="grid gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">
+                          <label className="flex items-center gap-2"><input type="checkbox" checked={citationLocatorVerified} onChange={(event: any) => setCitationLocatorVerified(event.target.checked)} /> Citation locator đã kiểm tra</label>
+                          <label className="flex items-center gap-2"><input type="checkbox" checked={legalSafeVerified} onChange={(event: any) => setLegalSafeVerified(event.target.checked)} /> Legal-safe/source use đã kiểm tra</label>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button type="button" onClick={() => void submitEvidenceReviewAction('review')} disabled={evidenceReviewBusy} className="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800 disabled:opacity-60">{evidenceReviewBusy ? 'Đang ghi...' : 'Ghi reviewer decision'}</button>
+                        <button type="button" onClick={() => void loadEvidenceReviewDetail(selectedEvidenceReviewItem)} disabled={evidenceReviewBusy} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100 disabled:opacity-60">Tải lại chi tiết</button>
+                        {user?.role === 'leader' || user?.role === 'admin' ? <>
+                          <button type="button" onClick={() => void submitEvidenceReviewAction('leader_approval')} disabled={evidenceReviewBusy || !((evidenceReviewDetail?.consensus || selectedEvidenceReviewItem.reviewConsensus)?.readyForLeaderApproval)} className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-100 disabled:opacity-60">Ký leader approval</button>
+                          <button type="button" onClick={() => void submitEvidenceReviewAction('leader_revoke')} disabled={evidenceReviewBusy || !(evidenceReviewDetail?.consensus || selectedEvidenceReviewItem.reviewConsensus)?.hasLeaderApproval} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-700 hover:bg-amber-100 disabled:opacity-60">Gỡ leader approval</button>
+                        </> : null}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Pack workbench</div>
+                <div className="text-sm text-slate-600">Gộp dossier + cockpit + release board + source bundle + execution registry để thấy pack nào thật sự gần tới snapshot nội bộ hoặc release verified.</div>
+              </div>
+              <a href="/api/admin/content/packs/workbench" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải workbench JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-6 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Snapshot ready</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.releaseSnapshotReady ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có official bundle</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.withOfficialBundles ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có textbook bundle</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.withTextbookBundles ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có execution plan</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.withExecutionPlan ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Có evidence ledger</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.withEvidenceLedger ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Evidence review ready</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.withEvidenceReview ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Evidence review leader approved</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.leaderApprovedEvidenceReview ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Unresolved links</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.packWorkbench.unresolvedEntityLinks ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[320px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.packWorkbench.items || []).length === 0 ? <div className="text-slate-600">Chưa dựng được workbench theo pack.</div> : summary?.packWorkbench.items.slice(0, 12).map((item) => (
+                <div key={item.packId} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">{item.dossierStatus}</span>
+                    {item.releaseStatus ? <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">release {item.releaseStatus}</span> : null}
+                    {item.releaseSnapshotReady ? <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-700">snapshot ready</span> : null}
+                    {item.executionStatus ? <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">exec {item.executionStatus}</span> : null}
+                  </div>
+                  <div className="mt-2 grid gap-2 md:grid-cols-3 text-xs text-slate-700">
+                    <div>Coverage {item.coveragePercent}%</div>
+                    <div>Verified {item.verifiedPercent}%</div>
+                    <div>Bundle linked {item.bundleCoverage.linkedPercent}%</div>
+                    <div>Ledger {item.evidenceLedgerCoveragePercent ?? 0}%</div>
+                    <div>Review {item.evidenceReviewCoveragePercent ?? 0}%</div>
+                    <div>Leader approval {item.evidenceReviewLeaderApprovalPercent ?? 0}%</div>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">Bundles {item.bundleCoverage.totalBundles} · official {item.bundleCoverage.officialCoreBundles} · textbook {item.bundleCoverage.textbookBundles} · unresolved {item.bundleCoverage.unresolvedEntityLinks} · ledger {item.evidenceLedgerReady ? 'ready' : 'pending'} · review {item.evidenceReviewReady ? 'ready' : 'pending'} · leader approval {item.evidenceReviewLeaderApproved ? 'ready' : 'pending'} · execution {item.executionPlanReady ? 'ready' : item.executionStatus || 'missing'}</div>
+                  <div className="mt-2 space-y-1 text-xs text-slate-600">{item.blockers.length ? item.blockers.slice(0, 3).map((entry, index) => <div key={index}>• {entry}</div>) : <div className="text-emerald-700">Pack đang sạch blocker trong workbench.</div>}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Academic release board</div>
+                <div className="text-sm text-slate-600">Đánh giá theo pack xem đã đủ điều kiện dùng thật chưa: đủ số lượng expected, hết blocker critical, không còn review conflict và đạt verified/published theo chuẩn release.</div>
+              </div>
+              <a href="/api/admin/content/release-board" target="_blank" rel="noreferrer" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm hover:bg-slate-100">Tải release board JSON</a>
+            </div>
+            <div className="grid gap-3 md:grid-cols-4 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Blocked</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.releaseBoard.blocked ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">In review</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.releaseBoard.inReview ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Release candidate</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.releaseBoard.releaseCandidate ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Released</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.releaseBoard.released ?? 0}</div></div>
+            </div>
+            <div className="mt-4 max-h-[320px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.releaseBoard.items || []).length === 0 ? <div className="text-slate-600">Chưa có pack nào đi vào release board trong phạm vi hiện tại.</div> : summary?.releaseBoard.items.slice(0, 16).map((item) => (
+                <div key={item.packId} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-medium text-slate-900">{item.grade} · {item.subject}</div>
+                    <span className={`inline-flex rounded-full border px-2 py-0.5 ${item.releaseStatus === 'released' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : item.releaseStatus === 'release_candidate' ? 'border-blue-200 bg-blue-50 text-blue-700' : item.releaseStatus === 'in_review' ? 'border-amber-200 bg-amber-50 text-amber-800' : 'border-rose-200 bg-rose-50 text-rose-700'}`}>{item.releaseStatus}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-600 text-[11px]">{item.rolloutStage}</span>
+                  </div>
+                  <div className="mt-2 grid gap-2 md:grid-cols-3 text-xs text-slate-700">
+                    <div>Expected: T{item.expected.topics} · P{item.expected.programs} · Q{item.expected.questions}</div>
+                    <div>Actual: T{item.actual.topics} · P{item.actual.programs} · Q{item.actual.questions}</div>
+                    <div>Published: T{item.published.topics} · P{item.published.programs} · Q{item.published.questions}</div>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-600">Critical {item.criticalIssues} · Warning {item.warningIssues} · Review blockers {item.unresolvedReviews}</div>
+                  <div className="mt-2 space-y-1 text-xs text-slate-600">{item.blockers.length ? item.blockers.slice(0, 4).map((entry, index) => <div key={index}>• {entry}</div>) : <div className="text-emerald-700">Pack đã đạt điều kiện release theo gate hiện tại.</div>}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Academic quality gate</div>
+                <div className="text-sm text-slate-600">Lớp kiểm soát độ chính xác học thuật: published phải verified, reviewed/verified phải có nguồn CTGDPT/SGK, có trang trích dẫn và không được trỏ mồ côi sang topic không tồn tại.</div>
+              </div>
+              <div className="text-xs text-slate-500">Blocker publish: {summary?.academicQuality.publishBlockers ?? 0}</div>
+            </div>
+            <div className="grid gap-3 md:grid-cols-5 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Critical</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.academicQuality.critical ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Published chưa verified</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.academicQuality.publishedNotVerified ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Thiếu nguồn chính danh</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.academicQuality.missingOfficialReferences ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Thiếu trang trích</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.academicQuality.missingReferencePages ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Link mồ côi</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.academicQuality.orphanLinks ?? 0}</div></div>
+            </div>
+            <div className="mt-4 grid gap-2 md:grid-cols-2">
+              {(summary?.academicQuality.byGradeSubject || []).slice(0, 8).map((item) => (
+                <div key={`${item.grade}-${item.subject}`} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">{item.grade} · {item.subject} <strong className="text-rose-700">critical {item.critical}</strong> · <span className="text-slate-900">total {item.total}</span></div>
+              ))}
+            </div>
+            <div className="mt-4 max-h-[280px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.academicQuality.items || []).length === 0 ? <div className="text-slate-600">Chưa có issue học thuật blocker trong phạm vi đang nhìn thấy.</div> : summary?.academicQuality.items.map((item) => (
+                <div key={`${item.entityType}-${item.entityId}-${item.code}`} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="font-medium text-slate-900">{item.entityType} · {item.title}</div>
+                  <div className="mt-1 text-xs text-blue-700">{item.grade} · {item.subject}{item.topic ? ` · ${item.topic}` : ''}</div>
+                  <div className="mt-1 flex flex-wrap gap-2 text-[11px]">
+                    <span className={`inline-flex rounded-full border px-2 py-0.5 ${qualityBadgeClass(item.severity)}`}>{item.severity}</span>
+                    <span className={`inline-flex rounded-full border px-2 py-0.5 ${sourceBadgeClass(item.sourceStatus)}`}>{labelSourceStatus(item.sourceStatus)}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-600">{item.lifecycleStatus}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-600">{item.code}</span>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-700">{item.message}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-lg font-semibold text-slate-900">Verification backlog</div>
+                <div className="text-sm text-slate-600">Hiển thị backlog thật của dữ liệu học thuật: seed/demo, thiếu references, lệch lifecycle và phần đã đủ metadata nhưng chưa chuyển trạng thái.</div>
+              </div>
+              <div className="text-xs text-slate-500">Tổng backlog: {summary?.verificationQueue.total ?? 0}</div>
+            </div>
+            <div className="grid gap-3 md:grid-cols-4 text-sm">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Seed</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.verificationQueue.seed ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Thiếu refs</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.verificationQueue.missingReferences ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Lệch lifecycle</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.verificationQueue.lifecycleMismatch ?? 0}</div></div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3"><div className="text-slate-500">Sẵn sàng review</div><div className="mt-1 text-lg font-semibold text-slate-900">{summary?.verificationQueue.readyForReview ?? 0}</div></div>
+            </div>
+            <div className="mt-4 grid gap-2 md:grid-cols-2">
+              {(summary?.verificationQueue.byGradeSubject || []).slice(0, 8).map((item) => (
+                <div key={`${item.grade}-${item.subject}`} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">{item.grade} · {item.subject} <strong className="text-slate-900">{item.value}</strong></div>
+              ))}
+            </div>
+            <div className="mt-4 max-h-[280px] space-y-3 overflow-y-auto pr-1 text-sm">
+              {(summary?.verificationQueue.items || []).length === 0 ? <div className="text-slate-600">Chưa có backlog verification trong phạm vi đang nhìn thấy.</div> : summary?.verificationQueue.items.map((item) => (
+                <div key={`${item.entityType}-${item.entityId}`} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="font-medium text-slate-900">{item.entityType} · {item.title}</div>
+                  <div className="mt-1 text-xs text-blue-700">{item.grade} · {item.subject}{item.topic ? ` · ${item.topic}` : ''}</div>
+                  <div className="mt-1 flex flex-wrap gap-2 text-[11px]">
+                    <span className={`inline-flex rounded-full border px-2 py-0.5 ${sourceBadgeClass(item.sourceStatus)}`}>{labelSourceStatus(item.sourceStatus)}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-600">{item.lifecycleStatus}</span>
+                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-600">refs {item.references}</span>
+                  </div>
+                  <div className="mt-2 space-y-1 text-xs text-slate-600">{item.issues.map((issue, index) => <div key={index}>• {issue}</div>)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="text-lg font-semibold text-slate-900">Audit gần nhất</div>
+              <div className="mt-4 space-y-3 text-sm">
+                {(summary?.audits || []).length === 0 ? <div className="text-slate-600">Chưa có log biên tập nội dung.</div> : summary?.audits.map((item) => (
+                  <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                    <div className="font-medium text-slate-900">{item.action} · {item.entityType}</div>
+                    <div className="text-slate-700">{item.summary}</div>
+                    <div className="mt-1 text-xs text-slate-500">{item.actorName} · {formatDate(item.createdAt)}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="text-lg font-semibold text-slate-900">Lịch sử import</div>
+              <div className="mt-4 space-y-3 text-sm">
+                {(summary?.imports || []).length === 0 ? <div className="text-slate-600">Chưa có batch import nào.</div> : summary?.imports.map((item) => (
+                  <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                    <div className="font-medium text-slate-900">{item.sourceLabel}</div>
+                    <div className="text-slate-700">Target: {item.target} · Topics: {item.topics} · Templates: {item.templates}</div>
+                    <div className="mt-1 text-xs text-slate-500">{item.importedBy} · {formatDate(item.createdAt)}{item.dryRun ? ' · dry-run' : ''}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[0.9fr,1.1fr]">
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div className="text-lg font-semibold text-slate-900">Membership directory</div>
+              <div className="text-sm text-slate-600">Vai trò login giờ bám theo membership active cùng trường/tổ thay vì chỉ chọn tay.</div>
+            </div>
+            <div className="text-xs text-slate-500">Tổng: {summary?.membershipSummary.total ?? 0} · Leader: {summary?.membershipSummary.leaders ?? 0} · Invited: {summary?.membershipSummary.invited ?? 0}</div>
+          </div>
+          <div className="flex gap-2">
+            <input value={membershipSearch} onChange={(event: any) => setMembershipSearch(event.target.value)} placeholder="Tìm theo tên, email, vai trò..." className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+            <select value={membershipStatusFilter} onChange={(event: any) => setMembershipStatusFilter(event.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm">
+              <option value="">Tất cả status</option>
+              <option value="active">active</option>
+              <option value="invited">invited</option>
+              <option value="inactive">inactive</option>
+            </select>
+            <button onClick={() => void loadMemberships()} className="rounded-xl bg-slate-900 px-4 py-2 text-white">Lọc</button>
+          </div>
+          <div className="mt-4 max-h-[360px] space-y-3 overflow-y-auto pr-1">
+            {membershipItems.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">Chưa có membership phù hợp.</div> : membershipItems.map((item) => (
+              <button key={item.id} onClick={() => { setSelectedMembershipId(item.id); setMembershipEditor(JSON.stringify(item, null, 2)); }} className={`block w-full rounded-2xl border p-4 text-left ${selectedMembershipId === item.id ? 'border-slate-900 bg-slate-100' : 'border-slate-200 bg-slate-50 hover:bg-slate-100'}`}>
+                <div className="font-medium text-slate-900">{item.name}</div>
+                <div className="mt-1 text-xs text-slate-600">{item.role} · {item.status}</div>
+                <div className="mt-1 text-xs text-blue-700">{item.schoolName} · {item.departmentName}</div>
+                <div className="mt-1 text-[11px] text-slate-500">review: {String(item.canReviewLessons)} · manage: {String(item.canManageContent)} · publish: {String(item.canPublishContent)}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div className="text-lg font-semibold text-slate-900">Sửa membership JSON trực tiếp</div>
+              <div className="text-sm text-slate-600">Cho phép dựng directory tổ/trường trước khi đẩy sang user directory production thật.</div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => resetMembershipDraft()} className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm">Membership mới</button>
+              <button onClick={() => void saveMembership()} className="rounded-xl bg-slate-900 px-4 py-2 text-sm text-white">Lưu membership</button>
+              <button onClick={() => void deleteCurrentMembership()} className="rounded-xl border border-rose-300 bg-rose-50 px-4 py-2 text-sm text-rose-700">Xóa</button>
+            </div>
+          </div>
+          <textarea value={membershipEditor} onChange={(event: any) => setMembershipEditor(event.target.value)} className="min-h-[360px] w-full rounded-2xl border border-slate-300 bg-slate-950 p-4 font-mono text-sm text-slate-100" spellCheck={false} />
+          <div className="mt-4 grid gap-3 md:grid-cols-4 text-sm">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+              <div className="text-slate-500">Active</div>
+              <div className="mt-1 text-lg font-semibold text-slate-900">{summary?.membershipSummary.active ?? 0}</div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+              <div className="text-slate-500">Invited / inactive</div>
+              <div className="mt-1 text-lg font-semibold text-slate-900">{summary?.membershipSummary.invited ?? 0} / {summary?.membershipSummary.inactive ?? 0}</div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+              <div className="text-slate-500">Admins</div>
+              <div className="mt-1 text-lg font-semibold text-slate-900">{summary?.membershipSummary.admins ?? 0}</div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+              <div className="text-slate-500">Department groups</div>
+              <div className="mt-1 text-lg font-semibold text-slate-900">{summary?.membershipSummary.byDepartment.length ?? 0}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

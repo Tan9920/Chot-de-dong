@@ -1,0 +1,4049 @@
+{
+  "version": "2026-05-02.batch103-academic-truth-registry",
+  "updatedAt": "2026-05-02T00:00:00.000Z",
+  "principles": [
+    "Coverage khác với readiness: có dòng lớp/môn không có nghĩa là đã đủ dữ liệu dạy học.",
+    "Không nâng seed/scaffold lên reviewed/verified nếu chưa có quy trình review thật.",
+    "Nếu dữ liệu chưa đạt reviewed + foundation thì chỉ dựng khung an toàn, không sinh kiến thức sâu.",
+    "Tên môn trong chương trình mới dùng Công nghệ; chỉ dùng kĩ thuật khi nói về phương pháp/kĩ thuật dạy học.",
+    "Casio/máy tính cầm tay chỉ hiện khi có dữ liệu được duyệt hoặc giáo viên tự nhập chịu trách nhiệm.",
+    "Batch92 mở rộng starter topic catalog cho 1–12 để test luồng chọn dữ liệu; tất cả vẫn là seed/developing, không phải reviewed/verified.",
+    "Batch103 bổ sung academic verification board và audit matrix; không có scope nào được nâng lên verified nếu thiếu nguồn/reviewer thật."
+  ],
+  "statusOrder": [
+    "scaffold",
+    "seed",
+    "community",
+    "reviewed",
+    "verified",
+    "approved_for_release"
+  ],
+  "supportOrder": [
+    "starter",
+    "developing",
+    "foundation",
+    "operational"
+  ],
+  "records": [
+    {
+      "id": "g1-tieng-viet",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Tiếng Việt",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g1-toan",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g1-dao-duc",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Đạo đức",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g1-tu-nhien-va-xa-hoi",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Tự nhiên và Xã hội",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g1-hoat-dong-trai-nghiem",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Hoạt động trải nghiệm",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g1-am-nhac",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Âm nhạc",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g1-mi-thuat",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Mĩ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g1-giao-duc-the-chat",
+      "level": "Tiểu học",
+      "grade": "1",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-tieng-viet",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Tiếng Việt",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-toan",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-dao-duc",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Đạo đức",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-tu-nhien-va-xa-hoi",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Tự nhiên và Xã hội",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-hoat-dong-trai-nghiem",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Hoạt động trải nghiệm",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-am-nhac",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Âm nhạc",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-mi-thuat",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Mĩ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g2-giao-duc-the-chat",
+      "level": "Tiểu học",
+      "grade": "2",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-tieng-viet",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Tiếng Việt",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-toan",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-dao-duc",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Đạo đức",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-tu-nhien-va-xa-hoi",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Tự nhiên và Xã hội",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-cong-nghe",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-tin-hoc",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-hoat-dong-trai-nghiem",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Hoạt động trải nghiệm",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-am-nhac",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Âm nhạc",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-mi-thuat",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Mĩ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-giao-duc-the-chat",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g3-ngoai-ngu-1",
+      "level": "Tiểu học",
+      "grade": "3",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-tieng-viet",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Tiếng Việt",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-toan",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-dao-duc",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Đạo đức",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-khoa-hoc",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Khoa học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-lich-su-va-dia-li",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Lịch sử và Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-cong-nghe",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-tin-hoc",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-hoat-dong-trai-nghiem",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Hoạt động trải nghiệm",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-am-nhac",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Âm nhạc",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-mi-thuat",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Mĩ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-giao-duc-the-chat",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g4-ngoai-ngu-1",
+      "level": "Tiểu học",
+      "grade": "4",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-tieng-viet",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Tiếng Việt",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-toan",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-dao-duc",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Đạo đức",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-khoa-hoc",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Khoa học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-lich-su-va-dia-li",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Lịch sử và Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-cong-nghe",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-tin-hoc",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-hoat-dong-trai-nghiem",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Hoạt động trải nghiệm",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-am-nhac",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Âm nhạc",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-mi-thuat",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Mĩ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-giao-duc-the-chat",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g5-ngoai-ngu-1",
+      "level": "Tiểu học",
+      "grade": "5",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-ngu-van",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Ngữ văn",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 2,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-toan",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-ngoai-ngu-1",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-giao-duc-cong-dan",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Giáo dục công dân",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-lich-su-va-dia-li",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Lịch sử và Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-khoa-hoc-tu-nhien",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Khoa học tự nhiên",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-cong-nghe",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-tin-hoc",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-giao-duc-the-chat",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-nghe-thuat",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Nghệ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g6-hoat-dong-trai-nghiem-huong-nghiep",
+      "level": "THCS",
+      "grade": "6",
+      "subject": "Hoạt động trải nghiệm, hướng nghiệp",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-ngu-van",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Ngữ văn",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-toan",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-ngoai-ngu-1",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-giao-duc-cong-dan",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Giáo dục công dân",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-lich-su-va-dia-li",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Lịch sử và Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-khoa-hoc-tu-nhien",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Khoa học tự nhiên",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-cong-nghe",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-tin-hoc",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-giao-duc-the-chat",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-nghe-thuat",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Nghệ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g7-hoat-dong-trai-nghiem-huong-nghiep",
+      "level": "THCS",
+      "grade": "7",
+      "subject": "Hoạt động trải nghiệm, hướng nghiệp",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-ngu-van",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Ngữ văn",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-toan",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-ngoai-ngu-1",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-giao-duc-cong-dan",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Giáo dục công dân",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-lich-su-va-dia-li",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Lịch sử và Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-khoa-hoc-tu-nhien",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Khoa học tự nhiên",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-cong-nghe",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-tin-hoc",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-giao-duc-the-chat",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-nghe-thuat",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Nghệ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g8-hoat-dong-trai-nghiem-huong-nghiep",
+      "level": "THCS",
+      "grade": "8",
+      "subject": "Hoạt động trải nghiệm, hướng nghiệp",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-ngu-van",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Ngữ văn",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-toan",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-ngoai-ngu-1",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-giao-duc-cong-dan",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Giáo dục công dân",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-lich-su-va-dia-li",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Lịch sử và Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-khoa-hoc-tu-nhien",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Khoa học tự nhiên",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-cong-nghe",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-tin-hoc",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-giao-duc-the-chat",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-nghe-thuat",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Nghệ thuật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g9-hoat-dong-trai-nghiem-huong-nghiep",
+      "level": "THCS",
+      "grade": "9",
+      "subject": "Hoạt động trải nghiệm, hướng nghiệp",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-ngu-van",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Ngữ văn",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-toan",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-ngoai-ngu-1",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-giao-duc-kinh-te-va-phap-luat",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Giáo dục kinh tế và pháp luật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-lich-su",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Lịch sử",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-dia-li",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-vat-li",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Vật lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-hoa-hoc",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Hóa học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-sinh-hoc",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Sinh học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-cong-nghe",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-tin-hoc",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-giao-duc-the-chat",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g10-hoat-dong-trai-nghiem-huong-nghiep",
+      "level": "THPT",
+      "grade": "10",
+      "subject": "Hoạt động trải nghiệm, hướng nghiệp",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-ngu-van",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Ngữ văn",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-toan",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-ngoai-ngu-1",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-giao-duc-kinh-te-va-phap-luat",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Giáo dục kinh tế và pháp luật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-lich-su",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Lịch sử",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-dia-li",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-vat-li",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Vật lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-hoa-hoc",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Hóa học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-sinh-hoc",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Sinh học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-cong-nghe",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-tin-hoc",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-giao-duc-the-chat",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g11-hoat-dong-trai-nghiem-huong-nghiep",
+      "level": "THPT",
+      "grade": "11",
+      "subject": "Hoạt động trải nghiệm, hướng nghiệp",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-ngu-van",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Ngữ văn",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-toan",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Toán",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-ngoai-ngu-1",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Ngoại ngữ 1",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-giao-duc-kinh-te-va-phap-luat",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Giáo dục kinh tế và pháp luật",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-lich-su",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Lịch sử",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-dia-li",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Địa lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-vat-li",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Vật lí",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-hoa-hoc",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Hóa học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-sinh-hoc",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Sinh học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-cong-nghe",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Công nghệ",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-tin-hoc",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Tin học",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-giao-duc-the-chat",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Giáo dục thể chất",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    },
+    {
+      "id": "g12-hoat-dong-trai-nghiem-huong-nghiep",
+      "level": "THPT",
+      "grade": "12",
+      "subject": "Hoạt động trải nghiệm, hướng nghiệp",
+      "book": "Starter 1–12 / giáo viên chọn nguồn",
+      "topicCount": 3,
+      "programUnits": 3,
+      "resources": 1,
+      "questions": 0,
+      "rubrics": 1,
+      "sourceStatus": "seed",
+      "reviewStatus": "not_reviewed",
+      "releaseTier": "internal_preview",
+      "supportLevel": "developing",
+      "contentDepthAllowed": false,
+      "safeLessonMode": "starter_topic_frame_only",
+      "sourceReferenceCount": 0,
+      "approvedReferenceCount": 0,
+      "dataWarnings": [
+        "Đã có starter topic catalog để chọn lớp/môn/chủ đề khi test, nhưng chưa có dữ liệu chuyên môn đã duyệt.",
+        "Chỉ được dựng khung giáo án an toàn; giáo viên phải nhập nội dung bài học từ nguồn hợp pháp trước khi dùng chính thức."
+      ],
+      "teacherActionRequired": [
+        "Chọn một chủ đề starter hoặc nhập chủ đề riêng.",
+        "Bổ sung nội dung, học liệu, câu hỏi, đáp án và nguồn hợp pháp trước khi dạy thật.",
+        "Không public tài nguyên nếu thiếu source/license/review."
+      ],
+      "casioAllowed": false
+    }
+  ]
+}

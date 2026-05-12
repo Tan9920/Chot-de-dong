@@ -1,0 +1,43 @@
+{
+  "version": "2026-05-02.batch103-academic-coverage-truth",
+  "updatedAt": "2026-05-02T00:00:00.000Z",
+  "purpose": "Batch103 dồn trọng tâm vào dữ liệu học thuật 1–12: đo thật coverage/verified, khóa sinh kiến thức sâu khi chưa đủ nguồn, và tạo workflow nhập-duyệt dữ liệu không tạo verified giả.",
+  "nonNegotiables": [
+    "Không nâng seed/scaffold/starter lên reviewed/verified nếu chưa có reviewer thật, nguồn hợp pháp và audit log.",
+    "Không copy dài SGK/sách giáo viên/tài liệu bản quyền; chỉ lưu metadata, mapping, trích yếu ngắn hợp pháp và nguồn.",
+    "Nếu thiếu dữ liệu reviewed + foundation + approved references, generator chỉ dựng khung giáo án an toàn.",
+    "Casio/máy tính cầm tay chỉ bật khi scope có dữ liệu được duyệt riêng hoặc giáo viên tự nhập chịu trách nhiệm.",
+    "Ảnh/học liệu cần source, license, attribution, approval status và takedown path trước khi public.",
+    "Cộng đồng không public tự do nếu chưa qua moderation/review."
+  ],
+  "deepContentGate": {
+    "minSourceStatus": "reviewed",
+    "minSupportLevel": "foundation",
+    "requiresApprovedReferenceCount": 1,
+    "requiresReviewerIdentity": true,
+    "requiresLegalSourceCheck": true,
+    "requiresReleaseGate": true
+  },
+  "requiredEvidenceForVerifiedScope": [
+    "curriculumMapping",
+    "legalSourceMetadata",
+    "shortExtractOrTeacherOwnedContentOnly",
+    "reviewerSignoff",
+    "licenseAndAttributionCheck",
+    "assessmentItemReview",
+    "exportComplianceLabel",
+    "takedownPath"
+  ],
+  "coverageLevels": {
+    "starter": "Có scope lớp/môn/chủ đề để chọn; chỉ dựng khung.",
+    "developing": "Có dữ liệu seed/starter hoặc mapping một phần; chưa sinh kiến thức sâu.",
+    "foundation": "Có nguồn hợp pháp, review một phần và học liệu/câu hỏi/rubric đủ tối thiểu.",
+    "operational": "Có review, nguồn, release gate, audit log và export compliance đủ để dùng trong quy trình nội bộ."
+  },
+  "teacherFacingLabels": {
+    "safe_frame_only": "Chỉ có khung an toàn",
+    "starter_topic_frame_only": "Bản mẫu thử — chỉ chọn chủ đề",
+    "structured_content_allowed": "Có dữ liệu đã kiểm soát",
+    "verified_release": "Đã duyệt phát hành"
+  }
+}

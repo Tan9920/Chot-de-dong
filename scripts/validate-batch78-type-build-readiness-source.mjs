@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const required = ['package-lock.json','.npmrc','types/source-compat.d.ts','scripts/run-source-validators.mjs','scripts/live-http-smoke.mjs','lib/public-trust-policy.ts','lib/release-signoff-board.ts','lib/release-signoff-workflow.ts','BATCH78_NOTES.md'];
+const missing = required.filter((file)=>!fs.existsSync(file));
+const pkg = JSON.parse(fs.readFileSync('package.json','utf8'));
+const scripts = ['source:validate','source:typecheck','build:readiness-validate','smoke:batch78','verify:batch78'];
+const missingScripts = scripts.filter((key)=>!pkg.scripts?.[key]);
+const notes = fs.readFileSync('BATCH78_NOTES.md','utf8');
+const markers = ['package-lock','source:typecheck','live HTTP smoke','không thêm AI','không production-ready'];
+const missingMarkers = markers.filter((m)=>!notes.toLowerCase().includes(m.toLowerCase()));
+const ok = !missing.length && !missingScripts.length && !missingMarkers.length;
+console.log(JSON.stringify({ok,missing,missingScripts,missingMarkers,note:'Batch78 source-level build/type readiness validation. It does not prove npm ci/typecheck/build pass.'},null,2));
+process.exit(ok?0:1);

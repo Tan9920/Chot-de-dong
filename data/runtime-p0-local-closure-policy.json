@@ -1,0 +1,27 @@
+{
+  "batch": "Batch126 - P0 Local Runtime Closure Hardening",
+  "version": "0.126.0",
+  "goal": "Raise local P0 runtime/build confidence by requiring fresh, strict local evidence before allowing P1 source work.",
+  "localP0RequiredEvidence": [
+    "package.json version is 0.126.0 and Node target remains 24.x",
+    ".node-version starts with 24.",
+    "Next/SWC dependencies are present after npm ci",
+    "source:validate, data:validate, typecheck pass",
+    "guarded build performs a real next build and records raw_next_build_passed with exit 0",
+    ".next/BUILD_ID and required server artifacts exist",
+    "production live HTTP smoke passes after the current build",
+    "auth invite runtime smoke passes after the current build",
+    "closure report checks evidence freshness and blocks stale artifacts",
+    "hosted URL smoke remains a separate public rollout gate"
+  ],
+  "mustNotClaim": [
+    "production-ready without hosted URL smoke and real-device UX smoke",
+    "Node 24 runtime verified if the command was executed on a non-24 local Node runtime",
+    "AI/payment/verified-data changes unless code evidence exists"
+  ],
+  "p1TransitionRule": {
+    "p1SourceWorkAllowed": "true only when strict local evidence is clean",
+    "publicP1RolloutAllowed": "true only when strict local evidence and APP_URL/NEXT_PUBLIC_APP_URL hosted smoke pass"
+  },
+  "noAiPaymentVerifiedFakeAdded": true
+}

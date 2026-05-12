@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+const requiredFiles=['scripts/check-npm-environment.mjs','scripts/normalize-package-lock-registry.mjs','scripts/clean-npm-ci.mjs','scripts/clean-npm-command.mjs','scripts/check-next-swc-ready.mjs','scripts/live-http-smoke.mjs','BATCH79_NOTES.md'];
+const missing=requiredFiles.filter(f=>!fs.existsSync(f));
+const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+const requiredScripts=['npm:diagnose','lockfile:public-registry','install:clean','next:swc-ready','build:clean','live:smoke','live:smoke:clean','build:closure-validate','smoke:batch79','verify:batch79'];
+const missingScripts=requiredScripts.filter(s=>!pkg.scripts?.[s]);
+const lock=fs.readFileSync('package-lock.json','utf8');
+const lockInternalRegistryMatches=(lock.match(/packages\.applied-caas-gateway1\.internal\.api\.openai\.org/g)||[]).length;
+const credentialedUrlMatches=(lock.match(/https:\/\/[^/\s"]+:[^@\s"]+@/g)||[]).length;
+const notes=fs.readFileSync('BATCH79_NOTES.md','utf8');
+const requiredMarkers=['Batch79','npm auth/install closure','package-lock public registry','build:clean','live:smoke:clean','không thêm AI','không production-ready'];
+const missingMarkers=requiredMarkers.filter(m=>!notes.toLowerCase().includes(m.toLowerCase()));
+const live=fs.readFileSync('scripts/live-http-smoke.mjs','utf8');
+const liveMarkers=['process.env','NPM_CONFIG_REGISTRY','npm_config_registry','dependencies_missing'];
+const missingLiveSmokeMarkers=liveMarkers.filter(m=>!live.includes(m));
+const ok=!missing.length&&!missingScripts.length&&!lockInternalRegistryMatches&&!credentialedUrlMatches&&!missingMarkers.length&&!missingLiveSmokeMarkers.length;
+console.log(JSON.stringify({ok,missing,missingScripts,lockInternalRegistryMatches,credentialedUrlMatches,missingMarkers,missingLiveSmokeMarkers,note:'Batch79 source validation checks install/build hygiene files, package scripts, public lockfile URLs, and sanitized live smoke source. It does not prove npm ci/build/live HTTP smoke pass.'},null,2));
+process.exit(ok?0:1);

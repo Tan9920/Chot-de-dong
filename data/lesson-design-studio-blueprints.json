@@ -1,0 +1,79 @@
+{
+  "version": "2026-04-30.batch81-lesson-design-studio-core",
+  "updatedAt": "2026-04-30T00:00:00.000Z",
+  "principles": [
+    "Không coi tạo giáo án là sản phẩm cuối; phải chuyển thành quy trình thiết kế bài dạy có kiểm nguồn, phân hóa, hoạt động, đánh giá và export.",
+    "Thiếu dữ liệu reviewed/foundation thì chỉ dựng khung an toàn, yêu cầu giáo viên nhập nội dung/học liệu/câu hỏi/đáp án từ nguồn hợp pháp.",
+    "Cơ bản phải dễ dùng thật; nâng cao phải có checklist, minh chứng, version/review/export readiness cho tổ chuyên môn.",
+    "Game/activity chỉ là gợi ý có kiểm soát; thiếu source/license/review thì không public như tài nguyên chính thức."
+  ],
+  "studioModes": [
+    {
+      "id": "easy",
+      "label": "Dễ dùng",
+      "goal": "Giáo viên mới hoặc lớn tuổi tạo nhanh khung giáo án, chỉnh trực tiếp và xuất nháp.",
+      "visibleControls": ["lớp", "môn", "bài", "thời lượng", "mức học sinh"],
+      "hiddenControls": ["release gate", "coverage audit", "advanced compliance"]
+    },
+    {
+      "id": "standard",
+      "label": "Tiêu chuẩn",
+      "goal": "Thiết kế bài dạy đủ hoạt động, phân hóa, đánh giá, học liệu, worksheet/slide outline.",
+      "visibleControls": ["hồ sơ lớp", "điều kiện thiết bị", "kiểu hoạt động", "checklist chất lượng"],
+      "hiddenControls": ["admin signoff", "public release"]
+    },
+    {
+      "id": "advanced",
+      "label": "Nâng cao",
+      "goal": "Creator/tổ trưởng kiểm nguồn, minh chứng, trạng thái dữ liệu, export readiness và gửi duyệt.",
+      "visibleControls": ["data truth", "compliance packet", "review workflow", "versioning", "community/activity readiness"],
+      "hiddenControls": []
+    }
+  ],
+  "lessonIntents": [
+    {
+      "id": "new_lesson",
+      "label": "Bài mới",
+      "activityBias": ["khoiDong", "hinhThanhKienThuc", "luyenTap", "vanDung"],
+      "qualityFocus": ["yêu cầu cần đạt", "khám phá", "chuẩn hóa kiến thức", "minh chứng đánh giá"]
+    },
+    {
+      "id": "practice",
+      "label": "Luyện tập/củng cố",
+      "activityBias": ["khoiDong", "luyenTap", "vanDung"],
+      "qualityFocus": ["bài tập phân tầng", "sửa lỗi", "tiêu chí sản phẩm", "exit ticket"]
+    },
+    {
+      "id": "review",
+      "label": "Ôn tập/hệ thống hóa",
+      "activityBias": ["khoiDong", "luyenTap", "vanDung"],
+      "qualityFocus": ["bản đồ kiến thức", "nhóm lỗi", "tự đánh giá", "kế hoạch học tiếp"]
+    },
+    {
+      "id": "exam_prep",
+      "label": "Ôn thi",
+      "activityBias": ["diagnostic", "luyenTap", "error_analysis", "vanDung"],
+      "qualityFocus": ["dạng bài", "chiến thuật thời gian", "thống kê lỗi", "nguồn đề/đáp án"]
+    },
+    {
+      "id": "project_activity",
+      "label": "Dự án/hoạt động trải nghiệm",
+      "activityBias": ["khoiDong", "project", "baoCao", "reflection"],
+      "qualityFocus": ["sản phẩm học sinh", "rubric", "thiết bị", "an toàn/lớp học"]
+    }
+  ],
+  "classContextOptions": {
+    "classSize": ["small", "standard", "large"],
+    "deviceAccess": ["none", "teacher_only", "shared_devices", "one_to_one"],
+    "space": ["regular_room", "lab", "outdoor", "online_or_blended"]
+  },
+  "exportReadinessChecklist": [
+    "Đủ 8 mục giáo án chính.",
+    "Yêu cầu cần đạt có kiến thức/kĩ năng, năng lực, phẩm chất, minh chứng và lưu ý kỹ thuật.",
+    "Mỗi hoạt động có mục tiêu, nội dung, sản phẩm và 4 bước tổ chức thực hiện.",
+    "Có phân hóa học sinh và kiểm tra đánh giá.",
+    "Có nhãn trạng thái dữ liệu/source/support/release.",
+    "Học liệu/game/activity có source/license/approval status hoặc bị giữ ở mức gợi ý nội bộ.",
+    "Không có claim chuẩn Bộ/100%/dùng ngay."
+  ]
+}

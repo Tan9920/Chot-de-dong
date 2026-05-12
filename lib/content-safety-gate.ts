@@ -1,0 +1,2 @@
+export function assessContentSafetyGate(input: any = {}) { return { mode: input.sourceStatus === 'verified' ? 'full' : 'safe_skeleton', blockers: input.sourceStatus === 'verified' ? [] : ['seed_or_scaffold_data'], warnings: ['Demo mode không sinh kiến thức sâu khi dữ liệu chưa verified.'] }; }
+export function applyContentSafetyGate(bundle: any, gate: any) { return { ...bundle, trace: { ...(bundle.trace || {}), contentSafety: gate } }; }

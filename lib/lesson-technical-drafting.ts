@@ -1,0 +1,1 @@
+export function getLessonTechnicalDraftingProfile(grade: string | number = '6', ..._args: any[]) { return { grade: String(grade), requiredActivityFlow: ['Chuyển giao nhiệm vụ', 'Thực hiện nhiệm vụ', 'Báo cáo, thảo luận', 'Kết luận, nhận định'], note: 'Áp dụng cấu trúc kỹ thuật giáo án rõ theo lớp.' }; }

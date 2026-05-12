@@ -1,0 +1,23 @@
+{
+  "version": "0.119.0",
+  "batch": "Batch119 — Runtime Evidence Gate Closure",
+  "purpose": "Close the remaining gap between runtime hard-gate policy and evidence collection: production live smoke must write a current artifact and the hard-gate report must evaluate it before allowing teacher-pilot/runtime claims.",
+  "requiredEvidence": [
+    "npm ci exits 0 and installs Next/SWC",
+    "artifacts/raw-next-build-diagnostic-last-run.json has ok=true and rawNextBuildExitCode=0",
+    ".next/BUILD_ID and required server manifests exist from the current build",
+    "artifacts/live-http-smoke-last-run.json has ok=true, smokeMode=production, and batch98RealAccountSaveExportSmoke=true",
+    "npm run auth-invite:runtime-smoke passes for invite/reuse/revoked/expired/self-elevation guards",
+    "GIAOAN_DEMO_URL=https://<hosted-url> npm run hosted:url-smoke passes before hostedClosure/publicDemoReady can be claimed"
+  ],
+  "blockedWhileMissingHostedUrl": [
+    "hostedClosed",
+    "publicDemoReady",
+    "productionReady"
+  ],
+  "noOverclaimRules": [
+    "Production live smoke pass is local runtime evidence, not hosted evidence.",
+    "Hosted closure remains blocked until strict hosted URL smoke passes.",
+    "Do not add AI, payment, marketplace, public community auto-publish, or fake verified data while hosted proof is missing."
+  ]
+}

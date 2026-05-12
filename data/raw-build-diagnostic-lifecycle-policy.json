@@ -1,0 +1,23 @@
+{
+  "batch": "Batch120 — Raw Build Diagnostic Lifecycle Hardening",
+  "purpose": "Prevent raw-build evidence from being overclaimed when the diagnostic process is interrupted, externally killed, or leaves a running/stale artifact while Next artifacts may still exist.",
+  "scope": "P0 Runtime/Build Closure only; no feature expansion.",
+  "blockedEvidenceStates": [
+    "diagnostic_started_not_finished_yet",
+    "diagnostic_running_not_finished_yet",
+    "interrupted_by_sigterm",
+    "interrupted_by_sigint",
+    "timeout_before_raw_build_exit_zero",
+    "raw_build_spawn_failed",
+    "raw_build_failed"
+  ],
+  "allowedRawBuildClosureState": "raw_build_exit_zero",
+  "controls": [
+    "raw-next-build-diagnostic writes running=false only on finalized exit paths",
+    "external SIGINT/SIGTERM writes an interrupted artifact before exiting",
+    "diagnostic uses a non-detached child process to avoid orphaned Next builds under CI/tool timeouts",
+    "hard gate blocks raw closure when raw diagnostic artifact is still running or interrupted",
+    "hosted closure still requires strict GIAOAN_DEMO_URL smoke and is not implied by local build"
+  ],
+  "noAiPaymentVerifiedFakeAdded": true
+}

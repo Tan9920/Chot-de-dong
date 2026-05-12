@@ -1,0 +1,476 @@
+{
+  "version": "2026-04-30.batch87-controlled-demo-feedback-loop",
+  "updatedAt": "2026-04-30T15:58:00.000Z",
+  "positioning": {
+    "safeStatement": "Nền tảng soạn giáo án, quản lý học liệu, xuất Word/PDF, cộng đồng giáo viên và workspace tổ chuyên môn/trường học.",
+    "forbiddenClaims": [
+      "AI tạo giáo án chuẩn 100%",
+      "Kho giáo án chuẩn Bộ khi dữ liệu chưa verified",
+      "Dùng ngay không cần giáo viên kiểm tra",
+      "Miễn phí không giới hạn mọi thứ",
+      "Đăng tài liệu là có tiền"
+    ],
+    "nonAiFirst": true,
+    "teacherFinalReviewRequired": true
+  },
+  "stagePolicy": {
+    "currentStage": "controlled_demo_feedback_loop",
+    "goal": "Tạo controlled teacher test pack, safe-sharing copy và feedback loop để chia link demo nhóm nhỏ có bằng chứng sau khi hosted smoke pass.",
+    "mustNotDo": [
+      "Không thêm AI/model/API/agent trong giai đoạn đầu.",
+      "Không thêm thanh toán thật hoặc marketplace tiền mặt.",
+      "Không public cộng đồng tự do khi chưa moderation/review.",
+      "Không nâng seed/scaffold thành verified bằng lời quảng cáo.",
+      "Không làm workspace người dùng thường quá kỹ thuật.",
+      "Không coi JSON fallback là database production.",
+      "Không coi source validators là runtime/live smoke thật.",
+      "Không public game/activity/forum/resource nếu thiếu moderation, nguồn/license hoặc còn takedown/report.",
+      "Không coi tạo giáo án văn bản đơn thuần là khác biệt sản phẩm đủ mạnh."
+    ]
+  },
+  "coreFlow": [
+    {
+      "id": "landing",
+      "label": "Người dùng hiểu ngay sản phẩm",
+      "longTermRequirement": "Trang chủ phải nói rõ đây là công cụ soạn giáo án, kho học liệu và xuất Word/PDF; không quảng cáo là AI.",
+      "currentImplementation": "components/workspace.tsx hero copy",
+      "maturity": "source_foundation"
+    },
+    {
+      "id": "template_lesson_builder",
+      "label": "Tạo giáo án từ mẫu",
+      "longTermRequirement": "Template engine nhận lớp/môn/bài/thời lượng/phương pháp, chỉ dựng khung an toàn nếu dữ liệu chưa verified.",
+      "currentImplementation": "POST /api/template-builder re-export /api/generate",
+      "maturity": "source_foundation"
+    },
+    {
+      "id": "edit_save_reopen",
+      "label": "Chỉnh sửa, lưu, mở lại",
+      "longTermRequirement": "Demo có thể localStorage; bản thật phải có SavedLesson/SavedLessonVersion trong database và migration rõ.",
+      "currentImplementation": "SavedLesson/SavedLessonVersion JSON persistence in lib/storage.ts + /api/lessons + workspace server save fallback localStorage",
+      "maturity": "json_persistence_foundation"
+    },
+    {
+      "id": "export_docx_pdf",
+      "label": "Xuất DOCX/PDF",
+      "longTermRequirement": "DOCX/PDF cần header/footer, watermark theo gói, nhãn dữ liệu, trạng thái bản nháp/review/approved và kiểm tra mở file thật.",
+      "currentImplementation": "POST /api/export/docx và /api/export/pdf có thể nhận lessonId/savedLessonId, đọc SavedLesson JSON persistence, gắn data truth/compliance packet vào file.",
+      "maturity": "export_compliance_foundation"
+    },
+    {
+      "id": "quality_checklist",
+      "label": "Checklist chất lượng rule-based",
+      "longTermRequirement": "Kiểm tra đủ yêu cầu cần đạt, hoạt động, đánh giá, học liệu, thời lượng, nguồn và trạng thái dữ liệu.",
+      "currentImplementation": "lib/lesson-quality-checklist.ts",
+      "maturity": "source_foundation"
+    }
+  ],
+  "dataTruthModel": {
+    "requiredLabels": [
+      "seed",
+      "scaffold",
+      "community",
+      "reviewed",
+      "verified",
+      "approved_for_release"
+    ],
+    "supportLevels": [
+      "starter",
+      "developing",
+      "foundation",
+      "operational"
+    ],
+    "rule": "Nếu thiếu dữ liệu reviewed/verified thì chỉ tạo khung giáo án an toàn, không sinh kiến thức sâu/câu hỏi/đáp án/Casio như nội dung chắc chắn.",
+    "mustAppearIn": [
+      "workspace",
+      "export",
+      "community resource",
+      "admin board",
+      "readiness API"
+    ]
+  },
+  "interfaceModes": [
+    {
+      "id": "easy",
+      "label": "Dễ dùng",
+      "audience": "Người mới, giáo viên lớn tuổi",
+      "show": [
+        "Tạo giáo án",
+        "Giáo án của tôi",
+        "Xuất Word/PDF",
+        "Hướng dẫn",
+        "Hỗ trợ"
+      ],
+      "hide": [
+        "governance chi tiết",
+        "coverage board kỹ thuật",
+        "creator analytics"
+      ]
+    },
+    {
+      "id": "standard",
+      "label": "Tiêu chuẩn",
+      "audience": "Đa số giáo viên",
+      "show": [
+        "Template",
+        "Kho cá nhân",
+        "Phiếu/slide",
+        "Lịch",
+        "Cộng đồng cơ bản"
+      ],
+      "hide": [
+        "thiết lập admin nâng cao"
+      ]
+    },
+    {
+      "id": "advanced",
+      "label": "Nâng cao",
+      "audience": "Creator, tổ trưởng, admin",
+      "show": [
+        "Version compare",
+        "Workflow",
+        "Dashboard",
+        "Moderation",
+        "Coverage/governance board"
+      ],
+      "hide": []
+    }
+  ],
+  "planFoundation": {
+    "free": {
+      "maxTemplateLessonsPerMonth": 50,
+      "maxSavedLessons": 30,
+      "exportDocxPerMonth": 5,
+      "exportPdfPerMonth": 10,
+      "pdfWatermark": true,
+      "worksheetsPerMonth": 10,
+      "outlineSlidesPerMonth": 3,
+      "pointsEnabled": true,
+      "workflow": false
+    },
+    "pro": {
+      "maxTemplateLessonsPerMonth": 1000,
+      "maxSavedLessons": 2000,
+      "exportDocxPerMonth": 300,
+      "exportPdfPerMonth": 300,
+      "pdfWatermark": false,
+      "worksheetsPerMonth": 300,
+      "outlineSlidesPerMonth": 150,
+      "versioning": true,
+      "qualityChecklist": true,
+      "workflow": false
+    },
+    "team": {
+      "maxUsers": 10,
+      "sharedLibrary": true,
+      "workflow": true,
+      "inlineComments": true,
+      "approval": true,
+      "teamDashboard": true,
+      "complianceBoard": true
+    },
+    "school": {
+      "multiTeam": true,
+      "roleBasedAccess": true,
+      "schoolTemplates": true,
+      "auditTrail": true,
+      "importData": true,
+      "dashboard": true
+    }
+  },
+  "communityFoundation": {
+    "states": [
+      "draft",
+      "submitted",
+      "needs_revision",
+      "rejected",
+      "approved_community",
+      "verified_official",
+      "taken_down"
+    ],
+    "publicRule": "Không public tự do. Nội dung cộng đồng phải qua moderation hoặc ít nhất có auto-hold/keyword flag/report/takedown.",
+    "noCashEarly": true,
+    "allowedRewardsEarly": [
+      "điểm",
+      "huy hiệu",
+      "Pro trial",
+      "lượt xuất",
+      "hiển thị nổi bật"
+    ],
+    "antiAbuse": [
+      "chống spam",
+      "chống tự vote",
+      "giới hạn IP/tài khoản",
+      "log cộng/trừ điểm",
+      "report/takedown"
+    ]
+  },
+  "runtimeGates": [
+    {
+      "id": "npm_install_hoặc_npm_ci_pass_thật",
+      "label": "npm install hoặc npm ci pass thật",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "npm_run_imports:validate_pass",
+      "label": "npm run imports:validate pass",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "npm_run_data:validate_pass",
+      "label": "npm run data:validate pass",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "npm_run_product:foundation-validate_pass",
+      "label": "npm run product:foundation-validate pass",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "npm_run_typecheck_pass",
+      "label": "npm run typecheck pass",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "npm_run_build_pass",
+      "label": "npm run build pass",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "live_http_smoke_/_/api/health_/api/demo/readiness_/api/produ",
+      "label": "live HTTP smoke / /api/health /api/demo/readiness /api/product/foundation pass",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "browser/mobile_ui_qa_tối_thiểu",
+      "label": "browser/mobile UI QA tối thiểu",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "saved_lesson_json_persistence_source_validation_pass",
+      "label": "saved lesson JSON persistence source validation pass",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "server_save/list_smoke_/api/lessons_pass_before_public_demo",
+      "label": "server save/list smoke /api/lessons pass before public demo",
+      "status": "needs_verification",
+      "note": "Migrated from earlier string runtime gate."
+    },
+    {
+      "id": "saved_lesson_export_smoke",
+      "label": "Export by saved lesson id",
+      "status": "source_validator_required",
+      "note": "POST /api/export/docx,pdf cần smoke với lessonId đã lưu; file phải có compliance packet và nhãn dữ liệu."
+    },
+    {
+      "id": "runtime_security_source_validation_pass",
+      "label": "npm run runtime:security-validate pass",
+      "status": "source_validator_required",
+      "note": "Batch73 validator kiểm getSessionUser không trả demoUser, write protection không demoBypass, CSRF/rate-limit/permission/account/audit markers."
+    },
+    {
+      "id": "hosted-demo:launch-gate-validate",
+      "label": "hosted-demo:launch-gate-validate",
+      "status": "batch84_source_gate"
+    },
+    {
+      "id": "hosted-demo:preflight",
+      "label": "hosted-demo:preflight",
+      "status": "batch84_source_gate"
+    },
+    {
+      "id": "GitHub Actions demo-runtime-verify",
+      "label": "GitHub Actions demo-runtime-verify",
+      "status": "batch84_source_gate"
+    },
+    {
+      "id": "Vercel hosted demo config",
+      "label": "Vercel hosted demo config",
+      "status": "batch84_source_gate"
+    }
+  ],
+  "nextBatchRecommendation": "Batch85 — Actual hosted demo run: execute GitHub/Vercel install, build, production live smoke and mobile QA; fix real runtime bugs only.",
+  "persistenceFoundation": {
+    "mode": "json_file_persistence_fallback",
+    "lessonFile": "data/saved-lessons.json",
+    "versionFile": "data/saved-lesson-versions.json",
+    "currentCapability": [
+      "list saved lessons from server JSON file",
+      "save draft lesson through /api/lessons",
+      "create SavedLessonVersion record on each save",
+      "restore version through existing route signature",
+      "workspace falls back to browser localStorage if server save fails"
+    ],
+    "productionLimits": [
+      "not a database",
+      "no multi-instance locking",
+      "no backup/restore policy",
+      "demo auth still needs real session validation before public deployment"
+    ],
+    "rule": "Có thể dùng để test demo ổn định hơn localStorage, nhưng không claim production persistence."
+  },
+  "exportFoundation": {
+    "stage": "batch72_export_quality_compliance_packet",
+    "supportedInputs": [
+      "payload_temporary",
+      "lessonId",
+      "savedLessonId"
+    ],
+    "mustInclude": [
+      "lessonStatus",
+      "sourceStatus",
+      "supportLevel",
+      "reviewStatus",
+      "releaseTier",
+      "watermark",
+      "teacherFinalReviewRequired",
+      "compliancePacket"
+    ],
+    "limits": [
+      "DOCX/PDF vẫn là generator tối thiểu; chưa kiểm mở file bằng Word/Google Docs/LibreOffice trong môi trường thật.",
+      "PDF dùng ASCII fallback để tránh lỗi font; DOCX giữ tiếng Việt tốt hơn."
+    ]
+  },
+  "runtimeSecurityFoundation": {
+    "stage": "batch73_runtime_security_closure",
+    "implemented": [
+      "getSessionUser đọc session cookie từ auth-sessions.json thay vì trả demoUser vô điều kiện",
+      "GET /api/auth/csrf cấp CSRF token và bootstrap session teacher quyền thấp để không phá demo UX",
+      "assertWriteProtection kiểm same-origin, content-type tối thiểu và so khớp x-csrf-token với cookie",
+      "assertRuntimeRateLimit dùng in-memory bucket theo action/IP/user-agent",
+      "password account dùng scrypt hash và timingSafeEqual, không còn verify mọi email/mật khẩu",
+      "assertLessonPermission kiểm owner/school/department/visibility cho SavedLesson/export",
+      "security audit log ghi JSON cho success/failure/blocked event",
+      "runtime:security-validate kiểm source-level các marker bảo mật chính"
+    ],
+    "limits": [
+      "Rate-limit vẫn in-memory, reset khi process restart; chưa phải Redis/DB production.",
+      "Session/account/audit vẫn JSON persistence; chưa có DB migration, backup, email verification/reset password đầy đủ.",
+      "CSRF và permission guard đã tốt hơn no-op nhưng cần live HTTP smoke qua browser/server thật.",
+      "Admin/member/invite vẫn foundation; vai trò cao cần quy trình invite/admin xác minh thật trước public rộng."
+    ],
+    "nonClaims": [
+      "Không claim production security.",
+      "Không claim deploy-ready nếu npm install/typecheck/build/live smoke chưa pass.",
+      "Không cho người dùng tự chọn admin/leader/school trên public flow."
+    ]
+  },
+  "subjectDataFoundation": {
+    "stage": "batch75_curriculum_import_review_pipeline",
+    "sourceFiles": [
+      "data/subject-data-registry.json",
+      "data/curriculum-import-drafts.json",
+      "lib/subject-data-truth.ts",
+      "lib/curriculum-data-pipeline.ts"
+    ],
+    "APIs": [
+      "GET /api/subject-data/truth",
+      "GET /api/subject-data/review-board",
+      "GET /api/admin/subject-data/imports",
+      "POST /api/admin/subject-data/imports preview-only"
+    ],
+    "rules": [
+      "Import draft phải có lớp/môn/bộ sách hoặc chương trình, topic, nguồn, license, attribution, reviewStatus, releaseTier.",
+      "POST import hiện chỉ preview để tránh ghi dữ liệu chưa kiểm chứng.",
+      "Không nâng seed/scaffold thành reviewed/verified nếu chưa có reviewer thật, nguồn hợp pháp và audit log.",
+      "contentDepthAllowed chỉ được bật khi đủ reviewed/foundation/approved references."
+    ],
+    "maturity": "source_foundation_not_verified_curriculum_data"
+  },
+  "lessonDraftingFoundation": {
+    "stage": "batch75_lesson_drafting_quality_profiles",
+    "sourceFiles": [
+      "data/lesson-drafting-profiles.json",
+      "lib/lesson-drafting-profile.ts",
+      "lib/generator.ts",
+      "lib/lesson-quality-checklist.ts"
+    ],
+    "APIs": [
+      "GET /api/lesson-drafting/profiles",
+      "POST /api/generate",
+      "POST /api/template-builder",
+      "POST /api/lesson-quality"
+    ],
+    "gradeProfiles": [
+      "Lớp 1–2",
+      "Lớp 3–4",
+      "Lớp 5",
+      "Lớp 6–9",
+      "Lớp 10–12",
+      "Ôn thi vào 10",
+      "Ôn thi THPT"
+    ],
+    "rules": [
+      "Không dùng một kiểu giáo án máy móc cho mọi lớp.",
+      "Nếu dữ liệu môn học chưa reviewed/foundation thì chỉ dựng khung an toàn.",
+      "Mỗi hoạt động có mục tiêu, nội dung, sản phẩm, tổ chức thực hiện đủ 4 bước.",
+      "Checklist phát hiện thiếu cấu trúc, thiếu nguồn, overclaim, Casio chưa duyệt và thiếu phân hóa."
+    ],
+    "maturity": "source_foundation_not_expert_reviewed"
+  },
+  "hiddenRiskAuditFoundation": {
+    "api": "GET /api/product/strategy-risk-audit",
+    "script": "npm run strategy:risk-audit",
+    "purpose": "Surface hidden blockers across runtime, deploy, data/legal, community, type hygiene and strategy alignment instead of relying only on UI screenshots or source validators.",
+    "doesNotProve": "It does not prove npm install, Next build, live HTTP smoke, or production readiness."
+  },
+  "lessonDesignStudio": {
+    "stage": "batch81_lesson_design_studio_core",
+    "nonAiCore": true,
+    "valueProposition": "Thiết kế bài dạy có bối cảnh lớp, phân hóa, hoạt động, minh chứng, worksheet/slide outline, export readiness và kiểm nguồn; không chỉ tạo văn bản giáo án.",
+    "requiredControls": [
+      "lessonIntent",
+      "designMode",
+      "classSize",
+      "deviceAccess",
+      "space",
+      "learnerProfile",
+      "sourceStatus",
+      "supportLevel"
+    ],
+    "safetyRules": [
+      "Thiếu dữ liệu reviewed/foundation thì chỉ dựng khung an toàn.",
+      "Game/activity thiếu source/license/review không được public như tài nguyên chính thức.",
+      "Không tự sinh câu hỏi/đáp án/Casio sâu khi chưa có dữ liệu duyệt hoặc giáo viên nhập.",
+      "Export chính thức cần compliance packet và review workflow."
+    ]
+  },
+  "currentBatch": "Batch87 — Controlled Demo Feedback Loop + Teacher Test Pack",
+  "stage": "controlled-demo-feedback-loop",
+  "deployHardening": {
+    "nodeEngine": "22.x",
+    "next": "15.3.8",
+    "react": "19.0.4",
+    "reactDom": "19.0.4",
+    "projectNpmAlwaysAuthRemoved": true,
+    "stillRequiresHostInstallBuildSmoke": true
+  },
+  "stageMetadata": {
+    "latestBatch": "Batch87",
+    "latestFocus": "Controlled Demo Feedback Loop + Teacher Test Pack",
+    "hostedUrlSmokeRequired": true,
+    "demoTesterPackRequired": true,
+    "teacherFeedbackEvidenceRequiredBeforeWiderSharing": true
+  },
+  "lastUpdated": "2026-04-30T22:10:00.000Z",
+  "batch": "Batch88 Feedback Evidence Dossier",
+  "demoFeedbackEvidence": {
+    "enabled": true,
+    "publicRawFeedback": false,
+    "studentPersonalDataAllowed": false,
+    "expandDemoRequiresNoOpenP0": true,
+    "expandDemoRequiresNoOpenP1": true,
+    "route": "/api/demo/feedback",
+    "note": "Feedback thật được dùng để quyết định dừng/tiếp tục/mở rộng test demo; không thay thế build/live smoke hoặc review học thuật."
+  }
+}

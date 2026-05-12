@@ -1,0 +1,121 @@
+{
+  "batch": "Batch138 — P0 Hosted Proof Execution Gate",
+  "version": "0.138.0",
+  "phase": "P0 hosted proof execution gate before P1/P2 expansion",
+  "sourceLevelOnly": true,
+  "purpose": "Provide one auditable gate that reads the real proof artifacts, classifies blockers, and prevents hosted/public proof from being claimed until Node24 CI, APP_URL strict smoke, hosted save/export smoke, real visual smoke evidence, P0/P1 stability and public rollout readiness artifacts pass.",
+  "selectedBecause": "Batch137 added the evidence capture pack, but the project still needs a single execution gate that ties those artifacts to claim policy, CI output and admin/runtime boards. This is still P0/P1 stabilization, not a new teacher feature.",
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "executionModes": [
+    {
+      "id": "local_dry_run",
+      "description": "Runs source/type/build/local smoke and writes a blocked hosted proof report when APP_URL or Node24/visual evidence is missing.",
+      "allowedClaims": ["local source/runtime evidence only", "hosted proof still blocked"]
+    },
+    {
+      "id": "hosted_strict_ci",
+      "description": "Runs on Node24 with APP_URL/GIAOAN_DEMO_URL and uploaded visual evidence. This mode can close hosted proof only if every required artifact passes.",
+      "allowedClaims": ["hosted evidence passed for the specific URL and artifact set", "production-ready still requires separate production DB/security/legal review"]
+    }
+  ],
+  "hardGates": [
+    {
+      "id": "node24_ci",
+      "label": "Node24 CI/deploy proof",
+      "command": "npm run verify:p0-deepest-node24-ci",
+      "artifact": "artifacts/verify-p0-deepest-last-run.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.ok === true and artifact.nodeVersion major is 24"
+    },
+    {
+      "id": "app_url_strict_release",
+      "label": "APP_URL strict release smoke",
+      "command": "APP_URL=https://<vercel-url> npm run verify:release:strict",
+      "artifact": "artifacts/verify-release-last-run.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.ok === true, artifact.appUrlPresent === true and artifact.summary.failed === 0"
+    },
+    {
+      "id": "hosted_real_account_save_export",
+      "label": "Hosted real account save/export smoke",
+      "command": "GIAOAN_DEMO_URL=https://<vercel-url> npm run hosted:url-smoke",
+      "artifact": "artifacts/hosted-demo-url-smoke-last-run.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.ok === true and hosted save/export smoke marker is true"
+    },
+    {
+      "id": "visual_smoke_real_browser",
+      "label": "Real browser visual smoke evidence",
+      "command": "npm run visual:smoke:evidence-validate",
+      "artifact": "artifacts/visual-smoke-evidence.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.ok === true and all required viewport captures pass; template evidence is not enough"
+    },
+    {
+      "id": "p0_p1_stability",
+      "label": "P0/P1 stability report",
+      "command": "npm run p0-p1:stability-report",
+      "artifact": "artifacts/p0-p1-stability-report-last-run.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.ok === true, localP0Stable === true and p1FoundationSourceReady === true"
+    },
+    {
+      "id": "capture_board",
+      "label": "Batch137 hosted evidence capture board",
+      "command": "npm run p0:hosted-evidence-capture-report",
+      "artifact": "artifacts/p0-hosted-evidence-capture-report-last-run.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.hostedProofClosed === true with no missing required evidence"
+    },
+    {
+      "id": "public_rollout_readiness",
+      "label": "Public rollout readiness report",
+      "command": "npm run public-rollout:readiness-report",
+      "artifact": "artifacts/public-rollout-readiness-report-last-run.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.ok === true and publicRolloutAllowed === true; productionReady can still be false until production review"
+    }
+  ],
+  "visualEvidence": {
+    "requiredViewports": ["mobile-360", "mobile-390", "mobile-430", "tablet-768", "desktop-1366", "desktop-1440"],
+    "templateIsPass": false,
+    "requiredSignals": [
+      "home/app shell visible",
+      "lesson authoring visible",
+      "safe data/governance labels visible",
+      "save/export controls visible or clearly gated",
+      "mobile navigation/sidebar can close"
+    ]
+  },
+  "ciContract": {
+    "workflowFile": ".github/workflows/p0-hosted-final-proof.yml",
+    "nodeVersion": "24",
+    "requiredInputOrSecret": "workflow_dispatch app_url or secret GIAOAN_DEMO_URL",
+    "strictFinalCommand": "npm run verify:p0-hosted-ci-proof",
+    "finalGateReportCommand": "npm run p0:hosted-proof-execution-report",
+    "artifactUploadExpected": true
+  },
+  "claimPolicy": {
+    "allowed": [
+      "Batch138 adds a P0 hosted proof execution gate and report.",
+      "A local run may say the gate is blocked and list missing evidence.",
+      "Hosted proof can only be described for the exact URL/artifacts that passed."
+    ],
+    "blocked": [
+      "Không nói production-ready.",
+      "Không nói public rollout allowed nếu public-rollout report còn false.",
+      "Không nói hosted proof closed nếu Node24/APP_URL/visual/save-export artifacts chưa pass.",
+      "Không nói visual smoke pass nếu chỉ có template.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  }
+}

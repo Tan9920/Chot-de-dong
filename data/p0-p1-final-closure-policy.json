@@ -1,0 +1,154 @@
+{
+  "batch": "Batch144 — P0/P1 Local Build Closure",
+  "version": "0.144.0",
+  "phase": "P0/P1 local closure after raw/guarded build proof",
+  "purpose": "Resolve the largest current blocker by proving the production build did not hang: guarded build artifacts are generated from a cleaned .next output and raw Next build exits 0. Local/source P0/P1 can close when these and existing P1/security/smoke gates pass; hosted/public proof remains blocked until Node24 GitHub Actions, hosted APP_URL, visual screenshots, production DB/security/legal review pass.",
+  "productionReady": false,
+  "publicRolloutAllowed": false,
+  "localP0P1ClosureEvidence": [
+    {
+      "id": "local_evidence_report",
+      "label": "P0/P1 local evidence report",
+      "artifact": "artifacts/p0-p1-local-evidence-report-last-run.json",
+      "command": "npm run p0-p1:local-evidence-report",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "localEvidenceReady === true",
+        "evidenceIntegrityReady === true",
+        "higherLocalP0P1ClaimAllowed === true"
+      ]
+    },
+    {
+      "id": "raw_build_diagnostic",
+      "label": "Raw Next build diagnostic exit-zero proof",
+      "artifact": "artifacts/raw-next-build-diagnostic-last-run.json",
+      "command": "GIAOAN_RAW_BUILD_TIMEOUT_MS=180000 npm run build:raw:diagnose",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "rawNextBuildExitCode === 0",
+        "buildOutputCleanup.removed === true",
+        "required manifests exist"
+      ]
+    },
+    {
+      "id": "stability_report",
+      "label": "P0/P1 stability report",
+      "artifact": "artifacts/p0-p1-stability-report-last-run.json",
+      "command": "npm run p0-p1:stability-report",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "localP0Stable === true",
+        "p1FoundationSourceReady === true"
+      ]
+    },
+    {
+      "id": "security_data_protection",
+      "label": "Security/data protection report",
+      "artifact": "artifacts/security-data-protection-report-last-run.json",
+      "command": "npm run security:data-protection-report",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "publicRolloutAllowed !== true"
+      ]
+    },
+    {
+      "id": "auth_invite_runtime_smoke",
+      "label": "Auth/invite runtime smoke",
+      "artifact": "artifacts/auth-invite-runtime-smoke-last-run.json",
+      "command": "npm run auth-invite:runtime-smoke",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "summary.batch98InviteRuntimeSmoke === true"
+      ]
+    },
+    {
+      "id": "live_smoke_production",
+      "label": "Production-mode local live smoke",
+      "artifact": "artifacts/live-http-smoke-last-run.json",
+      "command": "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "smokeMode === production"
+      ]
+    },
+    {
+      "id": "loopback_hosted_style_smoke",
+      "label": "Loopback hosted-style account/save/export smoke",
+      "artifact": "artifacts/p0-loopback-url-smoke-last-run.json",
+      "command": "npm run runtime:p0-loopback-url-smoke",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "hostedSummary.batch98RealAccountSaveExportSmoke === true"
+      ]
+    }
+  ],
+  "hostedPublicClosureEvidence": [
+    {
+      "id": "hosted_ci_final_proof",
+      "label": "Hosted CI final proof report",
+      "artifact": "artifacts/runtime-p0-hosted-ci-final-proof-report-last-run.json",
+      "command": "npm run runtime:p0-hosted-ci-proof-report",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "publicRolloutAllowed === true"
+      ]
+    },
+    {
+      "id": "public_rollout_readiness",
+      "label": "Public rollout readiness report",
+      "artifact": "artifacts/public-rollout-readiness-report-last-run.json",
+      "command": "npm run public-rollout:readiness-report",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "publicRolloutAllowed === true"
+      ]
+    },
+    {
+      "id": "visual_smoke_evidence",
+      "label": "Canonical visual smoke screenshots",
+      "artifact": "artifacts/visual-smoke-evidence.json",
+      "command": "APP_URL=https://<vercel-url> npm run visual:smoke:evidence-capture && npm run visual:smoke:evidence-validate",
+      "required": true,
+      "passWhen": [
+        "ok === true",
+        "all canonical viewport captures status=pass",
+        "screenshot files exist"
+      ]
+    }
+  ],
+  "canonicalVisualViewportIds": [
+    "mobile-360",
+    "mobile-390",
+    "mobile-430",
+    "tablet-768",
+    "desktop-1366",
+    "desktop-1440"
+  ],
+  "claimPolicy": {
+    "allowedIfLocalOnly": [
+      "Local/source P0/P1 final closure candidate",
+      "P1 foundation source-ready when local evidence and stability reports pass",
+      "Hosted/public still blocked if hosted evidence is missing",
+      "Raw Next build exit-zero local closure when raw build artifact is fresh and all local P0/P1 gates pass."
+    ],
+    "forbiddenUntilHostedPass": [
+      "public-rollout-ready",
+      "production-ready",
+      "P0/P1 hoàn thành tuyệt đối",
+      "100%",
+      "hosted-demo-closed",
+      "visual-smoke-pass-without-screenshots",
+      "P0/P1 hosted/public hoàn thành"
+    ]
+  },
+  "noAiPaymentVerifiedFakeAdded": true
+}

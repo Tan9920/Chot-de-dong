@@ -1,0 +1,268 @@
+{
+  "version": "batch110_teacher_topic_picker_with_curriculum_matrix_v1",
+  "batch": "Batch110 — Curriculum Matrix, Primary Bookset Mode & Safer Lesson Composer",
+  "purpose": "Fix lỗi giáo viên phải tự gõ chủ đề, chặn tổ hợp sai môn-chủ đề như Tiếng Việt + Phân số, và không cho người dùng tự chọn verified.",
+  "status": "offline_topic_picker_curriculum_matrix_guarded_hosted_runtime_still_guarded",
+  "rules": [
+    "Chủ đề phải được chọn từ danh sách theo lớp + môn, không dùng input tự do mặc định.",
+    "Chủ đề tự nhập chỉ là custom_teacher_input và luôn cần giáo viên chịu trách nhiệm nguồn; không được tự nâng verified.",
+    "Nhãn dữ liệu do catalog/registry quyết định; UI không cho chọn verified bằng tay.",
+    "Nếu thiếu dữ liệu verified, chỉ dựng khung giáo án an toàn, không sinh kiến thức sâu/câu hỏi/đáp án/Casio.",
+    "Tên môn trong chương trình mới dùng Công nghệ; kĩ thuật dạy học chỉ là thuật ngữ phương pháp."
+  ],
+  "labels": {
+    "seed": "Dữ liệu gợi ý/demo — chỉ dựng khung, giáo viên nhập nội dung thật.",
+    "scaffold": "Khung cấu trúc — chưa đủ kiểm chứng chuyên môn.",
+    "community": "Tài nguyên cộng đồng — cần moderation/review trước khi public rộng.",
+    "reviewed": "Đã review nội bộ — vẫn cần kiểm tra nguồn và phạm vi dùng.",
+    "verified": "Chỉ hiện khi có bằng chứng nguồn/reviewer/license thật; không cho chọn tay trong demo."
+  },
+  "customTopicPolicy": {
+    "allowed": true,
+    "defaultSourceStatus": "custom_teacher_input",
+    "contentDepthAllowed": false,
+    "warning": "Chủ đề tự nhập không phải dữ liệu verified. Hệ thống chỉ dựng khung; giáo viên tự chịu trách nhiệm nguồn và nội dung."
+  },
+  "grade5PriorityFix": {
+    "problem": "Batch107 cho nhập tự do nên có thể ra Tiếng Việt + Phân số và verified giả bằng tay.",
+    "fix": "Grade 5 có dropdown môn/chủ đề; Phân số chỉ nằm trong môn Toán; Tiếng Việt chỉ có chủ đề đọc/viết/luyện từ/nói nghe an toàn."
+  },
+  "grades": [
+    {
+      "grade": "5",
+      "level": "Tiểu học",
+      "subjects": [
+        {
+          "subject": "Tiếng Việt",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "g5-tv-doc-hieu",
+              "title": "Đọc hiểu văn bản theo chủ đề gần gũi",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Chỉ chọn làm chủ đề khung; giáo viên nhập văn bản/nội dung từ nguồn hợp lệ.",
+              "matrixRecordId": "g5-kntt-tieng-viet-doc-hieu",
+              "bookset": "ket_noi_tri_thuc",
+              "recordType": "topic_strand"
+            },
+            {
+              "id": "g5-tv-luyen-tu-cau",
+              "title": "Luyện từ và câu trong ngữ cảnh",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Không tự sinh ngữ liệu dài; giáo viên chọn ví dụ từ nguồn hợp lệ.",
+              "matrixRecordId": "g5-kntt-tieng-viet-luyen-tu-cau",
+              "bookset": "ket_noi_tri_thuc",
+              "recordType": "topic_strand"
+            },
+            {
+              "id": "g5-tv-viet-doan",
+              "title": "Viết đoạn/bài ngắn có hướng dẫn",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Chỉ tạo khung hoạt động viết, không tạo bài mẫu dài.",
+              "matrixRecordId": "g5-kntt-tieng-viet-viet-doan",
+              "bookset": "ket_noi_tri_thuc",
+              "recordType": "topic_strand"
+            },
+            {
+              "id": "g5-tv-noi-nghe",
+              "title": "Nói và nghe: trình bày, trao đổi ý kiến",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Gợi ý cấu trúc hoạt động, giáo viên chọn tình huống thật.",
+              "matrixRecordId": "g5-kntt-tieng-viet-noi-nghe",
+              "bookset": "ket_noi_tri_thuc",
+              "recordType": "topic_strand"
+            }
+          ]
+        },
+        {
+          "subject": "Toán",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "g5-toan-phan-so",
+              "title": "Phân số và ý nghĩa của phân số",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Chỉ dựng khung bài Toán về phân số; không tự sinh bài tập/đáp án nếu chưa có nguồn duyệt.",
+              "matrixRecordId": "g5-kntt-toan-phan-so-y-nghia",
+              "bookset": "ket_noi_tri_thuc",
+              "recordType": "official_lesson"
+            },
+            {
+              "id": "g5-toan-so-sanh-phan-so",
+              "title": "So sánh và sắp xếp phân số",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Giáo viên nhập bài tập từ nguồn hợp lệ hoặc tự biên soạn.",
+              "matrixRecordId": "g5-kntt-toan-so-sanh-phan-so",
+              "bookset": "ket_noi_tri_thuc",
+              "recordType": "topic_strand"
+            },
+            {
+              "id": "g5-toan-phep-tinh-phan-so",
+              "title": "Phép tính với phân số ở mức phù hợp lớp 5",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Không tự sinh đáp án; giáo viên kiểm tra và xác nhận."
+            },
+            {
+              "id": "g5-toan-do-luong",
+              "title": "Đo lường và giải quyết vấn đề gần gũi",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Gợi ý khung vận dụng thực tế, không bịa dữ kiện."
+            }
+          ]
+        },
+        {
+          "subject": "Khoa học",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "g5-kh-suc-khoe",
+              "title": "Sức khỏe và thói quen an toàn",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Chỉ dựng khung; giáo viên xác minh nội dung khoa học."
+            },
+            {
+              "id": "g5-kh-moi-truong",
+              "title": "Môi trường sống quanh em",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Không đưa số liệu/chỉ dẫn chuyên sâu chưa kiểm chứng."
+            }
+          ]
+        },
+        {
+          "subject": "Lịch sử và Địa lí",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "g5-lsdl-dia-phuong",
+              "title": "Tìm hiểu địa phương và bản đồ đơn giản",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Giáo viên chọn nguồn địa phương hợp lệ."
+            },
+            {
+              "id": "g5-lsdl-cau-chuyen-lich-su",
+              "title": "Câu chuyện lịch sử ở mức khái quát",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Không sao chép dài tài liệu/sách."
+            }
+          ]
+        },
+        {
+          "subject": "Công nghệ",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "g5-cong-nghe-san-pham",
+              "title": "Sản phẩm công nghệ quanh em",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Dùng đúng tên môn Công nghệ; không gọi môn là Kĩ thuật."
+            },
+            {
+              "id": "g5-cong-nghe-thiet-ke",
+              "title": "Thiết kế và sử dụng công cụ an toàn",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Giáo viên bổ sung vật liệu/thiết bị phù hợp lớp."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": "generic_primary",
+      "level": "Tiểu học fallback",
+      "subjects": [
+        {
+          "subject": "Tiếng Việt",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "primary-tv-doc-hieu",
+              "title": "Đọc hiểu văn bản ngắn theo chủ đề gần gũi",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Khung chủ đề chung, giáo viên nhập bài cụ thể."
+            },
+            {
+              "id": "primary-tv-viet-cau-doan",
+              "title": "Viết câu/đoạn ngắn có hướng dẫn",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Không sinh bài mẫu dài."
+            }
+          ]
+        },
+        {
+          "subject": "Toán",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "primary-toan-so-phep-tinh",
+              "title": "Số và phép tính trong tình huống gần gũi",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Chỉ dựng khung luyện tập."
+            },
+            {
+              "id": "primary-toan-hinh-do-luong",
+              "title": "Hình học và đo lường trực quan",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Giáo viên nhập dữ liệu/bài tập thật."
+            }
+          ]
+        },
+        {
+          "subject": "Đạo đức",
+          "sourceStatus": "seed",
+          "reviewStatus": "not_reviewed",
+          "supportLevel": "developing",
+          "topics": [
+            {
+              "id": "primary-dd-ung-xu",
+              "title": "Ứng xử tôn trọng bạn bè và người lớn",
+              "sourceStatus": "seed",
+              "contentDepthAllowed": false,
+              "safeUse": "Giáo viên chọn tình huống phù hợp lớp."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "curriculumMatrix": {
+    "enabled": true,
+    "file": "data/curriculum-compatibility-matrix.json",
+    "primaryBookset": "ket_noi_tri_thuc",
+    "legacyBooksetsHiddenFromTeacherFlow": [
+      "canh_dieu",
+      "chan_troi_sang_tao"
+    ]
+  }
+}

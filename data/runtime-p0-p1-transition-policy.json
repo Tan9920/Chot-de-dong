@@ -1,0 +1,41 @@
+{
+  "version": "0.125.0",
+  "batch": "Batch125 - P0 Runtime Closure & P1 Transition Gate",
+  "priority": "P0 before P1",
+  "purpose": "Only allow P1 source work after local runtime/build/auth smoke evidence is clean; public P1 rollout still requires hosted URL smoke.",
+  "localP0ClosureRequired": [
+    "public_registry_clean_install",
+    "next_swc_ready",
+    "source_validate_pass",
+    "data_validate_pass",
+    "typecheck_pass",
+    "strict_production_build_no_type_skip",
+    "raw_next_build_exit_zero",
+    "startable_next_artifact_present",
+    "production_live_http_smoke_pass",
+    "auth_invite_runtime_smoke_pass",
+    "no_ai_payment_verified_fake_added"
+  ],
+  "p1SourceWorkAllowedWhen": [
+    "localP0ClosureRequired all pass",
+    "hosted URL smoke is either passed or explicitly open/skipped with no fake URL"
+  ],
+  "publicP1RolloutAllowedWhen": [
+    "localP0ClosureRequired all pass",
+    "strict hosted URL smoke passes using APP_URL/NEXT_PUBLIC_APP_URL",
+    "mobile responsive smoke is manually confirmed on real devices or captured evidence is attached"
+  ],
+  "blockedClaimsUntilHostedSmoke": [
+    "hostedClosed",
+    "publicDemoReadyForTeachers",
+    "productionReady",
+    "P1PublicRolloutReady"
+  ],
+  "neverAddInThisGate": [
+    "AI SDK/API/model call",
+    "payment or marketplace",
+    "cash fund/referral payout",
+    "verified academic status without review evidence",
+    "auto-public community publishing"
+  ]
+}

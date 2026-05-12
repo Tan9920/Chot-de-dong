@@ -1,0 +1,87 @@
+name: P0 Hosted Final Proof
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_url:
+        description: "Hosted Vercel URL to smoke test. Leave empty to use secret GIAOAN_DEMO_URL."
+        required: false
+        type: string
+      strict:
+        description: "Fail the workflow when hosted/visual evidence is incomplete. Keep true for final proof."
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  workflow_call:
+    inputs:
+      app_url:
+        required: false
+        type: string
+      strict:
+        required: false
+        type: string
+        default: "true"
+
+jobs:
+  p0-hosted-final-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NEXT_PUBLIC_DEMO_MODE: "true"
+      GIAOAN_DEMO_MODE: "true"
+      GIAOAN_ALLOW_DEMO_LOGIN: "true"
+      GIAOAN_PUBLIC_TEST_MODE: "limited"
+      GIAOAN_SMOKE_MODE: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      APP_URL: ${{ inputs.app_url || secrets.GIAOAN_DEMO_URL }}
+      NEXT_PUBLIC_APP_URL: ${{ inputs.app_url || secrets.GIAOAN_DEMO_URL }}
+      GIAOAN_DEMO_URL: ${{ inputs.app_url || secrets.GIAOAN_DEMO_URL }}
+      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      GIAOAN_STRICT_HOSTED_CI_PROOF: ${{ inputs.strict == 'false' && '0' || '1' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Diagnose public registry
+        run: npm run registry:diagnose
+
+      - name: Normalize lockfile registry
+        run: npm run lockfile:public-registry
+
+      - name: Install dependencies cleanly
+        run: npm run install:clean
+
+      - name: Capture real visual smoke evidence with Chromium
+        run: npm run visual:smoke:evidence-capture
+
+      - name: Run hosted CI final proof runner
+        run: npm run runtime:p0-hosted-ci-proof-runner
+
+      - name: Strict final proof gate
+        if: ${{ inputs.strict != 'false' }}
+        run: npm run verify:p0-hosted-ci-proof
+
+      - name: Batch137 evidence capture report
+        if: always()
+        run: npm run p0:hosted-evidence-capture-report
+
+      - name: Batch138 hosted proof execution gate
+        if: always()
+        run: npm run p0:hosted-proof-execution-report
+
+      - name: Upload P0 hosted proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-hosted-final-proof-artifacts
+          path: artifacts/*.json
+          if-no-files-found: ignore

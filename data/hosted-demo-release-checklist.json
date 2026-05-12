@@ -1,0 +1,188 @@
+{
+  "version": "2026-04-30.batch88-demo-feedback-evidence-dossier",
+  "previousBatchCompatibility": [
+    "batch86-hosted-url-runtime-smoke",
+    "batch87-controlled-demo-feedback-loop"
+  ],
+  "updatedAt": "2026-04-30T22:05:00.000Z",
+  "purpose": "Source/runtime/tester/feedback checklist for deciding whether the non-AI lesson design demo can be shared, paused, or expanded after real hosted URL smoke and teacher feedback evidence.",
+  "positioning": {
+    "allowed": "Nền tảng soạn giáo án, thiết kế bài dạy, xuất Word/PDF, lưu trữ học liệu, cộng đồng giáo viên và workspace tổ chuyên môn/trường học.",
+    "forbidden": [
+      "AI tạo giáo án chuẩn",
+      "chuẩn Bộ 100%",
+      "dùng ngay không cần sửa",
+      "không vi phạm bản quyền",
+      "cộng đồng public tự do",
+      "kiếm tiền từ đăng tài liệu"
+    ],
+    "teacherReviewRequired": true,
+    "nonAiCore": true
+  },
+  "sourceGates": [
+    {
+      "id": "dependency_manifest",
+      "label": "Có package-lock public registry, Node major pin, patched Next/React và scripts kiểm tra install/build/runtime",
+      "requiredFiles": [
+        "package.json",
+        "package-lock.json",
+        ".npmrc"
+      ],
+      "requiredScripts": [
+        "registry:diagnose",
+        "install:clean",
+        "next:swc-ready",
+        "build:clean",
+        "live:smoke:clean"
+      ]
+    },
+    {
+      "id": "hosted_runtime_contract",
+      "label": "Có contract cho route demo quan trọng và smoke production",
+      "requiredFiles": [
+        "scripts/live-http-smoke.mjs",
+        "scripts/validate-batch83-route-contract-source.mjs"
+      ],
+      "requiredScripts": [
+        "route:contract-validate",
+        "deploy:runtime-contract-validate"
+      ]
+    },
+    {
+      "id": "launch_gate_api",
+      "label": "Có launch gate API để nhìn blocker demo trước khi public link",
+      "requiredFiles": [
+        "lib/hosted-demo-launch-gate.ts",
+        "app/api/demo/launch-gate/route.ts",
+        "data/hosted-demo-release-checklist.json"
+      ],
+      "requiredScripts": [
+        "hosted-demo:launch-gate-validate"
+      ]
+    },
+    {
+      "id": "ci_workflow",
+      "label": "Có GitHub Actions workflow để chạy install/typecheck/build/production smoke trên môi trường thật",
+      "requiredFiles": [
+        ".github/workflows/demo-runtime-verify.yml"
+      ],
+      "requiredScripts": [
+        "verify:batch85"
+      ]
+    },
+    {
+      "id": "host_config",
+      "label": "Có cấu hình hosted demo tối thiểu cho Vercel và biến môi trường demo",
+      "requiredFiles": [
+        "vercel.json",
+        ".env.example",
+        "docs/BATCH84_HOSTED_DEMO_LAUNCH_CHECKLIST.md"
+      ],
+      "requiredScripts": [
+        "hosted-demo:preflight"
+      ]
+    },
+    {
+      "id": "hosted_url_smoke_contract",
+      "label": "Có script kiểm tra URL Vercel thật: HTTPS, route GET, CSRF, template-builder, Lesson Design Studio, DOCX/PDF export và Vercel protection bypass cho automation",
+      "requiredFiles": [
+        "scripts/hosted-demo-url-smoke.mjs",
+        "scripts/validate-batch86-hosted-url-runtime-source.mjs",
+        "docs/BATCH86_HOSTED_RUNTIME_TEST_GUIDE.md"
+      ],
+      "requiredScripts": [
+        "hosted:url-smoke",
+        "hosted:url-smoke:optional",
+        "hosted:url-smoke-source-validate"
+      ]
+    },
+    {
+      "id": "demo_tester_feedback_loop",
+      "label": "Có controlled teacher test pack, safe-sharing copy, feedback questions, severity guide và API/UI để không chia link bừa bãi",
+      "requiredFiles": [
+        "data/demo-tester-feedback-pack.json",
+        "lib/demo-tester-pack.ts",
+        "app/api/demo/tester-pack/route.ts",
+        "scripts/validate-batch87-demo-tester-feedback-source.mjs",
+        "docs/BATCH87_CONTROLLED_TEACHER_TEST_GUIDE.md"
+      ],
+      "requiredScripts": [
+        "demo:tester-pack-validate",
+        "smoke:batch87",
+        "verify:batch87"
+      ]
+    },
+    {
+      "id": "demo_feedback_evidence_dossier",
+      "label": "Có feedback intake API, evidence board, admin review surface và validator để không mở rộng demo khi còn P0/P1",
+      "requiredFiles": [
+        "data/demo-feedback-submissions.json",
+        "lib/demo-feedback-intake.ts",
+        "app/api/demo/feedback/route.ts",
+        "app/api/admin/demo/feedback/route.ts",
+        "scripts/validate-batch88-demo-feedback-evidence-source.mjs",
+        "docs/BATCH88_DEMO_FEEDBACK_EVIDENCE_DOSSIER.md"
+      ],
+      "requiredScripts": [
+        "demo:feedback-validate",
+        "smoke:batch88",
+        "verify:batch88"
+      ]
+    }
+  ],
+  "mustPassOnHostBeforeSharing": [
+    "npm run registry:diagnose",
+    "npm run install:clean",
+    "npm run next:swc-ready",
+    "npm run data:validate",
+    "npm run source:validate",
+    "npm run hosted-demo:launch-gate-validate",
+    "npm run runtime:deploy-hardening-validate",
+    "npm run typecheck",
+    "npm run build:clean",
+    "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+    "npm run runtime:preflight",
+    "npm run verify:batch85",
+    "npm run hosted:url-smoke-source-validate",
+    "GIAOAN_DEMO_URL=https://your-vercel-domain.vercel.app npm run hosted:url-smoke",
+    "npm run demo:tester-pack-validate",
+    "npm run smoke:batch87",
+    "npm run verify:batch87",
+    "Mở /api/demo/tester-pack và kiểm shareRecommendation trước khi gửi link cho giáo viên",
+    "npm run demo:feedback-validate",
+    "npm run smoke:batch88",
+    "npm run verify:batch88",
+    "Mở /api/demo/feedback để xem feedback board trước khi mở rộng nhóm test",
+    "Nếu feedback board có P0/P1 mở thì dừng chia link và sửa lỗi trước"
+  ],
+  "publicTestRules": [
+    "Chỉ chia link demo cho nhóm test có kiểm soát khi build và production smoke đã pass trên host.",
+    "Không dùng link demo như bằng chứng sản phẩm đã production-ready.",
+    "Không để dữ liệu seed/scaffold được hiểu là verified.",
+    "Không bật public community auto-publish.",
+    "Không thêm thanh toán thật, marketplace tiền mặt hoặc quỹ tiền mặt trong giai đoạn này.",
+    "Thu feedback theo lỗi thật: không tạo được bài, không lưu được, không tải được file, giao diện khó hiểu, file Word/PDF lỗi font/bố cục.",
+    "Không chia link rộng nếu hosted:url-smoke chưa pass trên domain thật.",
+    "Nếu Vercel Deployment Protection đang bật, chỉ dùng VERCEL_AUTOMATION_BYPASS_SECRET trong CI/automation; không gửi secret cho người test ngoài.",
+    "Trước khi gửi link, copy tin nhắn safeSharingMessage từ tester pack để tránh overclaim.",
+    "Chỉ mời 3–10 giáo viên tin cậy ở vòng đầu; phân loại lỗi P0/P1/P2/P3.",
+    "Thu ít nhất một ảnh mobile, một file DOCX, một file PDF và feedback theo câu hỏi trong tester pack.",
+    "Feedback thật phải đi qua /api/demo/feedback; không gom rời rạc rồi mở rộng test nếu chưa triage.",
+    "Không mở rộng test nếu feedback board có P0/P1 mở hoặc có dữ liệu cá nhân học sinh.",
+    "Raw feedback/contact không public; chỉ hiển thị summary/redacted trên demo board."
+  ],
+  "manualQaRequired": [
+    "Mở bằng điện thoại Android màn hình nhỏ.",
+    "Mở bằng iPhone/Safari nếu có.",
+    "Tạo khung bài lớp 1, lớp 5, lớp 6, lớp 10 và một chế độ ôn thi.",
+    "Lưu nháp, mở lại, xuất DOCX/PDF và mở file thật.",
+    "Kiểm tra text cảnh báo seed/scaffold, không-AI, giáo viên phải tự kiểm tra.",
+    "Không đăng public tài nguyên cộng đồng thiếu nguồn/license.",
+    "Chạy hosted URL smoke bằng domain thật sau mỗi redeploy: GIAOAN_DEMO_URL=https://... npm run hosted:url-smoke.",
+    "Lưu artifact artifacts/hosted-demo-url-smoke-last-run.json để biết route nào pass/fail.",
+    "Mở /api/demo/tester-pack để xem nhiệm vụ test và câu hỏi feedback.",
+    "Gửi tester pack cho nhóm nhỏ, không chia link rộng trước khi có feedback P0/P1.",
+    "Sau mỗi vòng test, mở /api/demo/feedback và ghi lại số P0/P1/P2/P3.",
+    "Chỉ mở rộng ngoài nhóm nhỏ khi có ít nhất 3 feedback hợp lệ, không có P0/P1 mở và export/mobile đã được kiểm."
+  ]
+}

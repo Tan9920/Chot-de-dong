@@ -1,0 +1,172 @@
+{
+  "batch": "Batch144 — P0/P1 Local Build Closure",
+  "version": "0.144.0",
+  "phase": "P0/P1 local closure after resolving the build/page-data blocker",
+  "sourceLevelOnly": true,
+  "productionReady": false,
+  "publicRolloutAllowed": false,
+  "selectedBecause": "Batch143 exposed the current largest P0/P1 blocker: build/page-data proof could be mistaken as hanging when an interactive tool timeout killed the command. Batch144 makes guarded and raw build evidence fresh, current-run, and explicit, then requires raw Next build exit 0 for higher local P0/P1 closure claims.",
+  "scope": [
+    "Require local evidence runner artifacts to have ok=true, status=pass, completed===total and every command status=pass before the report/board can count them as pass.",
+    "Make in-progress runner artifacts ok=false so timeout/interruption artifacts cannot be accepted by the report.",
+    "Remove the recursive local-evidence-report command from the runner; run the report after the runner completes for strict current-run proof.",
+    "Keep hosted/public rollout blocked until Node24, APP_URL hosted smoke and real visual evidence pass.",
+    "Do not add AI, payment, fake verified data, auto-public community or role self-selection.",
+    "Require a cleaned raw Next build diagnostic artifact with rawNextBuildExitCode=0 before higher local P0/P1 closure can be claimed."
+  ],
+  "localEvidenceGates": [
+    {
+      "id": "source_validate",
+      "label": "Source validator registry pass",
+      "command": "npm run source:validate",
+      "artifact": "data/source-validate-last-run.json",
+      "required": true,
+      "freshCommandEvidence": false
+    },
+    {
+      "id": "data_validate",
+      "label": "JSON/data validation through source registry and direct data command",
+      "command": "npm run p0-p1:data-evidence",
+      "artifact": "artifacts/p0-p1-data-validate-evidence-last-run.json",
+      "required": true,
+      "passRule": "command evidence data:validate passed"
+    },
+    {
+      "id": "typecheck_artifact",
+      "label": "TypeScript typecheck evidence artifact",
+      "command": "npm run p0-p1:typecheck-evidence",
+      "artifact": "artifacts/p0-p1-typecheck-evidence-last-run.json",
+      "required": true
+    },
+    {
+      "id": "next_swc_artifact",
+      "label": "Next/SWC readiness evidence artifact",
+      "command": "npm run p0-p1:swc-evidence",
+      "artifact": "artifacts/p0-p1-next-swc-evidence-last-run.json",
+      "required": true
+    },
+    {
+      "id": "artifact_hygiene_artifact",
+      "label": "Artifact hygiene evidence artifact",
+      "command": "npm run p0-p1:artifact-hygiene-evidence",
+      "artifact": "artifacts/p0-p1-artifact-hygiene-evidence-last-run.json",
+      "required": false,
+      "recommended": true,
+      "note": "Recommended before packaging/sharing ZIP; not required in npm-ci working tree because node_modules/.next may be present."
+    },
+    {
+      "id": "route_contract_artifact",
+      "label": "Route contract source evidence artifact",
+      "command": "npm run p0-p1:route-contract-evidence",
+      "artifact": "artifacts/p0-p1-route-contract-evidence-last-run.json",
+      "required": true
+    },
+    {
+      "id": "runtime_preflight_artifact",
+      "label": "Runtime preflight source evidence artifact",
+      "command": "npm run p0-p1:runtime-preflight-evidence",
+      "artifact": "artifacts/p0-p1-runtime-preflight-evidence-last-run.json",
+      "required": false,
+      "recommended": true,
+      "note": "Recommended before packaging/sharing ZIP; not required in npm-ci working tree because node_modules/.next may be present."
+    },
+    {
+      "id": "guarded_build",
+      "label": "Guarded Next build artifact readiness",
+      "command": "GIAOAN_BUILD_TRACE_GRACE_MS=0 GIAOAN_BUILD_ARTIFACT_READY_GRACE_MS=0 npm run build",
+      "artifact": "artifacts/next-build-runtime-guard-last-run.json",
+      "required": true
+    },
+    {
+      "id": "raw_build_diagnostic",
+      "label": "Raw Next build diagnostic exit-zero proof",
+      "command": "GIAOAN_RAW_BUILD_TIMEOUT_MS=180000 npm run build:raw:diagnose",
+      "artifact": "artifacts/raw-next-build-diagnostic-last-run.json",
+      "required": true,
+      "passRule": "ok === true && rawNextBuildExitCode === 0 && buildOutputCleanup.removed === true"
+    },
+    {
+      "id": "live_smoke_clean",
+      "label": "Production-mode local live smoke",
+      "command": "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean",
+      "artifact": "artifacts/live-http-smoke-last-run.json",
+      "required": true
+    },
+    {
+      "id": "auth_invite_runtime_smoke",
+      "label": "Auth/invite runtime smoke blocks role self-elevation",
+      "command": "npm run auth-invite:runtime-smoke",
+      "artifact": "artifacts/auth-invite-runtime-smoke-last-run.json",
+      "required": true
+    },
+    {
+      "id": "loopback_hosted_style_smoke",
+      "label": "Loopback hosted-style URL smoke",
+      "command": "npm run runtime:p0-loopback-url-smoke",
+      "artifact": "artifacts/p0-loopback-url-smoke-last-run.json",
+      "required": true
+    },
+    {
+      "id": "security_data_protection_report",
+      "label": "Security/Data Protection Foundation report",
+      "command": "npm run security:data-protection-report",
+      "artifact": "artifacts/security-data-protection-report-last-run.json",
+      "required": true
+    },
+    {
+      "id": "local_evidence_runner",
+      "label": "Current-run local evidence runner completed",
+      "command": "npm run p0-p1:local-evidence-runner",
+      "artifact": "artifacts/p0-p1-local-evidence-runner-last-run.json",
+      "required": false,
+      "recommended": true
+    }
+  ],
+  "hostedStillRequired": [
+    {
+      "id": "node24_ci",
+      "command": "npm run verify:p0-deepest-node24-ci",
+      "reason": "Node22 local proof does not replace Node24 CI/Vercel proof."
+    },
+    {
+      "id": "app_url_strict_smoke",
+      "command": "APP_URL=https://<vercel-url> npm run verify:release:strict",
+      "reason": "Local loopback smoke does not prove public hosted URL."
+    },
+    {
+      "id": "visual_smoke_real_browser",
+      "command": "npm run visual:smoke:evidence-validate",
+      "reason": "Template evidence is not real browser capture."
+    }
+  ],
+  "claimPolicy": {
+    "allowed": [
+      "Local P0/P1 evidence is stronger only when all required local evidence gates pass and no present runner artifact is incomplete/running.",
+      "P1 source work can continue only inside existing guardrails after evidence integrity is clean.",
+      "Hosted/public rollout remains blocked until Node24, APP_URL and visual evidence are real."
+    ],
+    "blocked": [
+      "Không nói production-ready.",
+      "Không nói hosted proof đã đóng nếu chỉ có Node22 local evidence.",
+      "Không thêm feature mới để che P0/P1 blocker.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ]
+  },
+  "integrityRules": {
+    "localEvidenceRunnerPassRequires": [
+      "ok === true",
+      "status === pass",
+      "completed === total",
+      "commands.length === total",
+      "every command has ok === true and status === pass"
+    ],
+    "partialRunnerArtifact": "ok=false, status=running while commands are still running",
+    "reportBehavior": "present but incomplete recommended evidence becomes an integrity warning and blocks higherLocalP0P1ClaimAllowed",
+    "rawBuildPassRequires": [
+      "ok === true",
+      "rawNextBuildExitCode === 0",
+      "buildOutputCleanup.removed === true",
+      "next build reached route/page-data and exited 0"
+    ]
+  }
+}

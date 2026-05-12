@@ -1,0 +1,54 @@
+{
+  "records": [
+    {
+      "id": "ledger-grade6-nguvan-topic-01",
+      "packId": "grade6-nguvan-extended",
+      "entityType": "topics",
+      "entityId": "topic-grade6-nguvan-mo-dau",
+      "title": "Ngữ văn 6 - chủ đề mở đầu",
+      "sourceStatus": "reviewed",
+      "lifecycleStatus": "review",
+      "referenceBundleIds": ["grade6-nguvan-extended-official-core", "grade6-nguvan-extended-textbook"],
+      "fields": [
+        {
+          "field": "outcomes",
+          "label": "Yêu cầu cần đạt",
+          "required": true,
+          "referenceIds": ["van6-ctgdpt-outcomes", "van6-textbook-bai-1"],
+          "pages": "CTGDPT: tr. 12-13; SGK: tr. 6-9",
+          "mappingStatus": "reviewed",
+          "note": "Map sơ bộ; cần reviewer thứ 2 đối chiếu lại câu chữ."
+        },
+        {
+          "field": "subjectCompetencies",
+          "label": "Năng lực đặc thù",
+          "required": true,
+          "referenceIds": ["van6-ctgdpt-outcomes"],
+          "pages": "CTGDPT: tr. 12-13",
+          "mappingStatus": "mapped"
+        }
+      ]
+    },
+    {
+      "id": "ledger-grade6-toan-program-01",
+      "packId": "grade6-toan-extended",
+      "entityType": "programs",
+      "entityId": "program-grade6-toan-core",
+      "title": "Toán 6 - phân phối chương trình nền",
+      "sourceStatus": "seed",
+      "lifecycleStatus": "draft",
+      "referenceBundleIds": ["grade6-toan-extended-official-core", "grade6-toan-extended-textbook"],
+      "fields": [
+        {
+          "field": "units",
+          "label": "Đơn vị PPCT",
+          "required": true,
+          "referenceIds": ["toan6-ctgdpt-core", "toan6-textbook-muc-luc"],
+          "pages": "",
+          "mappingStatus": "pending",
+          "note": "Chưa điền phạm vi trích thật."
+        }
+      ]
+    }
+  ]
+}

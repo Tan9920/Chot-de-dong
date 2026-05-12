@@ -1,0 +1,755 @@
+[
+  {
+    "id": "ag-seed-nghe-nghiep-role-interview-l2",
+    "title": "Phỏng vấn nghề nghiệp trong lớp",
+    "kind": "role_play",
+    "grade": "Lớp 2",
+    "level": "Tiểu học",
+    "subject": "Hoạt động trải nghiệm",
+    "book": "Dùng chung",
+    "topic": "Nghề nghiệp quanh em",
+    "phase": "khoiDong",
+    "timeMinutes": 10,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "standard",
+    "objectives": [
+      "Khởi động chủ đề bằng trải nghiệm nói - nghe ngắn.",
+      "Giúp học sinh nêu được tên một số nghề quen thuộc ở mức mô tả đơn giản."
+    ],
+    "studentProducts": [
+      "Câu trả lời/phỏng vấn ngắn",
+      "Một thẻ nghề hoặc tranh minh họa do giáo viên chuẩn bị"
+    ],
+    "assessmentEvidence": [
+      "Học sinh gọi đúng tên nghề",
+      "Học sinh biết nói một việc làm hoặc dụng cụ gắn với nghề"
+    ],
+    "steps": [
+      "Giáo viên phát thẻ nghề hoặc tranh nghề nghiệp đã được kiểm tra nguồn.",
+      "Học sinh làm việc theo cặp: một em hỏi 'Bạn biết nghề này làm gì?', một em trả lời ngắn.",
+      "Một vài cặp chia sẻ trước lớp, giáo viên nhận xét nhẹ nhàng và chuyển vào bài."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị thẻ/tranh tự tạo hoặc tài nguyên có nguồn rõ.",
+      "Chọn câu hỏi ngắn, phù hợp lớp 1-2."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh tiết lộ thông tin gia đình quá riêng tư.",
+      "Không dùng ảnh người thật nếu chưa rõ quyền sử dụng."
+    ],
+    "differentiationNotes": [
+      "Học sinh yếu có thể chọn đáp án bằng tranh.",
+      "Học sinh nhanh có thể nói thêm dụng cụ hoặc nơi làm việc."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "starter",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "seed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Seed nội bộ - cần thay bằng tài nguyên có nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-04-28T00:00:00.000Z",
+    "updatedAt": "2026-04-28T00:00:00.000Z"
+  },
+  {
+    "id": "ag-seed-nghe-nghiep-card-match-l3",
+    "title": "Ghép thẻ nghề - công cụ - nơi làm việc",
+    "kind": "practice_game",
+    "grade": "Lớp 3",
+    "level": "Tiểu học",
+    "subject": "Hoạt động trải nghiệm",
+    "book": "Dùng chung",
+    "topic": "Nghề nghiệp quanh em",
+    "phase": "luyenTap",
+    "timeMinutes": 15,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Luyện nhận diện mối liên hệ giữa nghề, công cụ và môi trường làm việc.",
+      "Tạo hoạt động nhóm nhỏ dễ tổ chức."
+    ],
+    "studentProducts": [
+      "Bộ thẻ ghép đúng",
+      "Lời giải thích ngắn của nhóm"
+    ],
+    "assessmentEvidence": [
+      "Nhóm ghép đúng ít nhất 2/3 bộ thẻ",
+      "Học sinh nêu được lí do ghép ở mức đơn giản"
+    ],
+    "steps": [
+      "Chia nhóm 4 học sinh và phát bộ thẻ.",
+      "Nhóm ghép thẻ nghề với công cụ/nơi làm việc phù hợp.",
+      "Đại diện nhóm trình bày một bộ thẻ, giáo viên chuẩn hóa bằng câu hỏi gợi mở."
+    ],
+    "teacherPreparation": [
+      "Tạo bộ thẻ không chứa hình ảnh bản quyền không rõ nguồn.",
+      "Chuẩn bị một vài thẻ dễ và một vài thẻ phân hóa."
+    ],
+    "safetyNotes": [
+      "Tránh định kiến giới khi nói về nghề nghiệp.",
+      "Không biến trò chơi thành thi đua gây áp lực cho học sinh yếu."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ được phát ít thẻ hơn.",
+      "Nhóm nhanh có thêm thẻ nghề mở rộng."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "starter",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "seed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Seed nội bộ - cần review chuyên môn và license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-04-28T00:00:00.000Z",
+    "updatedAt": "2026-04-28T00:00:00.000Z"
+  },
+  {
+    "id": "ag-scaffold-exit-ticket-generic-1-12",
+    "title": "Exit ticket 3-2-1 cuối tiết",
+    "kind": "exit_ticket",
+    "grade": "Dùng chung",
+    "level": "THCS",
+    "subject": "Dùng chung",
+    "book": "Dùng chung",
+    "topic": "Dùng chung",
+    "phase": "vanDung",
+    "timeMinutes": 5,
+    "classSize": "large",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "quiet",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Thu nhanh minh chứng học sinh đã hiểu/chưa hiểu gì sau tiết học.",
+      "Giúp giáo viên điều chỉnh bài sau mà không cần công cụ AI."
+    ],
+    "studentProducts": [
+      "Phiếu 3 điều đã học, 2 điều còn thắc mắc, 1 việc muốn luyện thêm"
+    ],
+    "assessmentEvidence": [
+      "Tỉ lệ học sinh nêu đúng ý chính",
+      "Danh sách lỗi/thắc mắc lặp lại"
+    ],
+    "steps": [
+      "Giáo viên phát phiếu hoặc cho ghi vào vở.",
+      "Học sinh trả lời 3-2-1 trong 3-5 phút.",
+      "Giáo viên thu/đọc nhanh và ghi lại nhóm lỗi phổ biến."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị mẫu phiếu trống.",
+      "Chọn câu hỏi đúng với bài, không dùng nội dung chuyên môn chưa được kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không chấm điểm nặng hoạt động này.",
+      "Không công khai câu trả lời cá nhân khiến học sinh ngại hỏi."
+    ],
+    "differentiationNotes": [
+      "Học sinh yếu có thể viết ít hơn nhưng phải có một ý chính.",
+      "Học sinh khá có thể đề xuất ví dụ vận dụng."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "starter",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "seed",
+    "visibility": "limited",
+    "copyrightRisk": "low",
+    "sourceUrl": "",
+    "license": "internal_scaffold",
+    "attribution": "Khung hoạt động tự tạo - không chứa nội dung SGK.",
+    "authorName": "System seed",
+    "createdAt": "2026-04-28T00:00:00.000Z",
+    "updatedAt": "2026-04-28T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g1-speaking_circle",
+    "title": "Vòng tròn nói một câu",
+    "kind": "speaking_circle",
+    "grade": "Lớp 1",
+    "level": "Tiểu học",
+    "subject": "Tiếng Việt",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Luyện nói và nghe theo tình huống lớp học",
+    "phase": "khoiDong",
+    "timeMinutes": 7,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g4-inquiry_card",
+    "title": "Thẻ quan sát - điều em thấy và điều em hỏi",
+    "kind": "inquiry_card",
+    "grade": "Lớp 4",
+    "level": "Tiểu học",
+    "subject": "Khoa học",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Quan sát và đặt câu hỏi khoa học",
+    "phase": "hinhThanhKienThuc",
+    "timeMinutes": 12,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g5-practice_game",
+    "title": "Đường đua bước giải",
+    "kind": "practice_game",
+    "grade": "Lớp 5",
+    "level": "Tiểu học",
+    "subject": "Toán",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Giải quyết vấn đề bằng bước làm rõ ràng",
+    "phase": "luyenTap",
+    "timeMinutes": 15,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g6-station_rotation",
+    "title": "Trạm quan sát an toàn",
+    "kind": "station_rotation",
+    "grade": "Lớp 6",
+    "level": "THCS",
+    "subject": "Khoa học tự nhiên",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Quan sát, thí nghiệm an toàn và ghi nhận dữ liệu",
+    "phase": "hinhThanhKienThuc",
+    "timeMinutes": 18,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g7-group_map",
+    "title": "Bản đồ chi tiết đọc hiểu",
+    "kind": "group_map",
+    "grade": "Lớp 7",
+    "level": "THCS",
+    "subject": "Ngữ văn",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Đọc hiểu văn bản theo thể loại",
+    "phase": "luyenTap",
+    "timeMinutes": 15,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g8-design_sprint",
+    "title": "Thiết kế nhanh một giải pháp lớp học",
+    "kind": "design_sprint",
+    "grade": "Lớp 8",
+    "level": "THCS",
+    "subject": "Công nghệ",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Quy trình thiết kế và sử dụng công cụ an toàn",
+    "phase": "vanDung",
+    "timeMinutes": 20,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g9-error_clinic",
+    "title": "Phòng khám lỗi sai",
+    "kind": "error_clinic",
+    "grade": "Lớp 9",
+    "level": "THCS",
+    "subject": "Toán",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Giải quyết vấn đề bằng bước làm rõ ràng",
+    "phase": "luyenTap",
+    "timeMinutes": 18,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g10-case_discussion",
+    "title": "Tình huống - lựa chọn - căn cứ",
+    "kind": "case_discussion",
+    "grade": "Lớp 10",
+    "level": "THPT",
+    "subject": "Giáo dục kinh tế và pháp luật",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Quyền, nghĩa vụ và tình huống pháp luật cơ bản",
+    "phase": "hinhThanhKienThuc",
+    "timeMinutes": 20,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g11-mini_lab",
+    "title": "Mini-lab dữ liệu và sai số",
+    "kind": "mini_lab",
+    "grade": "Lớp 11",
+    "level": "THPT",
+    "subject": "Vật lí",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Thực hành đo đạc và xử lí dữ liệu an toàn",
+    "phase": "luyenTap",
+    "timeMinutes": 22,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": "ag-batch92-g12-writing_workshop",
+    "title": "Checklist đoạn văn theo luận điểm",
+    "kind": "writing_workshop",
+    "grade": "Lớp 12",
+    "level": "THPT",
+    "subject": "Ngữ văn",
+    "book": "Starter 1–12 / giáo viên chọn nguồn",
+    "topic": "Viết đoạn/bài theo quy trình",
+    "phase": "luyenTap",
+    "timeMinutes": 18,
+    "classSize": "standard",
+    "space": "regular_room",
+    "deviceRequirement": "minimal",
+    "noiseLevel": "moderate",
+    "learnerLevel": "mixed",
+    "objectives": [
+      "Tạo hoạt động tương tác ngắn gắn với chủ đề starter.",
+      "Giúp giáo viên có ý tưởng tổ chức lớp nhưng không thay thế nội dung chuyên môn đã kiểm chứng."
+    ],
+    "studentProducts": [
+      "Phiếu/ghi chú/sản phẩm ngắn do học sinh hoàn thành",
+      "Minh chứng quan sát hoặc trình bày ngắn"
+    ],
+    "assessmentEvidence": [
+      "Học sinh tham gia đúng nhiệm vụ",
+      "Sản phẩm có thể dùng làm minh chứng quá trình học"
+    ],
+    "steps": [
+      "Giáo viên nêu nhiệm vụ, tiêu chí và thời lượng rõ ràng.",
+      "Học sinh làm cá nhân/cặp/nhóm theo điều kiện lớp.",
+      "Một số nhóm/cá nhân chia sẻ; giáo viên chuẩn hóa bằng nguồn hợp pháp đã kiểm tra."
+    ],
+    "teacherPreparation": [
+      "Chuẩn bị phiếu/thẻ/tình huống tự tạo hoặc có nguồn/license rõ.",
+      "Điều chỉnh câu hỏi, đáp án, ví dụ theo dữ liệu chuyên môn đã kiểm tra."
+    ],
+    "safetyNotes": [
+      "Không yêu cầu học sinh chia sẻ dữ liệu cá nhân.",
+      "Không public học liệu/ảnh nếu thiếu nguồn, license hoặc review."
+    ],
+    "differentiationNotes": [
+      "Nhóm cần hỗ trợ nhận nhiệm vụ ngắn hơn hoặc có mẫu.",
+      "Nhóm nhanh có nhiệm vụ mở rộng/giải thích thêm."
+    ],
+    "sourceStatus": "seed",
+    "supportLevel": "developing",
+    "releaseTier": "internal_preview",
+    "reviewStatus": "not_reviewed",
+    "visibility": "limited",
+    "copyrightRisk": "unknown",
+    "sourceUrl": "",
+    "license": "",
+    "attribution": "Batch92 starter activity seed - cần nguồn/license trước khi public.",
+    "authorName": "System seed",
+    "createdAt": "2026-05-01T00:00:00.000Z",
+    "updatedAt": "2026-05-01T00:00:00.000Z"
+  }
+]

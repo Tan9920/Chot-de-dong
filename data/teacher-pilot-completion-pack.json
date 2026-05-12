@@ -1,0 +1,192 @@
+{
+  "version": "batch108_teacher_topic_picker_v1",
+  "batch": "Batch108 — Teacher Topic Picker & Data Label Safety Upgrade",
+  "purpose": "Hoàn thành lát cắt demo giáo viên dễ dùng hơn: chọn lớp/môn/chủ đề bằng dropdown, chặn sai môn-chủ đề, bỏ quyền tự chọn verified, vẫn không phụ thuộc npm/build.",
+  "status": "offline_topic_picker_complete_hosted_runtime_still_guarded",
+  "offlineArtifact": "public/teacher-pilot-demo.html",
+  "api": "/api/teacher-pilot/completion",
+  "adminApi": "/api/admin/teacher-pilot-completion-board",
+  "claimPolicy": {
+    "canClaim": [
+      "Có bản demo offline mở trực tiếp được từ file HTML sau khi giải nén ZIP.",
+      "Giáo viên không phải tự gõ chủ đề mặc định; chọn lớp/môn/chủ đề từ catalog.",
+      "Phân số chỉ hiện khi chọn môn Toán; không tạo Tiếng Việt + Phân số.",
+      "Nhãn dữ liệu tự động theo catalog/registry; UI không cho tự chọn verified."
+    ],
+    "cannotClaim": [
+      "Không claim production-ready.",
+      "Không claim hosted demo đã pass nếu chưa chạy hosted URL smoke trên URL thật.",
+      "Không claim dữ liệu học thuật verified 1-12.",
+      "Không claim sinh nội dung kiến thức sâu; bản này chỉ dựng khung an toàn."
+    ]
+  },
+  "completionCriteria": [
+    {
+      "id": "offline_html_artifact",
+      "label": "Có artifact HTML offline không phụ thuộc npm/build",
+      "required": true
+    },
+    {
+      "id": "safe_lesson_frame",
+      "label": "Khung giáo án có đủ mục ưu tiên: thông tin, yêu cầu cần đạt, học liệu, phương pháp, tiến trình, đánh giá, phân hóa, ghi chú",
+      "required": true
+    },
+    {
+      "id": "grade_band_profiles",
+      "label": "Có profile khác nhau cho lớp 1-2, 3-4, 5, 6-9, 10-12, ôn thi, phân hóa",
+      "required": true
+    },
+    {
+      "id": "teacher_modes",
+      "label": "Có Dễ dùng/Tiêu chuẩn/Nâng cao để không làm giáo viên phổ thông bị quá kỹ thuật",
+      "required": true
+    },
+    {
+      "id": "source_status_labels",
+      "label": "Có nhãn seed/scaffold/community/reviewed/verified và cảnh báo giáo viên tự kiểm tra",
+      "required": true
+    },
+    {
+      "id": "no_ai_dependency",
+      "label": "Không thêm AI SDK/API key/model call",
+      "required": true
+    },
+    {
+      "id": "no_fake_verified",
+      "label": "Không tạo verified giả hoặc mở contentDepthAllowed giả",
+      "required": true
+    },
+    {
+      "id": "hosted_runtime_guard",
+      "label": "Vẫn khóa claim hosted/runtime cho tới khi build/smoke thật pass",
+      "required": true
+    },
+    {
+      "id": "subject_topic_picker_catalog",
+      "label": "Có catalog lớp/môn/chủ đề để giáo viên không phải tự gõ mặc định",
+      "required": true
+    },
+    {
+      "id": "no_subject_topic_mismatch",
+      "label": "Chặn tổ hợp sai môn-chủ đề như Tiếng Việt + Phân số",
+      "required": true
+    },
+    {
+      "id": "no_manual_verified_choice",
+      "label": "Không cho người dùng tự chọn verified; nhãn dữ liệu do catalog/registry quyết định",
+      "required": true
+    },
+    {
+      "id": "math_fraction_only_under_math",
+      "label": "Phân số chỉ hiện dưới môn Toán trong demo lớp 5",
+      "required": true
+    }
+  ],
+  "teacherModes": [
+    {
+      "id": "easy",
+      "label": "Dễ dùng",
+      "shows": [
+        "Tạo nhanh",
+        "Khung giáo án",
+        "Checklist ngắn",
+        "Tải/copy bản nháp"
+      ],
+      "hides": [
+        "JSON kỹ thuật",
+        "runtime gate chi tiết"
+      ]
+    },
+    {
+      "id": "standard",
+      "label": "Tiêu chuẩn",
+      "shows": [
+        "Nhãn dữ liệu",
+        "Checklist đầy đủ",
+        "Ghi chú nguồn/học liệu",
+        "Cảnh báo trước khi dùng"
+      ]
+    },
+    {
+      "id": "advanced",
+      "label": "Nâng cao",
+      "shows": [
+        "Governance snapshot",
+        "Source status",
+        "Runtime/hosted guard",
+        "Danh sách việc cần đóng"
+      ]
+    }
+  ],
+  "gradeProfiles": [
+    {
+      "id": "g1_2",
+      "grades": [
+        1,
+        2
+      ],
+      "label": "Lớp 1-2",
+      "teachingStyle": "Trực quan, thao tác, câu lệnh ngắn, nhiều hỗ trợ.",
+      "avoid": "Không yêu cầu tự học dài hoặc lập luận trừu tượng."
+    },
+    {
+      "id": "g3_4",
+      "grades": [
+        3,
+        4
+      ],
+      "label": "Lớp 3-4",
+      "teachingStyle": "Tự học có hướng dẫn, hợp tác nhẹ, sản phẩm đơn giản.",
+      "avoid": "Không quá nặng thuật ngữ."
+    },
+    {
+      "id": "g5",
+      "grades": [
+        5
+      ],
+      "label": "Lớp 5 chuyển tiếp",
+      "teachingStyle": "Ôn nền tảng, vận dụng gần gũi, chuẩn bị chuyển cấp.",
+      "avoid": "Không nhảy thẳng sang phong cách THCS."
+    },
+    {
+      "id": "g6_9",
+      "grades": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "label": "Lớp 6-9",
+      "teachingStyle": "Khám phá, luyện tập, thảo luận, minh chứng, năng lực môn.",
+      "avoid": "Không để lớp 6 đại diện cho toàn THCS."
+    },
+    {
+      "id": "g10_12",
+      "grades": [
+        10,
+        11,
+        12
+      ],
+      "label": "Lớp 10-12",
+      "teachingStyle": "Tự học, lập luận, dự án, định hướng học thuật/nghề nghiệp.",
+      "avoid": "Không dùng template tiểu học/THCS đơn giản."
+    }
+  ],
+  "safeLessonSections": [
+    "I. THÔNG TIN CHUNG",
+    "II. YÊU CẦU CẦN ĐẠT",
+    "III. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU",
+    "IV. PHƯƠNG PHÁP VÀ KĨ THUẬT DẠY HỌC",
+    "V. TIẾN TRÌNH DẠY HỌC",
+    "VI. KIỂM TRA, ĐÁNH GIÁ",
+    "VII. PHÂN HÓA ĐỐI TƯỢNG HỌC SINH",
+    "VIII. GHI CHÚ / ĐIỀU CHỈNH SAU TIẾT DẠY"
+  ],
+  "nonAiLongTermFit": [
+    "Hoàn thành một artifact giáo viên có thể nhìn và dùng thử ngay.",
+    "Không phụ thuộc AI hoặc chi phí model.",
+    "Không che rủi ro hosted/runtime; tách offline completion khỏi hosted proof.",
+    "Là cầu nối sang test nhóm nhỏ sau khi Vercel build/smoke pass.",
+    "Sửa luồng chọn đầu vào để giáo viên phổ thông không phải biết đúng tên bài/chủ đề ngay từ đầu."
+  ]
+}

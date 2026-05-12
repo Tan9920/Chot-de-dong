@@ -1,0 +1,3 @@
+export function normalizeLessonGovernanceSnapshot(input: any = {}) { return { sourceStatus: 'seed', lifecycleStatus: 'draft', releaseTier: 'internal_preview', supportLevel: 'starter', sourceReferences: [], generatedAt: new Date().toISOString(), ...input }; }
+export function assessLessonGovernanceForApproval(snapshot: any = {}) { const s = normalizeLessonGovernanceSnapshot(snapshot); const blockers = s.sourceStatus === 'verified' ? [] : ['Nguồn chưa verified; chỉ nên dùng nội bộ/demo.']; return { allowed: blockers.length === 0, blockers, warnings: blockers, snapshot: s }; }
+export function labelLessonGovernanceApproval(assessment: any) { return assessment?.allowed ? 'Có thể duyệt' : 'Chưa đủ điều kiện duyệt chính thức'; }

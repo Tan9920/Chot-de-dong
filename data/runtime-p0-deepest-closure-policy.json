@@ -1,0 +1,41 @@
+{
+  "batch": 129,
+  "name": "P0 Deepest Comprehensive Runtime Closure",
+  "version": "0.129.0",
+  "tier": "P0",
+  "goal": "Push P0 as deep as the current environment allows without claiming public/production readiness before Node24 CI and hosted URL strict smoke.",
+  "localProofTargetPercent": 99,
+  "publicProofTargetPercentRequires": [
+    "Node 24 CI/Vercel runtime proof",
+    "APP_URL strict hosted smoke proof",
+    "mobile/tablet/desktop visual smoke after deploy"
+  ],
+  "localRequiredEvidence": [
+    "npm ci succeeds",
+    "source validators pass",
+    "data JSON validators pass",
+    "TypeScript typecheck passes",
+    "Next SWC binary is present",
+    "responsive/mobile navigation contract passes",
+    "prebuild stale artifacts are removed",
+    "Next guarded build produces current startable artifacts",
+    "local production live smoke passes",
+    "auth/invite/runtime smoke passes",
+    "loopback hosted-route smoke passes against next start",
+    "deepest closure report blocks 100/public rollout without external proof"
+  ],
+  "hardNonClaims": [
+    "Do not claim production-ready",
+    "Do not claim 100%",
+    "Do not claim hosted demo closed",
+    "Do not claim public P1 rollout allowed",
+    "Do not claim Node 24 verified when current process is not Node 24"
+  ],
+  "forbiddenAdditions": [
+    "AI/API/model SDK",
+    "payment/marketplace/quy/referral money flow",
+    "fake verified academic data",
+    "auto-public community content"
+  ],
+  "notes": "This policy intentionally separates local startable-runtime proof from public deployed proof. 99 local is allowed only as environment-scoped language; 100 requires external evidence."
+}

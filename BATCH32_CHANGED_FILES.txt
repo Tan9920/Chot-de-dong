@@ -1,0 +1,14 @@
+BATCH32_NOTES.md
+lib/types.ts
+lib/curriculum-support.ts
+lib/catalogs.ts
+data/settings.json
+prisma/schema.prisma
+lib/storage.ts
+lib/teaching-policy.ts
+lib/seed-pack-builder.ts
+lib/content-repository.ts
+app/api/generate/route.ts
+app/api/admin/content/route.ts
+lib/curriculum-data.ts
+components/workspace.tsx

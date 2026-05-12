@@ -1,0 +1,2 @@
+export function assessTeacherEditableFrameReadiness(input: any = {}) { return { ready: true, mode: 'safe_frame', canUseDetailedSubjectContent: input.sourceStatus === 'verified' || input.sourceStatus === 'reviewed', warnings: ['Teacher must review.'], input }; }
+export function buildTeacherEditableFrameLines(input: any = {}) { return ['Khung giáo án an toàn', `Lớp: ${input.input?.grade || input.grade || '6'}`, `Môn: ${input.input?.subject || input.subject || 'Ngữ văn'}`]; }

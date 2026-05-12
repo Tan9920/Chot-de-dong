@@ -1,0 +1,161 @@
+{
+  "version": "2026-05-04.batch111-academic-verification-readiness-dossier",
+  "updatedAt": "2026-05-04T00:00:00.000+07:00",
+  "batch": "Batch111 — Verified Academic 1–12 Readiness & Official Source Spine",
+  "purpose": "Dossier đo khả năng nâng Verified học thuật thật 1–12 sau khi đã có source spine. Không tự ghi registry và không tạo verified giả.",
+  "target": "Tăng từ 0–5% bằng cách chuẩn hóa bằng chứng đầu vào và chọn scope thí điểm nhỏ; không claim verified nếu chưa có reviewer/source pack thật.",
+  "scopeReleasePolicy": {
+    "canMarkReviewedWhen": [
+      "source pack metadata đủ",
+      "legal check cleared/official_public_metadata_only/teacher_owned",
+      "reviewerId + reviewerRole + reviewerSignoffAt thật",
+      "approvedReferenceCount >= 1",
+      "assessment/rubric nếu có đã review",
+      "exportComplianceLabel có trạng thái và nguồn"
+    ],
+    "canMarkVerifiedWhen": [
+      "đã reviewed",
+      "đủ mapping lớp–môn–bài/chủ đề",
+      "đủ nguồn hợp pháp/không copy dài",
+      "reviewer chuyên môn sign-off",
+      "release gate open",
+      "audit log ghi rõ ai duyệt lúc nào",
+      "takedown path sẵn sàng"
+    ],
+    "mustStaySafeFrameWhen": [
+      "chỉ seed/scaffold",
+      "chỉ topic_strand chưa map bài thật",
+      "thiếu reviewer",
+      "thiếu nguồn/license/attribution",
+      "legacy/reference-only",
+      "teacher_input/custom/unmapped"
+    ]
+  },
+  "pilotLanes": [
+    {
+      "id": "lane-primary-core",
+      "name": "Tiểu học lõi",
+      "grades": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "subjects": [
+        "Tiếng Việt",
+        "Toán",
+        "Tự nhiên và Xã hội",
+        "Khoa học",
+        "Lịch sử và Địa lí"
+      ],
+      "priority": "highest",
+      "reason": "Nhiều giáo viên tiểu học đa môn, cần dữ liệu an toàn và dễ kiểm tra trước."
+    },
+    {
+      "id": "lane-transition",
+      "name": "Lớp chuyển tiếp",
+      "grades": [
+        "5",
+        "6",
+        "9",
+        "10",
+        "12"
+      ],
+      "subjects": [
+        "Toán",
+        "Tiếng Việt",
+        "Ngữ văn",
+        "Tiếng Anh",
+        "Khoa học tự nhiên",
+        "Lịch sử và Địa lí"
+      ],
+      "priority": "high",
+      "reason": "Các lớp chuyển cấp/thi cử dễ bị sai khi dùng template chung."
+    },
+    {
+      "id": "lane-amended-subjects",
+      "name": "Môn có sửa đổi chương trình 2025 cần đối chiếu kỹ",
+      "grades": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "subjects": [
+        "Lịch sử và Địa lí",
+        "Lịch sử",
+        "Địa lí",
+        "Giáo dục công dân",
+        "Giáo dục kinh tế và pháp luật"
+      ],
+      "priority": "highest",
+      "reason": "Cần source spine mới nhất trước khi release dữ liệu sâu."
+    }
+  ],
+  "releaseCandidates": [
+    {
+      "scopeId": "g5-toan",
+      "grade": "5",
+      "subject": "Toán",
+      "bookset": "ket_noi_tri_thuc",
+      "candidateTopic": "Phân số và ý nghĩa của phân số",
+      "candidateReason": "Đang là case người dùng phát hiện sai môn/bài; nên chọn làm scope thí điểm để không lặp lỗi Tiếng Việt + Phân số.",
+      "currentAllowedStatus": "safe_frame_only",
+      "canBecomeVerifiedNow": false,
+      "missingToBecomeVerified": [
+        "official lesson mapping cụ thể",
+        "source pack hợp pháp cho bài/chủ đề",
+        "reviewer chuyên môn thật",
+        "release gate open"
+      ]
+    },
+    {
+      "scopeId": "g5-tieng-viet",
+      "grade": "5",
+      "subject": "Tiếng Việt",
+      "bookset": "ket_noi_tri_thuc",
+      "candidateTopic": "Đọc/Viết/Nói-nghe theo chủ đề thật",
+      "candidateReason": "Tránh sinh văn bản/đoạn mẫu dài sai hoặc vi phạm bản quyền; cần teacher supplied text/source.",
+      "currentAllowedStatus": "safe_frame_only",
+      "canBecomeVerifiedNow": false,
+      "missingToBecomeVerified": [
+        "văn bản nguồn hợp pháp hoặc giáo viên tự cung cấp",
+        "reviewer Tiếng Việt",
+        "license/attribution",
+        "no long copied text"
+      ]
+    },
+    {
+      "scopeId": "g6-lich-su-va-dia-li",
+      "grade": "6",
+      "subject": "Lịch sử và Địa lí",
+      "bookset": "ket_noi_tri_thuc",
+      "candidateTopic": "Scope cần đối chiếu sửa đổi CTGDPT hiện hành",
+      "candidateReason": "Không để bias lớp 6 thành mặc định, nhưng dùng để kiểm tra cơ chế đối chiếu TT17/2025 cho môn sửa đổi.",
+      "currentAllowedStatus": "safe_frame_only",
+      "canBecomeVerifiedNow": false,
+      "missingToBecomeVerified": [
+        "mapping theo phụ lục hiện hành",
+        "reviewer bộ môn",
+        "legal source check",
+        "release gate"
+      ]
+    }
+  ],
+  "metricsPolicy": {
+    "reportSeparately": [
+      "officialSourceSpineReadyPercent",
+      "sourcePackReadyPercent",
+      "reviewedCandidatePercent",
+      "verifiedOrApprovedPercent",
+      "deepContentAllowedPercent"
+    ],
+    "doNotMerge": "Không gộp officialSourceSpineReady vào verifiedOrApproved; có văn bản nguồn không đồng nghĩa bài học đã verified."
+  }
+}

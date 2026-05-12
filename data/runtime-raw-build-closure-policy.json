@@ -1,0 +1,37 @@
+{
+  "version": "0.117.0",
+  "batch": "Batch117 — Raw Next Build / Hosted Closure Triage",
+  "purpose": "Keep raw Next build as the highest runtime truth while adding a deterministic diagnostic/report layer for Collecting page data hangs and hosted smoke readiness.",
+  "closureRequirements": [
+    "npm run build:raw must exit 0 before raw build closure can be claimed",
+    "npm run build:raw:diagnose may record timeout/hang evidence but must not convert timeout into production-ready status",
+    "GIAOAN_SMOKE_MODE=production npm run live:smoke:clean must pass after a real .next build artifact exists",
+    "npm run auth-invite:runtime-smoke must pass before auth/session/CSRF runtime closure is claimed",
+    "GIAOAN_DEMO_URL=https://<hosted-url> npm run hosted:url-smoke must pass before hosted-ready is claimed"
+  ],
+  "knownBlocker": {
+    "phase": "Collecting page data",
+    "meaning": "In this audit environment, even a minimal Next app using Next 15.3.8 reached Collecting page data and did not exit within the bounded timeout. Treat this as unresolved until reproduced on target Node/Vercel host with full logs.",
+    "nextReference": "Next.js page-data/static-generation timeout guidance recommends checking unresolved promises, infinite loops, long network requests, and staticPageGenerationTimeout only as a diagnostic guard."
+  },
+  "noOverclaimRules": [
+    "Do not claim production-ready from guarded build artifacts",
+    "Do not claim hosted-ready without URL smoke",
+    "Do not claim raw build closure without build:raw exit 0",
+    "Do not add AI/payment/marketplace/verified academic data while runtime/build closure is unresolved"
+  ],
+  "bmAdInspiredOperatingRules": [
+    "Analyst: isolate the real blocker and evidence before feature work",
+    "PM: keep the batch to one capability and define acceptance gates",
+    "Architect: separate raw build truth from guarded fallback",
+    "Dev: make diagnostics repeatable instead of hiding failures",
+    "QA: report pass/fail/timeout/skipped explicitly"
+  ],
+  "forbiddenAdditions": [
+    "AI SDK/API/model call",
+    "payment gateway or cash marketplace",
+    "fake verified data",
+    "public community auto-publish",
+    "role self-escalation by user signup"
+  ]
+}

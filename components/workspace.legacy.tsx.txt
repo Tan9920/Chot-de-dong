@@ -1,0 +1,2625 @@
+'use client';
+
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import ContentAdminPanel from '@/components/content-admin';
+import type {
+  ActivityMode,
+  CurriculumSearchItem,
+  DashboardStats,
+  GeneratedLessonBundle,
+  LessonStatus,
+  LessonTemplateDetail,
+  ProgramDistribution,
+  QuestionBankItem,
+  RubricBankItem,
+  SavedLessonPlan,
+  SchoolSettings,
+  SessionUser,
+  SharedResourceItem,
+  WorkflowEvent,
+  TeachingMethod,
+  TeachingTechnique,
+  TopicContent,
+  CurriculumCoverageItem,
+  ContentOverview,
+  CurriculumPackSummary,
+  CurriculumRoadmapSummary,
+  LessonVersionDiff,
+  CurriculumScopeSelection,
+  TeachingPolicySettings,
+  PackReleaseTier,
+  CurriculumSupportLevel,
+  CurriculumSupportSummary,
+  LessonGovernanceAssessment,
+  LessonGovernanceSnapshot,
+  OperatingFoundationBoard,
+  OperatingEntitlementSnapshot,
+  LessonPedagogyProfile,
+  GradeLessonBlueprint,
+  LessonTechnicalDraftingProfile,
+  LessonQualityChecklistReport,
+  CoverageTruthReport,
+  LessonClassSize,
+  LessonClassroomSpace,
+  LessonDeviceAvailability,
+  LessonLearnerProfileLevel,
+  LessonDurationProfile,
+  ActivityGameLibraryItem,
+  ActivityGameLibraryReadiness,
+  ActivityGameLibrarySummary,
+  CommunityHubBoard,
+  DemoReadinessBoard
+} from '@/lib/types';
+import { assessLessonGovernanceForApproval, labelLessonGovernanceApproval, normalizeLessonGovernanceSnapshot } from '@/lib/lesson-governance';
+
+type MetadataResponse = {
+  curriculum: {
+    level: string;
+    grades: Record<string, {
+      name: string;
+      subjects: Record<string, {
+        name: string;
+        books: Record<string, {
+          name: string;
+          topics: Record<string, { title: string }>;
+        }>;
+      }>;
+    }>;
+  };
+  templates: string[];
+  teachingMethods: TeachingMethod[];
+  teachingTechniques: TeachingTechnique[];
+  summary: {
+    levels: string[];
+    gradeLevelMap: Record<string, string>;
+    grades: number;
+    subjects: number;
+    books: number;
+    topics: number;
+    coverage: CurriculumCoverageItem[];
+    packs: CurriculumPackSummary[];
+    roadmap?: CurriculumRoadmapSummary;
+    sourceStatusSummary?: { seed: number; reviewed: number; verified: number };
+    supportSummary?: CurriculumSupportSummary;
+    coverageTruth?: CoverageTruthReport;
+  };
+  defaultScope?: CurriculumScopeSelection | null;
+  teachingPolicy?: TeachingPolicySettings;
+  contentOverview: ContentOverview;
+  storage: string;
+};
+
+type TopicResponse = {
+  topic: TopicContent | null;
+  related: string[];
+};
+
+type DashboardResponse = DashboardStats & {
+  storage: string;
+};
+
+type BankResponse = {
+  questions: QuestionBankItem[];
+  rubrics: RubricBankItem[];
+};
+
+type CurriculumSearchResponse = {
+  items: CurriculumSearchItem[];
+};
+
+type ProgramResponse = {
+  program: ProgramDistribution | null;
+};
+
+type TemplatesResponse = {
+  items: LessonTemplateDetail[];
+};
+
+type ResourcesResponse = {
+  items: SharedResourceItem[];
+};
+
+type ActivityGameLibraryResponse = {
+  items: ActivityGameLibraryItem[];
+  readiness?: Record<string, ActivityGameLibraryReadiness>;
+  summary?: ActivityGameLibrarySummary;
+  policy?: {
+    noAiGeneratedContent: boolean;
+    publicRequiresReview: boolean;
+    sourceLicenseRequired: boolean;
+    seedOnlyAsSafeSkeleton: boolean;
+    officialExportRequiresVerifiedRelease: boolean;
+  };
+  note?: string;
+};
+
+type SettingsResponse = {
+  settings: SchoolSettings;
+};
+
+type OperatingFoundationResponse = {
+  board?: OperatingFoundationBoard;
+  error?: string;
+};
+
+type OperatingUsageResponse = {
+  entitlement?: OperatingEntitlementSnapshot;
+  error?: string;
+};
+
+type CommunityHubResponse = {
+  board?: CommunityHubBoard;
+  note?: string;
+  error?: string;
+};
+
+type DemoReadinessResponse = {
+  board?: DemoReadinessBoard;
+  error?: string;
+};
+
+
+type PedagogyResponse = {
+  profile?: LessonPedagogyProfile;
+  gradeBlueprint?: GradeLessonBlueprint;
+  subjectNaming?: { input: string; canonical: string; display: string; legacyAlias: boolean; warning?: string };
+  technicalDrafting?: LessonTechnicalDraftingProfile;
+  notice?: string;
+  error?: string;
+};
+
+type VersionDiffResponse = {
+  diff?: LessonVersionDiff;
+  error?: string;
+};
+
+type ContentImportResponse = {
+  result?: {
+    target: 'json_store' | 'database';
+    overview: ContentOverview;
+    importedAt: string;
+    importedBy: string;
+  };
+  error?: string;
+};
+
+type GenerateResponse = {
+  bundle?: GeneratedLessonBundle;
+  error?: string;
+  policy?: TeachingPolicySettings & {
+    actualSourceStatus?: 'seed' | 'reviewed' | 'verified';
+    actualReleaseTier?: PackReleaseTier;
+    actualSupportLevel?: CurriculumSupportLevel;
+    bypassed?: boolean;
+    notice?: string;
+  };
+};
+
+type LessonQualityResponse = {
+  qualityChecklist?: LessonQualityChecklistReport;
+  error?: string;
+};
+
+const activityModes: ActivityMode[] = ['cá nhân', 'cặp đôi', 'nhóm', 'cả lớp'];
+type WorkspaceTab = 'soan' | 'chuong-trinh' | 'ngan-hang' | 'thu-vien' | 'kho' | 'dashboard' | 'van-hanh' | 'thiet-lap' | 'quan-tri-noi-dung';
+type WorkspaceMode = 'easy' | 'standard' | 'advanced';
+
+const allStatusFilters: Array<{ value: LessonStatus | 'all'; label: string }> = [
+  { value: 'all', label: 'Tất cả trạng thái' },
+  { value: 'draft', label: 'Bản nháp' },
+  { value: 'review', label: 'Chờ duyệt' },
+  { value: 'approved', label: 'Đã duyệt' }
+];
+
+export default function Workspace() {
+  const [metadata, setMetadata] = useState<MetadataResponse | null>(null);
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [activeTab, setActiveTab] = useState<WorkspaceTab>('soan');
+  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>('easy');
+
+  const [level, setLevel] = useState('');
+  const [grade, setGrade] = useState('');
+  const [subject, setSubject] = useState('');
+  const [book, setBook] = useState('');
+  const [topic, setTopic] = useState('');
+  const [template, setTemplate] = useState('Mẫu phát triển phẩm chất - năng lực');
+
+  const [modeFilter, setModeFilter] = useState<ActivityMode | 'all'>('all');
+  const [methods, setMethods] = useState<string[]>(['pp-thao-luan', 'pp-truc-quan']);
+  const [techniques, setTechniques] = useState<string[]>(['kt-think-pair-share']);
+
+  const [topicData, setTopicData] = useState<TopicContent | null>(null);
+  const [relatedTopics, setRelatedTopics] = useState<string[]>([]);
+  const [bundle, setBundle] = useState<GeneratedLessonBundle | null>(null);
+  const [generatePolicy, setGeneratePolicy] = useState<GenerateResponse['policy'] | null>(null);
+  const [editor, setEditor] = useState('');
+  const [currentLessonId, setCurrentLessonId] = useState<string | null>(null);
+  const [currentLessonVersion, setCurrentLessonVersion] = useState(1);
+  const [currentLessonStatus, setCurrentLessonStatus] = useState<LessonStatus | 'unsaved'>('unsaved');
+  const [currentLessonGovernance, setCurrentLessonGovernance] = useState<LessonGovernanceSnapshot | null>(null);
+  const [message, setMessage] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const [program, setProgram] = useState<ProgramDistribution | null>(null);
+  const [questionBank, setQuestionBank] = useState<QuestionBankItem[]>([]);
+  const [rubricBank, setRubricBank] = useState<RubricBankItem[]>([]);
+  const [curriculumHits, setCurriculumHits] = useState<CurriculumSearchItem[]>([]);
+  const [bankSearch, setBankSearch] = useState('');
+
+  const [templateLibrary, setTemplateLibrary] = useState<LessonTemplateDetail[]>([]);
+  const [resourceSearch, setResourceSearch] = useState('');
+  const [resources, setResources] = useState<SharedResourceItem[]>([]);
+  const [activityGameSearch, setActivityGameSearch] = useState('');
+  const [activityGames, setActivityGames] = useState<ActivityGameLibraryItem[]>([]);
+  const [activityGameReadiness, setActivityGameReadiness] = useState<Record<string, ActivityGameLibraryReadiness>>({});
+  const [activityGameSummary, setActivityGameSummary] = useState<ActivityGameLibrarySummary | null>(null);
+  const [communityHub, setCommunityHub] = useState<CommunityHubBoard | null>(null);
+  const [demoReadiness, setDemoReadiness] = useState<DemoReadinessBoard | null>(null);
+
+  const [librarySearch, setLibrarySearch] = useState('');
+  const [libraryStatus, setLibraryStatus] = useState<LessonStatus | 'all'>('all');
+  const [librarySubject, setLibrarySubject] = useState('');
+  const [libraryGrade, setLibraryGrade] = useState('');
+  const [libraryAuthor, setLibraryAuthor] = useState('');
+  const [library, setLibrary] = useState<SavedLessonPlan[]>([]);
+  const [reviewDrafts, setReviewDrafts] = useState<Record<string, string>>({});
+  const [versionDiffs, setVersionDiffs] = useState<Record<string, LessonVersionDiff>>({});
+  const [loadingDiffKey, setLoadingDiffKey] = useState<string | null>(null);
+
+  const [dashboard, setDashboard] = useState<DashboardResponse | null>(null);
+  const [operatingBoard, setOperatingBoard] = useState<OperatingFoundationBoard | null>(null);
+  const [operatingEntitlement, setOperatingEntitlement] = useState<OperatingEntitlementSnapshot | null>(null);
+  const [pedagogyProfile, setPedagogyProfile] = useState<LessonPedagogyProfile | null>(null);
+  const [gradeBlueprint, setGradeBlueprint] = useState<GradeLessonBlueprint | null>(null);
+  const [technicalDrafting, setTechnicalDrafting] = useState<LessonTechnicalDraftingProfile | null>(null);
+  const [lessonQuality, setLessonQuality] = useState<LessonQualityChecklistReport | null>(null);
+  const [checkingQuality, setCheckingQuality] = useState(false);
+  const [subjectNamingWarning, setSubjectNamingWarning] = useState<string>('');
+  const [settings, setSettings] = useState<SchoolSettings | null>(null);
+  const [settingsDraft, setSettingsDraft] = useState<SchoolSettings | null>(null);
+  const [syncingContent, setSyncingContent] = useState(false);
+  const [contentSyncMessage, setContentSyncMessage] = useState('');
+
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [loginName, setLoginName] = useState('Giáo viên demo');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [csrfToken, setCsrfToken] = useState('');
+  const [loginRole, setLoginRole] = useState<'teacher' | 'leader' | 'admin'>('teacher');
+  const [loginSchool, setLoginSchool] = useState('Trường Demo CTGDPT 1–12');
+  const [loginDepartment, setLoginDepartment] = useState('Tổ chuyên môn dùng chung');
+  const [loginInviteCode, setLoginInviteCode] = useState('');
+  const [allowInternalPreview, setAllowInternalPreview] = useState(false);
+  const [classSize, setClassSize] = useState<LessonClassSize>('standard');
+  const [classroomSpace, setClassroomSpace] = useState<LessonClassroomSpace>('regular_room');
+  const [deviceAvailability, setDeviceAvailability] = useState<LessonDeviceAvailability>('basic');
+  const [learnerLevel, setLearnerLevel] = useState<LessonLearnerProfileLevel>('mixed');
+  const [durationProfile, setDurationProfile] = useState<LessonDurationProfile>('standard');
+
+  useEffect(() => {
+    void loadBoot();
+  }, []);
+
+  useEffect(() => {
+    if (!metadata) return;
+    const gradeNames = Object.keys(metadata.curriculum.grades);
+    if (gradeNames.length && !gradeNames.includes(grade)) setGrade(gradeNames[0]);
+    if (metadata.summary.levels.length && !metadata.summary.levels.includes(level)) setLevel(metadata.summary.levels[0]);
+  }, [metadata, grade, level]);
+
+  useEffect(() => {
+    if (!metadata) return;
+    const derivedLevel = metadata.summary.gradeLevelMap[grade];
+    if (derivedLevel && derivedLevel !== level) setLevel(derivedLevel);
+  }, [metadata, grade, level]);
+
+  const gradeOptions = useMemo(() => metadata ? Object.keys(metadata.curriculum.grades).filter((item) => metadata.summary.gradeLevelMap[item] === level) : [], [metadata, level]);
+  useEffect(() => {
+    if (gradeOptions.length && !gradeOptions.includes(grade)) setGrade(gradeOptions[0]);
+  }, [gradeOptions, grade]);
+
+  const subjects = useMemo(() => metadata ? Object.keys(metadata.curriculum.grades[grade]?.subjects || {}) : [], [metadata, grade]);
+  useEffect(() => {
+    if (subjects.length && !subjects.includes(subject)) setSubject(subjects[0]);
+  }, [subjects, subject]);
+
+  const books = useMemo(() => metadata ? Object.keys(metadata.curriculum.grades[grade]?.subjects?.[subject]?.books || {}) : [], [metadata, grade, subject]);
+  useEffect(() => {
+    if (books.length && !books.includes(book)) setBook(books[0]);
+  }, [books, book]);
+
+  const topics = useMemo(() => metadata ? Object.keys(metadata.curriculum.grades[grade]?.subjects?.[subject]?.books?.[book]?.topics || {}) : [], [metadata, grade, subject, book]);
+  useEffect(() => {
+    if (topics.length && !topics.includes(topic)) setTopic(topics[0]);
+  }, [topics, topic]);
+
+  useEffect(() => {
+    if (!metadata || !level || !grade || !subject || !book || !topic) return;
+    void Promise.all([loadTopic(), loadProgram(), loadBanks(), loadResources(resourceSearch), loadActivityGames(activityGameSearch)]);
+  }, [metadata, level, grade, subject, book, topic]);
+
+
+  useEffect(() => {
+    if (!grade) return;
+    void loadPedagogyProfile();
+  }, [level, grade, subject]);
+
+  useEffect(() => {
+    if (activeTab === 'kho') void loadLibrary();
+    if (activeTab === 'dashboard') void loadDashboard();
+    if (activeTab === 'van-hanh') void loadOperatingFoundation();
+    if (activeTab === 'thiet-lap') void loadSettings();
+    if (activeTab === 'ngan-hang') {
+      if (bankSearch.trim()) {
+        void loadCurriculumSearch(bankSearch);
+      } else {
+        setCurriculumHits([]);
+      }
+    }
+  }, [activeTab]);
+
+
+  const visibleTabs = useMemo(() => {
+    const standardTabs: WorkspaceTab[] = ['soan', 'chuong-trinh', 'ngan-hang', 'thu-vien', 'kho', 'dashboard'];
+    const advancedTabs: WorkspaceTab[] = [...standardTabs, 'van-hanh', 'thiet-lap'];
+    if (workspaceMode === 'easy') return new Set<WorkspaceTab>(['soan', 'kho', 'dashboard']);
+    if (workspaceMode === 'advanced') {
+      if (user?.role === 'leader' || user?.role === 'admin') advancedTabs.push('quan-tri-noi-dung');
+      return new Set<WorkspaceTab>(advancedTabs);
+    }
+    return new Set<WorkspaceTab>(standardTabs);
+  }, [workspaceMode, user?.role]);
+
+  useEffect(() => {
+    if (!visibleTabs.has(activeTab)) setActiveTab('soan');
+  }, [activeTab, visibleTabs]);
+
+  const settingsLevelOptions = useMemo(() => metadata?.summary.levels.map((item) => ({ value: item, label: item })) || [], [metadata]);
+  const settingsGradeOptions = useMemo(() => {
+    if (!metadata || !settingsDraft?.preferredLevel) return [];
+    return Object.keys(metadata.curriculum.grades)
+      .filter((item: string) => metadata.summary.gradeLevelMap[item] === settingsDraft.preferredLevel)
+      .map((item: string) => ({ value: item, label: item }));
+  }, [metadata, settingsDraft?.preferredLevel]);
+  const settingsSubjectOptions = useMemo(() => {
+    if (!metadata || !settingsDraft?.preferredGrade) return [];
+    return Object.keys(metadata.curriculum.grades[settingsDraft.preferredGrade]?.subjects || {}).map((item: string) => ({ value: item, label: item }));
+  }, [metadata, settingsDraft?.preferredGrade]);
+  const settingsBookOptions = useMemo(() => {
+    if (!metadata || !settingsDraft?.preferredGrade || !settingsDraft?.preferredSubject) return [];
+    return Object.keys(metadata.curriculum.grades[settingsDraft.preferredGrade]?.subjects?.[settingsDraft.preferredSubject]?.books || {}).map((item: string) => ({ value: item, label: item }));
+  }, [metadata, settingsDraft?.preferredGrade, settingsDraft?.preferredSubject]);
+
+  useEffect(() => {
+    if (!settingsDraft || !metadata) return;
+    if (settingsGradeOptions.length && settingsDraft.preferredGrade && !settingsGradeOptions.some((item) => item.value === settingsDraft.preferredGrade)) {
+      updateSettingsField('preferredGrade', settingsGradeOptions[0].value);
+    }
+  }, [metadata, settingsDraft?.preferredGrade, settingsGradeOptions]);
+
+  useEffect(() => {
+    if (!settingsDraft || !metadata) return;
+    if (settingsSubjectOptions.length && settingsDraft.preferredSubject && !settingsSubjectOptions.some((item) => item.value === settingsDraft.preferredSubject)) {
+      updateSettingsField('preferredSubject', settingsSubjectOptions[0].value);
+    }
+  }, [metadata, settingsDraft?.preferredSubject, settingsSubjectOptions]);
+
+  useEffect(() => {
+    if (!settingsDraft || !metadata) return;
+    if (settingsBookOptions.length && settingsDraft.preferredBook && !settingsBookOptions.some((item) => item.value === settingsDraft.preferredBook)) {
+      updateSettingsField('preferredBook', settingsBookOptions[0].value);
+    }
+  }, [metadata, settingsDraft?.preferredBook, settingsBookOptions]);
+  async function loadBoot() {
+    const [metadataRes, meRes, csrfRes, templatesRes, settingsRes, operatingRes, usageRes, activityGamesRes, communityHubRes, demoReadinessRes] = await Promise.all([
+      fetch('/api/metadata'),
+      fetch('/api/auth/me'),
+      fetch('/api/auth/csrf'),
+      fetch('/api/templates'),
+      fetch('/api/settings'),
+      fetch('/api/operating/foundation'),
+      fetch('/api/operating/usage'),
+      fetch('/api/activity-games'),
+      fetch('/api/community/hub'),
+      fetch('/api/demo/readiness')
+    ]);
+    const metadataJson = await metadataRes.json() as MetadataResponse;
+    const meJson = await meRes.json() as { user: SessionUser | null };
+    const csrfJson = await csrfRes.json().catch(() => ({} as { csrfToken?: string })) as { csrfToken?: string };
+    const templatesJson = await templatesRes.json() as TemplatesResponse;
+    const settingsJson = await settingsRes.json() as SettingsResponse;
+    const operatingJson = await operatingRes.json() as OperatingFoundationResponse;
+    const usageJson = await usageRes.json() as OperatingUsageResponse;
+    const activityGamesJson = await activityGamesRes.json() as ActivityGameLibraryResponse;
+    const communityHubJson = await communityHubRes.json().catch(() => ({} as CommunityHubResponse)) as CommunityHubResponse;
+    const demoReadinessJson = await demoReadinessRes.json().catch(() => ({} as DemoReadinessResponse)) as DemoReadinessResponse;
+    setMetadata(metadataJson);
+    setUser(meJson.user);
+    if (csrfJson.csrfToken) setCsrfToken(csrfJson.csrfToken);
+    setTemplateLibrary(templatesJson.items || []);
+    setSettings(settingsJson.settings);
+    setSettingsDraft(settingsJson.settings);
+    if (operatingJson.board) setOperatingBoard(operatingJson.board);
+    if (usageJson.entitlement) setOperatingEntitlement(usageJson.entitlement);
+    setActivityGames(activityGamesJson.items || []);
+    setActivityGameReadiness(activityGamesJson.readiness || {});
+    setActivityGameSummary(activityGamesJson.summary || null);
+    if (communityHubJson.board) setCommunityHub(communityHubJson.board);
+    if (operatingJson.board?.demoReadiness) setDemoReadiness(operatingJson.board.demoReadiness);
+    if (demoReadinessJson.board) setDemoReadiness(demoReadinessJson.board);
+    setLoginSchool(settingsJson.settings.schoolName);
+    setLoginDepartment(settingsJson.settings.departmentName);
+    if (metadataJson.defaultScope) {
+      setLevel(metadataJson.defaultScope.level);
+      setGrade(metadataJson.defaultScope.grade);
+      setSubject(metadataJson.defaultScope.subject);
+      setBook(metadataJson.defaultScope.book);
+      if (metadataJson.defaultScope.topic) setTopic(metadataJson.defaultScope.topic);
+    }
+    setTemplate(settingsJson.settings.preferredTemplates[0] || metadataJson.templates[1] || metadataJson.templates[0] || 'Mẫu phát triển phẩm chất - năng lực');
+  }
+
+  async function loadTopic() {
+    const params = new URLSearchParams({ level, grade, subject, book, topic });
+    const res = await fetch(`/api/topic?${params.toString()}`);
+    const json = await res.json() as TopicResponse;
+    setTopicData(json.topic);
+    setRelatedTopics(json.related || []);
+  }
+
+  async function loadProgram() {
+    const params = new URLSearchParams({ grade, subject, book });
+    const res = await fetch(`/api/program?${params.toString()}`);
+    const json = await res.json() as ProgramResponse;
+    setProgram(json.program);
+  }
+
+  async function loadBanks() {
+    const params = new URLSearchParams({ grade, subject, book, topic });
+    const res = await fetch(`/api/banks?${params.toString()}`);
+    const json = await res.json() as BankResponse;
+    setQuestionBank(json.questions || []);
+    setRubricBank(json.rubrics || []);
+  }
+
+  async function loadCurriculumSearch(keyword: string) {
+    const params = new URLSearchParams({ q: keyword, grade, subject, book });
+    const res = await fetch(`/api/curriculum/search?${params.toString()}`);
+    const json = await res.json() as CurriculumSearchResponse;
+    setCurriculumHits(json.items || []);
+  }
+
+  async function loadResources(keyword = '') {
+    const params = new URLSearchParams({ q: keyword, grade, subject, book, topic });
+    const res = await fetch(`/api/resources?${params.toString()}`);
+    const json = await res.json() as ResourcesResponse;
+    setResources(json.items || []);
+  }
+
+  async function loadActivityGames(keyword = '') {
+    const params = new URLSearchParams({ q: keyword, grade, subject, topic });
+    const res = await fetch(`/api/activity-games?${params.toString()}`);
+    const json = await res.json() as ActivityGameLibraryResponse;
+    setActivityGames(json.items || []);
+    setActivityGameReadiness(json.readiness || {});
+    setActivityGameSummary(json.summary || null);
+  }
+
+  async function loadLibrary() {
+    const params = new URLSearchParams({ q: librarySearch, status: libraryStatus, subject: librarySubject, grade: libraryGrade, author: libraryAuthor });
+    const res = await fetch(`/api/library/search?${params.toString()}`);
+    const json = await res.json() as { items: SavedLessonPlan[] };
+    setLibrary(json.items ?? []);
+  }
+
+  async function loadDashboard() {
+    const res = await fetch('/api/dashboard');
+    const json = await res.json() as DashboardResponse;
+    setDashboard(json);
+  }
+
+  async function loadOperatingFoundation() {
+    const [foundationRes, usageRes, communityHubRes, demoReadinessRes] = await Promise.all([fetch('/api/operating/foundation'), fetch('/api/operating/usage'), fetch('/api/community/hub'), fetch('/api/demo/readiness')]);
+    const foundationJson = await foundationRes.json() as OperatingFoundationResponse;
+    const usageJson = await usageRes.json() as OperatingUsageResponse;
+    const communityHubJson = await communityHubRes.json().catch(() => ({} as CommunityHubResponse)) as CommunityHubResponse;
+    const demoReadinessJson = await demoReadinessRes.json().catch(() => ({} as DemoReadinessResponse)) as DemoReadinessResponse;
+    if (foundationJson.board) {
+      setOperatingBoard(foundationJson.board);
+      if (foundationJson.board.demoReadiness) setDemoReadiness(foundationJson.board.demoReadiness);
+    }
+    if (usageJson.entitlement) setOperatingEntitlement(usageJson.entitlement);
+    if (communityHubJson.board) setCommunityHub(communityHubJson.board);
+    if (demoReadinessJson.board) setDemoReadiness(demoReadinessJson.board);
+  }
+
+
+  async function loadPedagogyProfile() {
+    const params = new URLSearchParams({ grade, level, subject });
+    const res = await fetch(`/api/pedagogy?${params.toString()}`);
+    const json = await res.json() as PedagogyResponse;
+    setPedagogyProfile(json.profile || null);
+    setGradeBlueprint(json.gradeBlueprint || null);
+    setTechnicalDrafting(json.technicalDrafting || null);
+    setSubjectNamingWarning(json.subjectNaming?.warning || "");
+  }
+
+  async function loadSettings() {
+    const res = await fetch('/api/settings');
+    const json = await res.json() as SettingsResponse;
+    setSettings(json.settings);
+    setSettingsDraft(json.settings);
+  }
+
+  function writeHeaders(extra: Record<string, string> = {}) {
+    return { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken, ...extra };
+  }
+
+  async function handleGenerate() {
+    setMessage('Đang dựng giáo án từ mẫu và dữ liệu có cấu trúc...');
+    const res = await fetch('/api/template-builder', {
+      method: 'POST',
+      headers: writeHeaders(),
+      body: JSON.stringify({
+        level,
+        grade,
+        subject,
+        book,
+        topic,
+        template,
+        methods,
+        techniques,
+        allowInternalPreview,
+        lessonContext: { classSize, classroomSpace, deviceAvailability, learnerLevel, durationProfile }
+      })
+    });
+    const json = await res.json() as GenerateResponse;
+    if (!res.ok || !json.bundle) {
+      setGeneratePolicy(json.policy || null);
+      setMessage(json.error || 'Không sinh được giáo án.');
+      return;
+    }
+    setBundle(json.bundle);
+    setLessonQuality(json.bundle.qualityChecklist || null);
+    setGeneratePolicy(json.policy || null);
+    setCurrentLessonGovernance(normalizeLessonGovernanceSnapshot({
+      packId: topicData?.sourceMeta?.packId || json.bundle.trace.packId,
+      sourceStatus: topicData?.sourceMeta?.status || json.bundle.trace.sourceStatus,
+      lifecycleStatus: topicData?.governance?.lifecycleStatus || json.bundle.trace.lifecycleStatus,
+      releaseTier: json.bundle.trace.releaseTier || selectedCoverage?.releaseTier || json.policy?.actualReleaseTier,
+      supportLevel: json.bundle.trace.supportLevel || selectedCoverage?.supportLevel || json.policy?.actualSupportLevel,
+      sourceLabel: topicData?.sourceMeta?.sourceLabel || json.bundle.trace.sourceLabel,
+      sourceReferences: topicData?.sourceMeta?.references || [],
+      supportFlags: selectedCoverage?.supportFlags,
+      supportNotes: selectedCoverage?.supportNotes,
+      generatedAt: new Date().toISOString(),
+      referenceCount: json.bundle.trace.referenceCount,
+      fieldEvidenceCount: json.bundle.trace.fieldEvidenceCount,
+      conflicts: json.bundle.trace.conflicts
+    }));
+    setEditor(json.bundle.plan);
+    setMessage(json.policy?.notice || 'Đã dựng giáo án từ template, học liệu seed/scaffold và dữ liệu có cấu trúc. Giáo viên vẫn cần kiểm tra trước khi dùng.');
+    void loadOperatingFoundation();
+  }
+
+  async function runLessonQualityCheck() {
+    setCheckingQuality(true);
+    const res = await fetch('/api/lesson-quality', {
+      method: 'POST',
+      headers: writeHeaders(),
+      body: JSON.stringify({
+        content: editor,
+        level,
+        grade,
+        subject,
+        book,
+        topic,
+        template,
+        methods,
+        techniques,
+        governanceSnapshot: derivedCurrentGovernance,
+        sourceStatus: derivedCurrentGovernance?.sourceStatus || 'seed',
+        releaseTier: derivedCurrentGovernance?.releaseTier || 'internal_preview',
+        supportLevel: derivedCurrentGovernance?.supportLevel || 'starter'
+      })
+    });
+    const json = await res.json() as LessonQualityResponse;
+    setCheckingQuality(false);
+    if (!res.ok || !json.qualityChecklist) {
+      setMessage(json.error || 'Không chạy được checklist chất lượng giáo án.');
+      return null;
+    }
+    setLessonQuality(json.qualityChecklist);
+    setMessage(`Checklist chất lượng: ${json.qualityChecklist.summary.score}/100 · blocker ${json.qualityChecklist.summary.blockers} · cảnh báo ${json.qualityChecklist.summary.warnings}.`);
+    return json.qualityChecklist;
+  }
+
+  async function handleExport(format: 'docx' | 'pdf') {
+    if (!user) {
+      setMessage("Hãy đăng nhập workspace trước khi xuất " + format.toUpperCase() + ".");
+      return;
+    }
+    const res = await fetch(`/api/export/${format}`, {
+      method: 'POST',
+      headers: writeHeaders(),
+      body: JSON.stringify({
+        title: `${subject} - ${topic}`,
+        level,
+        grade,
+        subject,
+        book,
+        topic,
+        template,
+        methods,
+        techniques,
+        content: editor,
+        governanceSnapshot: derivedCurrentGovernance,
+        packId: derivedCurrentGovernance?.packId,
+        sourceStatus: derivedCurrentGovernance?.sourceStatus || 'seed',
+        lifecycleStatus: derivedCurrentGovernance?.lifecycleStatus || 'draft',
+        releaseTier: derivedCurrentGovernance?.releaseTier,
+        lessonStatus: currentLessonStatus,
+        sourceLabel: derivedCurrentGovernance?.sourceLabel || 'Biên tập nội bộ',
+        sourceReferences: derivedCurrentGovernance?.sourceReferences || []
+      })
+    });
+    if (!res.ok) {
+      const errorJson = await res.json().catch(() => ({} as { error?: string }));
+      setMessage(errorJson.error || `Không xuất được ${format.toUpperCase()}.`);
+      return;
+    }
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    const disposition = res.headers.get('Content-Disposition') || '';
+    const matchedName = disposition.match(/filename="?([^";]+)"?/i)?.[1];
+    anchor.download = matchedName || `noi-bo-${subject}-${topic}.${format}`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.URL.revokeObjectURL(url);
+    setMessage(`Đã xuất ${format.toUpperCase()} theo export guard và quota operating hiện tại.`);
+    void loadOperatingFoundation();
+  }
+
+  async function handleSave(status: 'draft' | 'review' = 'draft') {
+    if (!user) {
+      setMessage('Hãy đăng nhập workspace trước khi lưu.');
+      return;
+    }
+    setSaving(true);
+    const finalStatus = status === 'review' && settings?.approvalRequired === false ? 'approved' : status;
+    const payload = {
+      title: `${subject} - ${topic}`,
+      level,
+      grade,
+      subject,
+      book,
+      topic,
+      template,
+      methods,
+      techniques,
+      content: editor,
+      status: finalStatus,
+      governanceSnapshot: derivedCurrentGovernance,
+      changeSummary: currentLessonId ? 'Cập nhật nội dung từ trình soạn.' : 'Tạo giáo án từ trình soạn.'
+    };
+    const res = await fetch(currentLessonId ? `/api/lessons/${currentLessonId}` : '/api/lessons', {
+      method: currentLessonId ? 'PUT' : 'POST',
+      headers: writeHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json() as { item?: SavedLessonPlan; error?: string; governance?: LessonGovernanceAssessment; qualityChecklist?: LessonQualityChecklistReport };
+    setSaving(false);
+    if (!res.ok || !json.item) {
+      if (json.qualityChecklist) setLessonQuality(json.qualityChecklist);
+      const governanceNote = json.governance?.issues?.filter((item) => item.severity === 'blocker').map((item) => item.message).join(' ');
+      setMessage(governanceNote || json.error || 'Không lưu được giáo án.');
+      return;
+    }
+    setCurrentLessonId(json.item.id);
+    setCurrentLessonVersion(json.item.currentVersion || 1);
+    setCurrentLessonStatus(json.item.status);
+    setCurrentLessonGovernance(json.item.governanceSnapshot || derivedCurrentGovernance);
+    setLessonQuality(json.qualityChecklist || lessonQuality);
+    const actualStatus = json.item.status;
+    setMessage(actualStatus === 'approved' ? `Đã lưu và duyệt. Phiên bản hiện tại: v${json.item.currentVersion}.` : actualStatus === 'review' ? `Đã gửi duyệt giáo án. Phiên bản hiện tại: v${json.item.currentVersion}.` : `Đã lưu bản nháp. Phiên bản hiện tại: v${json.item.currentVersion}.`);
+    if (activeTab === 'kho') void loadLibrary();
+    void loadDashboard();
+    void loadOperatingFoundation();
+  }
+
+  async function handleLogin() {
+    const endpoint = authMode === 'register' ? '/api/auth/register' : '/api/auth/login';
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: loginName, email: loginEmail, password: loginPassword, role: loginRole, schoolName: loginSchool, departmentName: loginDepartment, inviteCode: loginInviteCode })
+    });
+    const json = await res.json() as { user?: SessionUser; error?: string; autoProvisioned?: boolean; downgraded?: boolean; privilegedBlocked?: boolean; notice?: string; effectiveRole?: SessionUser['role']; csrfToken?: string; inviteAccepted?: boolean; inviteWarning?: string };
+    if (!res.ok || !json.user) {
+      setMessage(json.error || (authMode === 'register' ? 'Không đăng ký được tài khoản.' : 'Không đăng nhập được vào workspace.'));
+      return;
+    }
+    if (json.csrfToken) setCsrfToken(json.csrfToken);
+    setUser(json.user);
+    void loadOperatingFoundation();
+    const note = json.notice ? ' ' + json.notice : json.inviteWarning ? ' ' + json.inviteWarning : json.downgraded ? ' Yêu cầu leader/admin không có invite/membership hợp lệ nên đã hạ về teacher.' : json.autoProvisioned ? ' Đã auto-provision membership teacher cho lần vào đầu.' : '';
+    setMessage(`${authMode === 'register' ? 'Đã đăng ký và vào workspace' : 'Đã vào workspace'} với vai trò ${labelRole(json.user.role)} · ${json.user.schoolName} / ${json.user.departmentName}.${note}`);
+  }
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST', headers: writeHeaders() });
+    setUser(null);
+    setMessage('Đã đăng xuất workspace.');
+  }
+
+  async function handleChangePassword() {
+    if (!user) {
+      setMessage('Hãy đăng nhập trước khi đổi mật khẩu.');
+      return;
+    }
+    const res = await fetch('/api/auth/change-password', {
+      method: 'POST',
+      headers: writeHeaders(),
+      body: JSON.stringify({ email: loginEmail, currentPassword, newPassword, revokeOtherSessions: true })
+    });
+    const json = await res.json().catch(() => ({} as { error?: string; revokedSessions?: number }));
+    if (!res.ok) {
+      setMessage(json.error || 'Không đổi được mật khẩu.');
+      return;
+    }
+    setCurrentPassword('');
+    setNewPassword('');
+    setMessage('Đã đổi mật khẩu và thu hồi ' + String(json.revokedSessions || 0) + ' phiên khác.');
+  }
+
+  async function handleLogoutAll() {
+    if (!user) return;
+    const res = await fetch('/api/auth/logout-all', { method: 'POST', headers: writeHeaders() });
+    const json = await res.json().catch(() => ({} as { error?: string; revokedSessions?: number }));
+    if (!res.ok) {
+      setMessage(json.error || 'Không thu hồi được các phiên đăng nhập.');
+      return;
+    }
+    setUser(null);
+    setMessage('Đã thu hồi ' + String(json.revokedSessions || 0) + ' phiên đăng nhập và đăng xuất khỏi thiết bị hiện tại.');
+  }
+
+  async function updateStatus(id: string, status: 'draft' | 'review' | 'approved') {
+    const lesson = library.find((item: SavedLessonPlan) => item.id === id) ?? dashboard?.recent.find((item: SavedLessonPlan) => item.id === id) ?? dashboard?.reviewQueue.find((item: SavedLessonPlan) => item.id === id);
+    if (!lesson) return;
+    const res = await fetch(`/api/lessons/${id}`, {
+      method: 'PUT',
+      headers: writeHeaders(),
+      body: JSON.stringify({
+        ...lesson,
+        status,
+        eventAction: status === 'approved' ? 'approved' : status === 'review' ? 'submitted' : 'updated',
+        changeSummary: status === 'approved' ? 'Duyệt giáo án.' : status === 'review' ? 'Chuyển giáo án sang chờ duyệt.' : 'Đưa giáo án về bản nháp.'
+      })
+    });
+    const json = await res.json() as { error?: string; governance?: LessonGovernanceAssessment };
+    if (res.ok) {
+      setMessage('Đã cập nhật trạng thái giáo án.');
+      void loadLibrary();
+      void loadDashboard();
+      return;
+    }
+    const governanceNote = json.governance?.issues?.filter((item) => item.severity === 'blocker').map((item) => item.message).join(' ');
+    setMessage(governanceNote || json.error || 'Không cập nhật được trạng thái.');
+  }
+
+  async function removeLesson(id: string) {
+    const res = await fetch(`/api/lessons/${id}`, { method: 'DELETE', headers: writeHeaders() });
+    const json = await res.json().catch(() => ({} as { error?: string }));
+    if (res.ok) {
+      setMessage('Đã xóa giáo án khỏi kho nội bộ.');
+      void loadLibrary();
+      void loadDashboard();
+      return;
+    }
+    setMessage(json.error || 'Không xóa được giáo án.');
+  }
+
+  async function submitReview(id: string, nextStatus?: 'review' | 'approved') {
+    const comment = (reviewDrafts[id] || '').trim();
+    if (!comment) {
+      setMessage('Nhập nhận xét trước khi gửi.');
+      return;
+    }
+
+    const res = await fetch(`/api/lessons/${id}/reviews`, {
+      method: 'POST',
+      headers: writeHeaders(),
+      body: JSON.stringify({ comment, nextStatus })
+    });
+    const json = await res.json() as { error?: string; governance?: LessonGovernanceAssessment };
+    if (!res.ok) {
+      const governanceNote = json.governance?.issues?.filter((item) => item.severity === 'blocker').map((item) => item.message).join(' ');
+      setMessage(governanceNote || json.error || 'Không gửi được nhận xét.');
+      return;
+    }
+
+    setReviewDrafts((prev: Record<string, string>) => ({ ...prev, [id]: '' }));
+    setMessage(nextStatus === 'approved' ? 'Đã duyệt và ghi nhận nhận xét.' : 'Đã gửi nhận xét.');
+    void loadLibrary();
+    void loadDashboard();
+  }
+
+  async function cloneLesson(item: SavedLessonPlan) {
+    if (!user) {
+      setMessage('Hãy đăng nhập workspace trước khi nhân bản.');
+      return;
+    }
+    const res = await fetch('/api/lessons', {
+      method: 'POST',
+      headers: writeHeaders(),
+      body: JSON.stringify({
+        title: `${item.title} (Bản sao)`,
+        level: item.level,
+        grade: item.grade,
+        subject: item.subject,
+        book: item.book,
+        topic: item.topic,
+        template: item.template,
+        methods: item.methods,
+        techniques: item.techniques,
+        content: item.content,
+        governanceSnapshot: item.governanceSnapshot,
+        status: 'draft',
+        eventAction: 'cloned',
+        changeSummary: `Nhân bản từ ${item.title}.`
+      })
+    });
+    const json = await res.json() as { error?: string };
+    if (!res.ok) {
+      setMessage(json.error || 'Không nhân bản được giáo án.');
+      return;
+    }
+    setMessage('Đã tạo bản sao giáo án để chỉnh sửa tiếp.');
+    void loadLibrary();
+    void loadDashboard();
+  }
+
+  async function saveSettings() {
+    if (!settingsDraft) return;
+    const res = await fetch('/api/settings', {
+      method: 'PUT',
+      headers: writeHeaders(),
+      body: JSON.stringify(settingsDraft)
+    });
+    const json = await res.json() as { settings?: SchoolSettings; error?: string };
+    if (!res.ok || !json.settings) {
+      setMessage(json.error || 'Không lưu được thiết lập.');
+      return;
+    }
+    setSettings(json.settings);
+    setSettingsDraft(json.settings);
+    setLoginSchool(json.settings.schoolName);
+    setLoginDepartment(json.settings.departmentName);
+    await loadBoot();
+    setMessage('Đã lưu thiết lập nhà trường / tổ chuyên môn.');
+  }
+
+  async function syncContent(target: 'auto' | 'json' | 'database') {
+    setSyncingContent(true);
+    setContentSyncMessage('');
+    try {
+      const res = await fetch('/api/content/import', {
+        method: 'POST',
+        headers: writeHeaders(),
+        body: JSON.stringify({ target })
+      });
+      const json = await res.json() as ContentImportResponse;
+      if (!res.ok || !json.result) {
+        setContentSyncMessage(json.error || 'Không đồng bộ được kho nội dung.');
+        return;
+      }
+      await loadBoot();
+      setContentSyncMessage(`Đã đồng bộ seed vào ${labelContentMode(json.result.target)}.`);
+    } finally {
+      setSyncingContent(false);
+    }
+  }
+
+  function applySavedLesson(item: SavedLessonPlan) {
+    setActiveTab('soan');
+    setCurrentLessonId(item.id);
+    setCurrentLessonVersion(item.currentVersion || 1);
+    setCurrentLessonStatus(item.status);
+    setLevel(item.level);
+    setGrade(item.grade);
+    setSubject(item.subject);
+    setBook(item.book);
+    setTopic(item.topic);
+    setTemplate(item.template);
+    setMethods(item.methods);
+    setTechniques(item.techniques);
+    setEditor(item.content);
+    setBundle(null);
+    setGeneratePolicy(null);
+    setCurrentLessonGovernance(item.governanceSnapshot || null);
+    setLessonQuality(null);
+    setMessage(`Đã nạp lại giáo án "${item.title}" vào trình soạn ở phiên bản v${item.currentVersion || 1}.`);
+  }
+
+  function createNewDraft() {
+    setGeneratePolicy(null);
+    setCurrentLessonId(null);
+    setCurrentLessonVersion(1);
+    setCurrentLessonStatus('unsaved');
+    setCurrentLessonGovernance(null);
+    setEditor('');
+    setBundle(null);
+    setLessonQuality(null);
+    setMessage('Đã chuyển sang chế độ tạo giáo án mới.');
+  }
+
+  async function compareVersion(lessonId: string, versionId: string, compareVersionId?: string) {
+    const key = `${lessonId}:${versionId}:${compareVersionId || 'auto'}`;
+    setLoadingDiffKey(key);
+    const params = new URLSearchParams({ versionId });
+    if (compareVersionId) params.set('compareVersionId', compareVersionId);
+    const res = await fetch(`/api/lessons/${lessonId}/versions/compare?${params.toString()}`);
+    const json = await res.json() as VersionDiffResponse;
+    setLoadingDiffKey(null);
+    if (!res.ok || !json.diff) {
+      setMessage(json.error || 'Không tạo được diff giữa các phiên bản.');
+      return;
+    }
+    setVersionDiffs((prev) => ({ ...prev, [lessonId]: json.diff as LessonVersionDiff }));
+  }
+
+  async function restoreVersion(lessonId: string, versionId: string) {
+    const res = await fetch(`/api/lessons/${lessonId}/versions/${versionId}/restore`, { method: 'POST', headers: writeHeaders() });
+    const json = await res.json() as { item?: SavedLessonPlan; error?: string; governance?: LessonGovernanceAssessment };
+    if (!res.ok || !json.item) {
+      setMessage(json.error || 'Không phục hồi được phiên bản.');
+      return;
+    }
+    setMessage(`Đã phục hồi phiên bản. Giáo án hiện tại ở v${json.item.currentVersion}.`);
+    if (currentLessonId === lessonId) {
+      applySavedLesson(json.item);
+    }
+    void loadLibrary();
+    void loadDashboard();
+  }
+
+  function openTopicInEditor(nextTopic: string) {
+    setTopic(nextTopic);
+    setActiveTab('soan');
+    setMessage(`Đã chuyển sang chủ đề "${nextTopic}".`);
+  }
+
+  function applyTopicRecommendations() {
+    if (!topicData) return;
+    setMethods(topicData.recommendedMethodIds || []);
+    setTechniques(topicData.recommendedTechniqueIds || []);
+    setModeFilter('all');
+    setMessage(`Đã áp dụng gợi ý phương pháp/kĩ thuật cho chủ đề "${topicData.title}".`);
+  }
+
+  function updateSettingsField<K extends keyof SchoolSettings>(key: K, value: SchoolSettings[K]) {
+    setSettingsDraft((prev: SchoolSettings | null) => prev ? { ...prev, [key]: value } : prev);
+  }
+
+  const filteredMethods = useMemo(() => {
+    if (!metadata) return [];
+    return metadata.teachingMethods.filter((item: TeachingMethod) => modeFilter === 'all' || item.modes.includes(modeFilter));
+  }, [metadata, modeFilter]);
+
+  const filteredTechniques = useMemo(() => {
+    if (!metadata) return [];
+    return metadata.teachingTechniques.filter((item: TeachingTechnique) => modeFilter === 'all' || item.modes.includes(modeFilter));
+  }, [metadata, modeFilter]);
+
+  const selectedTemplateDetail = useMemo(() => templateLibrary.find((item: LessonTemplateDetail) => item.name === template) ?? null, [templateLibrary, template]);
+
+  const selectedCoverage = useMemo(() => metadata?.summary.coverage.find((item: CurriculumCoverageItem) => item.grade === grade && item.subject === subject && item.book === book) ?? null, [metadata, grade, subject, book]);
+  const supportSummary = metadata?.summary.supportSummary;
+  const derivedCurrentGovernance = useMemo<LessonGovernanceSnapshot | null>(() => {
+    if (!selectedCoverage && !topicData && !bundle && !currentLessonGovernance) return null;
+    const sourceReferences = topicData?.sourceMeta?.references || currentLessonGovernance?.sourceReferences || [];
+    const supportFlags = selectedCoverage?.supportFlags || currentLessonGovernance?.supportFlags;
+    const supportNotes = selectedCoverage?.supportNotes || currentLessonGovernance?.supportNotes;
+    return normalizeLessonGovernanceSnapshot({
+      packId: currentLessonGovernance?.packId || topicData?.sourceMeta?.packId || bundle?.trace.packId,
+      sourceStatus: currentLessonGovernance?.sourceStatus || topicData?.sourceMeta?.status || bundle?.trace.sourceStatus || selectedCoverage?.sourceStatus || 'seed',
+      lifecycleStatus: currentLessonGovernance?.lifecycleStatus || topicData?.governance?.lifecycleStatus || bundle?.trace.lifecycleStatus || 'draft',
+      releaseTier: currentLessonGovernance?.releaseTier || bundle?.trace.releaseTier || selectedCoverage?.releaseTier || generatePolicy?.actualReleaseTier || 'internal_preview',
+      supportLevel: currentLessonGovernance?.supportLevel || bundle?.trace.supportLevel || selectedCoverage?.supportLevel || generatePolicy?.actualSupportLevel || 'starter',
+      sourceLabel: currentLessonGovernance?.sourceLabel || topicData?.sourceMeta?.sourceLabel || bundle?.trace.sourceLabel || 'Biên tập nội bộ',
+      sourceReferences,
+      supportFlags,
+      supportNotes,
+      generatedAt: currentLessonGovernance?.generatedAt || new Date().toISOString(),
+      referenceCount: currentLessonGovernance?.referenceCount || bundle?.trace.referenceCount || sourceReferences.length,
+      fieldEvidenceCount: currentLessonGovernance?.fieldEvidenceCount || bundle?.trace.fieldEvidenceCount,
+      conflicts: currentLessonGovernance?.conflicts || bundle?.trace.conflicts || []
+    });
+  }, [selectedCoverage, topicData, bundle, currentLessonGovernance, generatePolicy]);
+  const currentGovernanceAssessment = useMemo<LessonGovernanceAssessment | null>(() => {
+    if (!settings || !derivedCurrentGovernance) return null;
+    return assessLessonGovernanceForApproval({ snapshot: derivedCurrentGovernance, settings });
+  }, [derivedCurrentGovernance, settings]);
+  const rolloutSummary = useMemo(() => {
+    const packs = metadata?.summary.packs || [];
+    return {
+      grade6Expanded: packs.filter((item) => item.rolloutStage === 'grade6_extended').length,
+      grade6Foundation: packs.filter((item) => item.rolloutStage === 'grade6_full_foundation').length,
+      starter112: packs.filter((item) => item.rolloutStage === 'starter_1_12').length,
+      legacyCore: packs.filter((item) => item.rolloutStage === 'legacy_core').length
+    };
+  }, [metadata]);
+
+  const roadmapSummary = metadata?.summary.roadmap;
+  const coverageTruth = metadata?.summary.coverageTruth;
+  const selectedCoverageTruthGrade = useMemo(() => coverageTruth?.gradeReports.find((item) => item.grade === grade) ?? null, [coverageTruth, grade]);
+  const selectedRoadmapGrade = useMemo(() => roadmapSummary?.grades.find((item) => item.grade === grade) ?? null, [roadmapSummary, grade]);
+
+  const recommendedTemplates = useMemo(() => {
+    return templateLibrary.filter((item: LessonTemplateDetail) => item.recommendedModes.some((mode: ActivityMode) => modeFilter === 'all' || mode === modeFilter)).slice(0, 3);
+  }, [templateLibrary, modeFilter]);
+
+
+  function toggleSelection(id: string, list: string[], setter: (next: string[]) => void) {
+    setter(list.includes(id) ? list.filter((item) => item !== id) : [...list, id]);
+  }
+
+  return (
+    <main className="min-h-screen bg-slate-50">
+      <div className="mx-auto max-w-7xl space-y-6 p-4 md:p-6">
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+            <div className="space-y-4">
+              <div className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700">Bản nâng cấp lớn · Scope mặc định 1–12 + policy kiểm soát luồng dạy học</div>
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">Nền tảng soạn giáo án, thư viện nội bộ và vận hành tổ chuyên môn</h1>
+                <p className="mt-3 max-w-4xl text-slate-600">
+                  Bản này đẩy trọng tâm sang vận hành chung 1–12: scope mặc định bám roadmap thật, luồng sinh giáo án có policy theo sourceStatus/release tier, và dữ liệu seed/demo không còn nên được hiểu ngầm là dữ liệu dạy học chính thức.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 text-sm">
+                <Badge>Scope mặc định 1–12</Badge>
+                <Badge>Teaching-path policy gating</Badge>
+                <Badge>Khởi động phủ 1–12</Badge>
+                <Badge>Roadmap độ phủ theo lớp</Badge>
+                <Badge>Soạn + lưu + duyệt</Badge>
+                <Badge>Thư viện mẫu giáo án</Badge>
+                <Badge>Học liệu dùng chung</Badge>
+                <Badge>Thiết lập tổ chuyên môn</Badge>
+                <Badge>Storage: {metadata?.storage || 'đang tải...'}</Badge>
+                <Badge>Public trust policy</Badge>
+                <Badge>Release dossier trước khi public</Badge>
+              </div>
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                <div className="font-semibold">Cam kết minh bạch: không tạo kiến thức giả, không nói quá, không public học liệu khi chưa qua kiểm duyệt.</div>
+                <div className="mt-1">Dữ liệu seed/scaffold chỉ được dùng như khung an toàn. Giáo viên/tổ chuyên môn phải kiểm tra nguồn, license, yêu cầu cần đạt, phẩm chất/năng lực và bối cảnh lớp học trước khi xuất hoặc chia sẻ rộng. Trước khi public hoặc phát hành cấp trường, cần lập release dossier: nguồn, bằng chứng, legal gate, moderation, sign-off giáo viên/reviewer/pháp lý và disclosure công khai.</div>
+              </div>
+              {metadata && (
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  <MiniStat label="Cấp học" value={String(metadata.summary.levels.length)} />
+                  <MiniStat label="Khối lớp" value={`${metadata.summary.grades} lớp`} />
+                  <MiniStat label="Môn" value={String(metadata.summary.subjects)} />
+                  <MiniStat label="Bộ sách" value={String(metadata.summary.books)} />
+                  <MiniStat label="Chủ đề seed/demo" value={String(metadata.summary.topics)} />
+                  <MiniStat label="Pack rollout" value={String(metadata.summary.packs.length)} />
+                  <MiniStat label="Pack nền lớp 6 (vùng dày dữ liệu)" value={String(rolloutSummary.grade6Foundation)} />
+                  <MiniStat label="Pack lớp 6 mở rộng (không phải mặc định hệ thống)" value={String(rolloutSummary.grade6Expanded)} />
+                  <MiniStat label="Starter 1–12" value={String(rolloutSummary.starter112)} />
+                  <MiniStat label="Starter / developing" value={supportSummary ? `${supportSummary.starter} / ${supportSummary.developing}` : '—'} />
+                  <MiniStat label="Foundation / operational" value={supportSummary ? `${supportSummary.foundation} / ${supportSummary.operational}` : '—'} />
+                  <MiniStat label="Reviewed / verified" value={`${metadata.contentOverview?.sourceStatusSummary?.reviewed ?? 0} / ${metadata.contentOverview?.sourceStatusSummary?.verified ?? 0}`} />
+                  <MiniStat label="Roadmap phủ bề mặt" value={roadmapSummary ? `${roadmapSummary.coveredSubjectsTotal}/${roadmapSummary.requiredSubjectsTotal}` : '—'} />
+                  <MiniStat label="Truth readiness 1–12" value={coverageTruth ? `${coverageTruth.truthReadinessPercent}%` : '—'} />
+                  <MiniStat label="Seed / verified slots" value={coverageTruth ? `${coverageTruth.seedSubjectSlots} / ${coverageTruth.verifiedSubjectSlots}` : '—'} />
+                  <MiniStat label="Mức phủ môn đang chọn" value={selectedCoverage ? `${selectedCoverage.topics} bài · ${labelSourceStatus(selectedCoverage.sourceStatus)} · ${labelCurriculumSupportLevel(selectedCoverage.supportLevel)}` : '—'} />
+                </div>
+              )}
+            </div>
+
+            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div className="mb-3 font-semibold text-slate-900">Workspace profile</div>
+              <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-3">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Chế độ hiển thị</div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <FilterButton active={workspaceMode === 'easy'} onClick={() => setWorkspaceMode('easy')}>Dễ dùng</FilterButton>
+                  <FilterButton active={workspaceMode === 'standard'} onClick={() => setWorkspaceMode('standard')}>Tiêu chuẩn</FilterButton>
+                  <FilterButton active={workspaceMode === 'advanced'} onClick={() => setWorkspaceMode('advanced')}>Nâng cao</FilterButton>
+                </div>
+                <p className="mt-2 text-xs text-slate-500">Dễ dùng chỉ giữ luồng soạn, kho và dashboard; nâng cao mới hiện governance/quản trị.</p>
+              </div>
+              {user ? (
+                <div className="space-y-3 text-sm">
+                  <div className="rounded-xl border border-slate-200 bg-white p-3">
+                    <div className="font-medium text-slate-900">{user.name}</div>
+                    <div className="text-slate-600">Vai trò: {labelRole(user.role)}</div>
+                    <div className="mt-1 text-xs text-slate-500">{user.schoolName} · {user.departmentName}</div>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-white p-3">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Bảo mật tài khoản</div>
+                    <div className="mt-2 grid gap-2">
+                      <Input label="Email tài khoản" value={loginEmail} onChange={setLoginEmail} placeholder="Email đã đăng ký" />
+                      <Input label="Mật khẩu hiện tại" value={currentPassword} onChange={setCurrentPassword} type="password" />
+                      <Input label="Mật khẩu mới" value={newPassword} onChange={setNewPassword} type="password" />
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <button onClick={handleChangePassword} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs hover:bg-slate-100">
+                        Đổi mật khẩu
+                      </button>
+                      <button onClick={handleLogoutAll} className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700 hover:bg-rose-100">
+                        Đăng xuất mọi thiết bị
+                      </button>
+                    </div>
+                    <p className="mt-2 text-xs text-slate-500">Batch48: đổi mật khẩu có rate-limit, CSRF và audit log; mặc định thu hồi phiên khác.</p>
+                  </div>
+                  <button onClick={handleLogout} className="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100">
+                    Đăng xuất
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <FilterButton active={authMode === 'login'} onClick={() => setAuthMode('login')}>Đăng nhập</FilterButton>
+                    <FilterButton active={authMode === 'register'} onClick={() => setAuthMode('register')}>Đăng ký</FilterButton>
+                  </div>
+                  <Input label="Tên hiển thị" value={loginName} onChange={setLoginName} />
+                  <Input label="Email" value={loginEmail} onChange={setLoginEmail} placeholder="Dùng để đăng nhập thật hơn" />
+                  <Input label="Mật khẩu" value={loginPassword} onChange={setLoginPassword} placeholder="Tối thiểu 8 ký tự" type="password" />
+                  <Input label="Tên trường" value={loginSchool} onChange={setLoginSchool} />
+                  <Input label="Tổ / bộ môn" value={loginDepartment} onChange={setLoginDepartment} />
+                  <Input label="Mã mời quyền cao nếu có" value={loginInviteCode} onChange={setLoginInviteCode} placeholder="Bỏ trống thì chỉ vào quyền giáo viên" />
+                  <Select label="Vai trò" value={loginRole} onChange={(value) => setLoginRole(value as 'teacher' | 'leader' | 'admin')} options={[
+                    { value: 'teacher', label: 'Giáo viên' },
+                    { value: 'leader', label: 'Tổ trưởng / chuyên môn' },
+                    { value: 'admin', label: 'Quản trị' }
+                  ]} />
+                  <button onClick={handleLogin} className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-95">
+                    {authMode === 'register' ? 'Đăng ký và vào workspace' : 'Đăng nhập'}
+                  </button>
+                  <p className="text-xs text-slate-500">Leader/admin phải được cấp membership hoặc mã mời hợp lệ; người dùng tự đăng ký chỉ nhận quyền giáo viên.</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            <TabButton active={activeTab === 'soan'} onClick={() => setActiveTab('soan')}>Soạn giáo án</TabButton>
+            {visibleTabs.has('chuong-trinh') ? <TabButton active={activeTab === 'chuong-trinh'} onClick={() => setActiveTab('chuong-trinh')}>Phân phối chương trình</TabButton> : null}
+            {visibleTabs.has('ngan-hang') ? <TabButton active={activeTab === 'ngan-hang'} onClick={() => setActiveTab('ngan-hang')}>Ngân hàng câu hỏi & rubric</TabButton> : null}
+            {visibleTabs.has('thu-vien') ? <TabButton active={activeTab === 'thu-vien'} onClick={() => setActiveTab('thu-vien')}>Thư viện dùng chung</TabButton> : null}
+            <TabButton active={activeTab === 'kho'} onClick={() => setActiveTab('kho')}>Kho nội bộ</TabButton>
+            <TabButton active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')}>Dashboard</TabButton>
+            {visibleTabs.has('van-hanh') ? <TabButton active={activeTab === 'van-hanh'} onClick={() => setActiveTab('van-hanh')}>Vận hành 1–12</TabButton> : null}
+            {visibleTabs.has('thiet-lap') ? <TabButton active={activeTab === 'thiet-lap'} onClick={() => setActiveTab('thiet-lap')}>Thiết lập trường</TabButton> : null}
+            {visibleTabs.has('quan-tri-noi-dung') ? <TabButton active={activeTab === 'quan-tri-noi-dung'} onClick={() => setActiveTab('quan-tri-noi-dung')}>Quản trị nội dung</TabButton> : null}
+          </div>
+
+          {message && <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">{message}</div>}
+        </section>
+
+        {activeTab === 'soan' && metadata && (
+          <div className="grid gap-6 xl:grid-cols-[1.05fr,1.55fr]">
+            <div className="space-y-6">
+              <Card title="1. Chọn thông tin bài dạy" desc="Luồng chính của giáo viên khi bắt đầu soạn.">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Select label="Cấp học" value={level} onChange={setLevel} options={metadata.summary.levels.map((item) => ({ value: item, label: item }))} />
+                  <Select label="Lớp" value={grade} onChange={setGrade} options={gradeOptions.map((item) => ({ value: item, label: item }))} />
+                  <Select label="Môn" value={subject} onChange={setSubject} options={subjects.map((item) => ({ value: item, label: item }))} />
+                  <Select label="Bộ sách" value={book} onChange={setBook} options={books.map((item) => ({ value: item, label: item }))} />
+                  <Select label="Bài / Chủ đề" value={topic} onChange={setTopic} options={topics.map((item) => ({ value: item, label: item }))} />
+                  <Select label="Mẫu giáo án" value={template} onChange={setTemplate} options={metadata.templates.map((item) => ({ value: item, label: item }))} />
+                </div>
+
+                {relatedTopics.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <div className="text-sm font-medium text-slate-700">Chủ đề liên quan</div>
+                    <div className="flex flex-wrap gap-2">
+                      {relatedTopics.map((item) => (
+                        <button key={item} onClick={() => openTopicInEditor(item)} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm hover:bg-slate-100">
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </Card>
+
+              <Card title="Hồ sơ sư phạm theo lớp/khối" desc="Không dùng một khung chung cho mọi lớp; lớp 1, lớp 5, THCS và THPT có cách tổ chức khác nhau.">
+                {pedagogyProfile ? (
+                  <div className="space-y-4 text-sm text-slate-700">
+                    <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">{pedagogyProfile.gradeRangeLabel}</div>
+                      <div className="mt-1 font-medium text-slate-900">{pedagogyProfile.headline}</div>
+                    </div>
+                    {subjectNamingWarning ? <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">{subjectNamingWarning}</div> : null}
+                    {gradeBlueprint ? (
+                      <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Khung giáo án riêng cho {gradeBlueprint.grade}</div>
+                        <div className="mt-1 font-medium text-slate-900">{gradeBlueprint.title}</div>
+                        <p className="mt-1 text-xs text-slate-600">{gradeBlueprint.shortPurpose}</p>
+                        <div className="mt-3 grid gap-3 md:grid-cols-2">
+                          <InfoList title="Cấu trúc cần ưu tiên" items={gradeBlueprint.lessonStructureFocus.slice(0, 3)} compact />
+                          <InfoList title="Yêu cầu cần đạt nên viết" items={gradeBlueprint.requiredOutcomeGuidance.slice(0, 3)} compact />
+                        </div>
+                      </div>
+                    ) : null}
+                    {technicalDrafting ? (
+                      <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Kĩ thuật soạn giáo án theo lớp</div>
+                        <div className="mt-1 font-medium text-slate-900">{technicalDrafting.title}</div>
+                        <p className="mt-1 text-xs text-slate-700">{technicalDrafting.principle}</p>
+                        <div className="mt-3 grid gap-3 md:grid-cols-2">
+                          <InfoList title="Quy tắc viết hoạt động" items={technicalDrafting.activityWritingRules.slice(0, 3)} compact />
+                          <InfoList title="Lỗi kĩ thuật cần tránh" items={technicalDrafting.commonTechnicalErrors.slice(0, 3)} compact />
+                        </div>
+                      </div>
+                    ) : null}
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <InfoList title="Đặc điểm người học" items={pedagogyProfile.learnerProfile.slice(0, 3)} compact />
+                      <InfoList title="Nguyên tắc soạn giáo án" items={pedagogyProfile.lessonDesignPrinciples.slice(0, 3)} compact />
+                    </div>
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <InfoList title="Sản phẩm/minh chứng nên có" items={pedagogyProfile.evidenceProducts.slice(0, 4)} compact />
+                      <InfoList title="Điều cần tránh" items={pedagogyProfile.discouragedPatterns.slice(0, 4)} compact />
+                    </div>
+                    <div className="grid gap-2 md:grid-cols-4">
+                      <MiniMetric label="Khởi động" value={pedagogyProfile.activityTiming.khoiDong.minutes} />
+                      <MiniMetric label="Hình thành" value={pedagogyProfile.activityTiming.hinhThanh.minutes} />
+                      <MiniMetric label="Luyện tập" value={pedagogyProfile.activityTiming.luyenTap.minutes} />
+                      <MiniMetric label="Vận dụng" value={pedagogyProfile.activityTiming.vanDung.minutes} />
+                    </div>
+                  </div>
+                ) : <EmptyState label="Chưa tải được hồ sơ sư phạm theo lớp." />}
+              </Card>
+
+              <Card title="2. Bối cảnh lớp học" desc="Giáo án không nên dùng một kiểu cho mọi lớp; chọn điều kiện thực tế để điều chỉnh hoạt động, đánh giá và phân hóa.">
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                  <Select label="Sĩ số" value={classSize} onChange={(value) => setClassSize(value as LessonClassSize)} options={[
+                    { value: 'small', label: 'Ít học sinh / nhóm nhỏ' },
+                    { value: 'standard', label: 'Sĩ số tiêu chuẩn' },
+                    { value: 'large', label: 'Lớp đông' }
+                  ]} />
+                  <Select label="Không gian lớp" value={classroomSpace} onChange={(value) => setClassroomSpace(value as LessonClassroomSpace)} options={[
+                    { value: 'regular_room', label: 'Phòng học thường' },
+                    { value: 'small_room', label: 'Phòng nhỏ / khó di chuyển' },
+                    { value: 'lab_room', label: 'Phòng bộ môn / thực hành' },
+                    { value: 'outdoor_or_flexible', label: 'Không gian mở / linh hoạt' },
+                    { value: 'online_or_hybrid', label: 'Trực tuyến / kết hợp' }
+                  ]} />
+                  <Select label="Thiết bị" value={deviceAvailability} onChange={(value) => setDeviceAvailability(value as LessonDeviceAvailability)} options={[
+                    { value: 'minimal', label: 'Ít thiết bị' },
+                    { value: 'basic', label: 'Cơ bản' },
+                    { value: 'projector', label: 'Có máy chiếu / màn hình chung' },
+                    { value: 'lab_or_1to1', label: 'Phòng lab hoặc thiết bị 1:1' }
+                  ]} />
+                  <Select label="Mức học sinh" value={learnerLevel} onChange={(value) => setLearnerLevel(value as LessonLearnerProfileLevel)} options={[
+                    { value: 'needs_support', label: 'Cần hỗ trợ nhiều' },
+                    { value: 'standard', label: 'Mức chuẩn' },
+                    { value: 'advanced', label: 'Khá/giỏi hoặc cần mở rộng' },
+                    { value: 'mixed', label: 'Phân hóa rõ' }
+                  ]} />
+                  <Select label="Thời lượng" value={durationProfile} onChange={(value) => setDurationProfile(value as LessonDurationProfile)} options={[
+                    { value: 'short', label: 'Ngắn / rút gọn' },
+                    { value: 'standard', label: 'Một tiết tiêu chuẩn' },
+                    { value: 'double_period', label: 'Hai tiết / bài dài' },
+                    { value: 'project_or_extended', label: 'Dự án / chuỗi hoạt động' }
+                  ]} />
+                </div>
+                <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600">
+                  Hệ thống chỉ điều chỉnh khung tổ chức hoạt động, phân hóa và đánh giá theo bối cảnh; không tự bịa kiến thức sâu, không tự thêm hướng dẫn Casio/học liệu nếu chưa có nguồn được duyệt.
+                </div>
+              </Card>
+
+              <Card title="3. Phương pháp và kĩ thuật dạy học" desc="Tách riêng rõ phương pháp, kĩ thuật và hình thức tổ chức.">
+                <div className="space-y-4">
+                  <div>
+                    <div className="mb-2 text-sm font-medium text-slate-700">Lọc theo hình thức tổ chức</div>
+                    <div className="flex flex-wrap gap-2">
+                      <FilterButton active={modeFilter === 'all'} onClick={() => setModeFilter('all')}>Tất cả</FilterButton>
+                      {activityModes.map((item) => (
+                        <FilterButton key={item} active={modeFilter === item} onClick={() => setModeFilter(item)}>
+                          {item}
+                        </FilterButton>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="mb-2 text-sm font-semibold text-slate-900">Phương pháp dạy học</div>
+                    <div className="space-y-2">
+                      {filteredMethods.map((item) => (
+                        <CheckCard key={item.id} checked={methods.includes(item.id)} onClick={() => toggleSelection(item.id, methods, setMethods)} title={item.name} desc={`${item.description} · ${item.modes.join(', ')}`} />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="mb-2 text-sm font-semibold text-slate-900">Kĩ thuật dạy học</div>
+                    <div className="space-y-2">
+                      {filteredTechniques.map((item) => (
+                        <CheckCard key={item.id} checked={techniques.includes(item.id)} onClick={() => toggleSelection(item.id, techniques, setTechniques)} title={item.name} desc={`${item.description} · ${item.modes.join(', ')}`} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {metadata.teachingPolicy && (
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                      <div className="font-semibold text-slate-900">Policy cho luồng sinh giáo án</div>
+                      <div className="mt-2">Tối thiểu sourceStatus: <span className="font-medium">{metadata.teachingPolicy.minSourceStatus}</span> · release tier: <span className="font-medium">{metadata.teachingPolicy.minReleaseTier}</span> · support level: <span className="font-medium">{labelCurriculumSupportLevel(metadata.teachingPolicy.minSupportLevel)}</span>.</div>
+                      <div className="mt-1">Scope mặc định hiện hành: <span className="font-medium">{metadata.defaultScope?.level} · {metadata.defaultScope?.grade} · {metadata.defaultScope?.subject}</span>.</div>
+                      {(user?.role === 'leader' || user?.role === 'admin') && metadata.teachingPolicy.allowPrivilegedPreviewBypass && (
+                        <label className="mt-3 flex items-center gap-2 text-sm">
+                          <input type="checkbox" checked={allowInternalPreview} onChange={(event: any) => setAllowInternalPreview(event.target.checked)} />
+                          <span>Bật internal preview bypass cho scope chưa đạt ngưỡng</span>
+                        </label>
+                      )}
+                    </div>
+                  )}
+
+                  <button onClick={handleGenerate} className="w-full rounded-xl bg-slate-900 px-4 py-3 text-white hover:opacity-95">
+                    Dựng giáo án đúng kĩ thuật + học liệu gợi ý
+                  </button>
+                </div>
+              </Card>
+
+              <Card title="Kho dữ liệu hiện tại" desc="Tóm tắt nguồn dữ liệu mà workspace đang dùng theo mặt bằng 1–12 hiện tại; lớp 6 vẫn là vùng có dữ liệu dày hơn nhưng không còn là mặc định hệ thống.">
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <MiniMetric label="Nguồn" value={labelContentMode(metadata?.contentOverview?.sourceMode)} />
+                  <MiniMetric label="Cấp học" value={metadata?.contentOverview?.levels?.length ?? 0} />
+                  <MiniMetric label="Chủ đề" value={metadata?.contentOverview?.topics ?? 0} />
+                  <MiniMetric label="Câu hỏi" value={metadata?.contentOverview?.questions ?? 0} />
+                  <MiniMetric label="Rubric" value={metadata?.contentOverview?.rubrics ?? 0} />
+                  <MiniMetric label="Học liệu" value={metadata?.contentOverview?.resources ?? 0} />
+                  <MiniMetric label="PPCT" value={metadata?.contentOverview?.programs ?? 0} />
+                  <MiniMetric label="Seed/demo" value={metadata?.contentOverview?.sourceStatusSummary?.seed ?? 0} />
+                  <MiniMetric label="Reviewed" value={metadata?.contentOverview?.sourceStatusSummary?.reviewed ?? 0} />
+                  <MiniMetric label="Verified" value={metadata?.contentOverview?.sourceStatusSummary?.verified ?? 0} />
+                  <MiniMetric label="Starter" value={supportSummary?.starter ?? 0} />
+                  <MiniMetric label="Developing" value={supportSummary?.developing ?? 0} />
+                  <MiniMetric label="Foundation" value={supportSummary?.foundation ?? 0} />
+                  <MiniMetric label="Operational" value={supportSummary?.operational ?? 0} />
+                </div>
+              </Card>
+
+              <Card title="Roadmap dữ liệu CTGDPT" desc="Không chỉ đếm pack; bản này đo luôn độ phủ theo lớp, môn và mức readiness để biết nên nạp tiếp ở đâu.">
+                <div className="grid gap-3 md:grid-cols-4">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="text-sm font-medium text-slate-700">Legacy core</div>
+                    <div className="mt-2 text-2xl font-bold text-slate-900">{rolloutSummary.legacyCore}</div>
+                    <div className="mt-1 text-sm text-slate-600">Các pack lõi cũ, hiện tập trung nhiều ở lớp 6 do lịch sử phát triển repo.</div>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="text-sm font-medium text-slate-700">Nền lớp 6</div>
+                    <div className="mt-2 text-2xl font-bold text-slate-900">{rolloutSummary.grade6Foundation}</div>
+                    <div className="mt-1 text-sm text-slate-600">Tầng pack mới để làm dày vùng dữ liệu hiện có; vẫn cần thay dần bằng dữ liệu chuẩn đã kiểm chứng.</div>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="text-sm font-medium text-slate-700">Mở rộng lớp 6</div>
+                    <div className="mt-2 text-2xl font-bold text-slate-900">{rolloutSummary.grade6Expanded}</div>
+                    <div className="mt-1 text-sm text-slate-600">Pack mở rộng ở vùng dữ liệu lớp 6; có giá trị lịch sử nhưng không nên bị hiểu là trung tâm sản phẩm.</div>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="text-sm font-medium text-slate-700">Starter 1–12</div>
+                    <div className="mt-2 text-2xl font-bold text-slate-900">{rolloutSummary.starter112}</div>
+                    <div className="mt-1 text-sm text-slate-600">Pack khởi động có cấu trúc để phủ mặt bằng toàn hệ 1–12, nhưng phần lớn vẫn mới ở mức seed/demo.</div>
+                  </div>
+                </div>
+                {selectedCoverage && (
+                  <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                    <div className="font-semibold text-slate-900">Trạng thái thật của scope đang chọn</div>
+                    <div className="mt-2">{selectedCoverage.level} · {selectedCoverage.grade} · {selectedCoverage.subject}</div>
+                    <div className="mt-1">Support: <span className="font-medium">{labelCurriculumSupportLevel(selectedCoverage.supportLevel)}</span> · source: <span className="font-medium">{labelSourceStatus(selectedCoverage.sourceStatus)}</span> · release: <span className="font-medium">{selectedCoverage.releaseTier}</span>.</div>
+                    <div className="mt-1">Chủ đề {selectedCoverage.topics} · PPCT {selectedCoverage.programUnits} · học liệu {selectedCoverage.resources} · câu hỏi {selectedCoverage.questions} · rubric {selectedCoverage.rubrics}.</div>
+                    {selectedCoverage.sourceNote ? <div className="mt-2 rounded-2xl border border-amber-200 bg-white px-3 py-2 text-amber-800">{selectedCoverage.sourceNote}</div> : null}
+                    {selectedCoverage.supportNotes?.length ? <ul className="mt-3 list-disc space-y-1 pl-5 text-slate-700">{selectedCoverage.supportNotes.map((note) => <li key={note}>{note}</li>)}</ul> : null}
+                  </div>
+                )}
+
+                {roadmapSummary && (
+                  <>
+                    <div className="mt-4 grid gap-3 md:grid-cols-4">
+                      <MiniMetric label="Roadmap yêu cầu" value={roadmapSummary.requiredSubjectsTotal} />
+                      <MiniMetric label="Phủ bề mặt" value={`${roadmapSummary.coveredSubjectsTotal}/${roadmapSummary.requiredSubjectsTotal}`} />
+                      <MiniMetric label="Truth readiness" value={`${roadmapSummary.truthReadinessPercent}%`} />
+                      <MiniMetric label="Seed / verified / operational" value={`${roadmapSummary.seedSubjectsTotal} / ${roadmapSummary.verifiedSubjectsTotal} / ${roadmapSummary.operationalSubjectsTotal}`} />
+                    </div>
+
+                    {selectedRoadmapGrade && (
+                      <div className="mt-4 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm">
+                        <div className="font-semibold text-slate-900">Roadmap của {selectedRoadmapGrade.grade}</div>
+                        <div className="mt-2 text-slate-700">
+                          Phủ bề mặt <span className="font-semibold">{selectedRoadmapGrade.coveredSubjects.length}/{selectedRoadmapGrade.requiredSubjects.length}</span> môn · truth readiness <span className="font-semibold">{selectedRoadmapGrade.truthReadinessPercent}%</span> · seed <span className="font-semibold">{selectedRoadmapGrade.seedSubjectCount}</span> · reviewed <span className="font-semibold">{selectedRoadmapGrade.reviewedSubjects.length}</span> · verified <span className="font-semibold">{selectedRoadmapGrade.verifiedSubjects.length}</span> · operational <span className="font-semibold">{selectedRoadmapGrade.operationalSubjectCount}</span>. Đây là số đo truth, không phải quảng cáo readiness.
+                        </div>
+                        <div className="mt-3 grid gap-3 md:grid-cols-2">
+                          <InfoList title="Môn đã có" items={selectedRoadmapGrade.coveredSubjects} compact />
+                          <InfoList title="Môn còn thiếu" items={selectedRoadmapGrade.missingSubjects.length ? selectedRoadmapGrade.missingSubjects : ['Đã phủ đủ theo roadmap khởi động']} compact />
+                          <InfoList title="Môn reviewed" items={selectedRoadmapGrade.reviewedSubjects.length ? selectedRoadmapGrade.reviewedSubjects : ['Chưa có môn reviewed']} compact />
+                          <InfoList title="Môn verified" items={selectedRoadmapGrade.verifiedSubjects.length ? selectedRoadmapGrade.verifiedSubjects : ['Chưa có môn verified']} compact />
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedCoverageTruthGrade && (
+                      <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm">
+                        <div className="font-semibold text-slate-900">Coverage truth của {selectedCoverageTruthGrade.grade}</div>
+                        <div className="mt-2 text-slate-700">
+                          Bề mặt <span className="font-semibold">{selectedCoverageTruthGrade.surfaceCoveragePercent}%</span> · truth readiness <span className="font-semibold">{selectedCoverageTruthGrade.truthReadinessPercent}%</span> · saved lesson share <span className="font-semibold">{selectedCoverageTruthGrade.savedLessonSharePercent}%</span>.
+                        </div>
+                        {selectedCoverageTruthGrade.warnings.length ? <ul className="mt-3 list-disc space-y-1 pl-5 text-amber-900">{selectedCoverageTruthGrade.warnings.slice(0, 3).map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}
+                      </div>
+                    )}
+
+                    {roadmapSummary.nextPriorities.length > 0 && (
+                      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                        <div className="text-sm font-semibold text-slate-900">Ưu tiên rollout tiếp theo</div>
+                        <div className="mt-3 grid gap-3 md:grid-cols-2">
+                          {roadmapSummary.nextPriorities.map((item) => (
+                            <div key={`${item.grade}-${item.subjects.join(',')}`} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
+                              <div className="font-medium text-slate-900">{item.grade} · {item.level}</div>
+                              <div className="mt-1 text-slate-600">{item.reason}</div>
+                              <div className="mt-2 text-blue-700">{item.subjects.length ? item.subjects.join(' · ') : 'Ưu tiên chuyển sang verified hoặc làm dày hơn dữ liệu.'}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+                <div className="mt-4 max-h-64 overflow-auto rounded-2xl border border-slate-200">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="bg-slate-50 text-slate-600">
+                      <tr>
+                        <th className="px-3 py-2 font-medium">Cấp</th>
+                        <th className="px-3 py-2 font-medium">Lớp</th>
+                        <th className="px-3 py-2 font-medium">Môn</th>
+                        <th className="px-3 py-2 font-medium">Giai đoạn</th>
+                        <th className="px-3 py-2 font-medium">Source</th>
+                        <th className="px-3 py-2 font-medium">Chủ đề</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(metadata.summary.packs || []).slice(0, 24).map((pack) => (
+                        <tr key={pack.id} className="border-t border-slate-200">
+                          <td className="px-3 py-2 text-slate-600">{pack.level}</td>
+                          <td className="px-3 py-2 text-slate-900">{pack.grade}</td>
+                          <td className="px-3 py-2 text-slate-900">{pack.subject}</td>
+                          <td className="px-3 py-2 text-slate-600">{pack.rolloutStage === 'legacy_core' ? 'legacy core' : pack.rolloutStage === 'grade6_extended' ? 'vùng dữ liệu lớp 6 mở rộng' : pack.rolloutStage === 'grade6_full_foundation' ? 'vùng dữ liệu lớp 6 foundation' : 'starter 1–12'}</td>
+                          <td className="px-3 py-2 text-slate-600">{labelSourceStatus(pack.sourceStatus)} · {labelCurriculumSupportLevel(pack.supportLevel)}</td>
+                          <td className="px-3 py-2 text-slate-900">{pack.topics}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+
+              <Card title="3. Mẫu giáo án đang chọn" desc="Không chỉ chọn tên mẫu, giờ có luôn cấu trúc để giáo viên bám vào khi viết.">
+                {selectedTemplateDetail ? (
+                  <div className="space-y-4 text-sm">
+                    <div>
+                      <div className="font-semibold text-slate-900">{selectedTemplateDetail.name}</div>
+                      <div className="mt-1 text-slate-600">{selectedTemplateDetail.description}</div>
+                    </div>
+                    <InfoList title="Tình huống nên dùng" items={selectedTemplateDetail.useCases} compact />
+                    <InfoList title="Trọng tâm đánh giá" items={selectedTemplateDetail.assessmentFocus} compact />
+                    <div className="space-y-3">
+                      {selectedTemplateDetail.sections.map((section, index) => (
+                        <div key={section.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                          <div className="font-medium text-slate-900">{index + 1}. {section.title}</div>
+                          <div className="mt-1 text-sm text-slate-600">{section.objective}</div>
+                          <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+                            {section.prompts.map((prompt) => <li key={prompt}>{prompt}</li>)}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : <EmptyState label="Chưa tải được chi tiết mẫu giáo án." />}
+              </Card>
+
+              <Card title="4. Chuẩn bài dạy tự đổ ra">
+                {topicData ? (
+                  <div className="space-y-4 text-sm text-slate-700">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge>{topicData.code}</Badge>
+                      {topicData.sourceMeta?.status && <Badge>{topicData.sourceMeta.status}</Badge>}
+                      {topicData.sourceMeta?.sourceLabel && <Badge>{topicData.sourceMeta.sourceLabel}</Badge>}
+                    </div>
+                    {topicData.sourceMeta?.note && <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">{topicData.sourceMeta.note}</div>}
+                    {selectedCoverage && (
+                      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+                        <MiniStat label="Chủ đề" value={String(selectedCoverage.topics)} />
+                        <MiniStat label="PPCT" value={String(selectedCoverage.programUnits)} />
+                        <MiniStat label="Học liệu" value={String(selectedCoverage.resources)} />
+                        <MiniStat label="Câu hỏi" value={String(selectedCoverage.questions)} />
+                        <MiniStat label="Rubric" value={String(selectedCoverage.rubrics)} />
+                      </div>
+                    )}
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <InfoList title="PP dạy học gợi ý" items={(topicData.recommendedMethodIds || []).map((id) => metadata?.teachingMethods.find((item) => item.id === id)?.name || id)} compact />
+                      <InfoList title="Kĩ thuật gợi ý" items={(topicData.recommendedTechniqueIds || []).map((id) => metadata?.teachingTechniques.find((item) => item.id === id)?.name || id)} compact />
+                      <InfoList title="Hình thức tổ chức" items={topicData.recommendedModes || []} compact />
+                    </div>
+                    <div>
+                      <button onClick={applyTopicRecommendations} className="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100">Áp dụng gợi ý</button>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <InfoList title="Yêu cầu cần đạt - kiến thức/kĩ năng" items={topicData.outcomes} />
+                      <InfoList title="Yêu cầu cần đạt - năng lực chung" items={topicData.coreCompetencies} />
+                      <InfoList title="Yêu cầu cần đạt - năng lực đặc thù" items={topicData.subjectCompetencies} />
+                      <InfoList title="Yêu cầu cần đạt - phẩm chất" items={topicData.qualities} />
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <InfoList title="Học liệu" items={topicData.materials} compact />
+                      <InfoList title="Thiết bị" items={topicData.devices} compact />
+                    </div>
+                  </div>
+                ) : <EmptyState label="Chưa tải được dữ liệu chủ đề." />}
+              </Card>
+            </div>
+
+            <div className="space-y-6">
+              <Card title="5. Trình soạn giáo án">
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <Badge>{currentLessonId ? `Đang sửa: v${currentLessonVersion}` : 'Giáo án mới'}</Badge>
+                  {currentLessonId && <Badge>ID: {currentLessonId.slice(0, 8)}...</Badge>}
+                  {bundle?.trace.releaseTier && <Badge>{bundle.trace.releaseTier}</Badge>}
+                  {bundle?.trace.supportLevel && <Badge>{labelCurriculumSupportLevel(bundle.trace.supportLevel)}</Badge>}
+                  <button onClick={createNewDraft} className="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100">Tạo giáo án mới</button>
+                  <button onClick={() => void handleSave('draft')} disabled={saving} className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-60">Lưu bản nháp</button>
+                  <button onClick={() => void handleSave('review')} disabled={saving} className="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100 disabled:opacity-60">{settings?.approvalRequired === false ? 'Lưu và duyệt' : 'Gửi duyệt'}</button>
+                  <button onClick={() => void runLessonQualityCheck()} disabled={checkingQuality} className="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100 disabled:opacity-60">{checkingQuality ? 'Đang kiểm tra...' : 'Checklist giáo án'}</button>
+                  <button onClick={() => void handleExport('docx')} className="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100">Xuất DOCX</button>
+                  <button onClick={() => void handleExport('pdf')} className="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100">Xuất PDF</button>
+                </div>
+                {user?.role === 'teacher' && settings?.approvalRequired !== false && <div className="mb-3 text-xs text-slate-500">Giáo viên có thể lưu và gửi duyệt; quyền review/approve thuộc tổ trưởng hoặc admin.</div>}
+                {generatePolicy ? <div className="mb-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-700">Sinh gần nhất: source <span className="font-medium">{labelSourceStatus(generatePolicy.actualSourceStatus)}</span> · release <span className="font-medium">{generatePolicy.actualReleaseTier}</span> · support <span className="font-medium">{labelCurriculumSupportLevel(generatePolicy.actualSupportLevel)}</span>{generatePolicy.bypassed ? ' · bypass đã bật' : ''}.</div> : null}
+                <LessonGovernancePanel snapshot={derivedCurrentGovernance} settings={settings} compact title="Truy vết / readiness của bản đang soạn" />
+                <LessonQualityPanel report={lessonQuality} />
+                <textarea value={editor} onChange={(event: any) => setEditor(event.target.value)} placeholder="Sau khi sinh giáo án, nội dung sẽ xuất hiện ở đây để bạn chỉnh sửa trực tiếp..." className="min-h-[540px] w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm leading-6 text-slate-800" />
+              </Card>
+
+              <div className="grid gap-6 xl:grid-cols-2">
+                <Card title="6. Học liệu sinh kèm">
+                  {bundle ? (
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-2">
+                        <Badge>{bundle.trace.sourceStatus}</Badge>
+                        {bundle.trace.releaseTier && <Badge>{bundle.trace.releaseTier}</Badge>}
+                        {bundle.trace.supportLevel && <Badge>{labelCurriculumSupportLevel(bundle.trace.supportLevel)}</Badge>}
+                        <Badge>{bundle.trace.lifecycleStatus}</Badge>
+                      </div>
+                      <InfoList title="Câu hỏi nhận biết" items={bundle.suggestedQuestions.nhanBiet} compact />
+                      <InfoList title="Câu hỏi thông hiểu" items={bundle.suggestedQuestions.thongHieu} compact />
+                      <InfoList title="Câu hỏi vận dụng" items={bundle.suggestedQuestions.vanDung} compact />
+                      <InfoList title="Rubric gợi ý" items={bundle.rubric} compact />
+                      <InfoList title="Phiếu học tập / nhiệm vụ" items={bundle.worksheet} compact />
+                      <InfoList title="Kiểm tra nhanh cuối tiết" items={bundle.quickCheck} compact />
+                    </div>
+                  ) : <EmptyState label="Sinh giáo án để xem học liệu gợi ý." />}
+                </Card>
+
+                <Card title="7. Thư viện học liệu cho chủ đề hiện tại">
+                  <div className="mb-3 flex gap-2">
+                    <input value={resourceSearch} onChange={(event: any) => setResourceSearch(event.target.value)} placeholder="Tìm trong học liệu dùng chung..." className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                    <button onClick={() => void loadResources(resourceSearch)} className="rounded-xl bg-slate-900 px-4 py-2 text-white">Tìm</button>
+                  </div>
+                  {resources.length === 0 ? (
+                    <EmptyState label="Chưa có học liệu dùng chung cho lựa chọn hiện tại." />
+                  ) : (
+                    <div className="space-y-3">
+                      {resources.map((item) => (
+                        <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                          <div className="flex flex-wrap gap-2">
+                            <Badge>{item.type}</Badge>
+                            <Badge>{item.audience}</Badge>
+                          </div>
+                          <div className="mt-2 font-medium text-slate-900">{item.title}</div>
+                          <div className="mt-1 text-sm text-slate-600">{item.description}</div>
+                          <div className="mt-2 text-xs text-blue-700">{item.subject} · {item.topic || 'Dùng chung'} · {item.tags.join(', ')}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </Card>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'chuong-trinh' && (
+          <div className="grid gap-6 xl:grid-cols-[1.25fr,0.9fr]">
+            <Card title="Phân phối chương trình" desc="Theo dõi tuần, tiết, mục tiêu, sản phẩm và đánh giá của cùng môn học.">
+              {program ? (
+                <div className="space-y-4">
+                  {program.units.map((unit) => (
+                    <div key={unit.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+                        <div className="font-semibold text-slate-900">{unit.title}</div>
+                        <div className="text-sm text-slate-600">{unit.week} · {unit.periods}</div>
+                      </div>
+                      <div className="mt-1 text-sm text-blue-700">{unit.topicTitle}</div>
+                      <div className="mt-3 text-sm text-slate-700">{unit.objective}</div>
+                      <div className="mt-3 grid gap-3 md:grid-cols-2">
+                        <InfoList title="Sản phẩm học tập" items={unit.products} compact />
+                        <InfoList title="Đánh giá" items={unit.assessment} compact />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : <EmptyState label="Chưa có phân phối chương trình cho lựa chọn hiện tại." />}
+            </Card>
+
+            <div className="space-y-6">
+              <Card title="Mẫu nên dùng cùng phân phối này">
+                <div className="space-y-3">
+                  {recommendedTemplates.length === 0 ? <EmptyState label="Chưa có gợi ý mẫu." /> : recommendedTemplates.map((item) => (
+                    <button key={item.id} onClick={() => { setTemplate(item.name); setActiveTab('soan'); }} className="block w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left hover:bg-slate-100">
+                      <div className="font-medium text-slate-900">{item.name}</div>
+                      <div className="mt-1 text-sm text-slate-600">{item.description}</div>
+                      <div className="mt-2 text-xs text-blue-700">{item.recommendedModes.join(' · ')}</div>
+                    </button>
+                  ))}
+                </div>
+              </Card>
+
+              <Card title="Gợi ý phối hợp trong tổ chuyên môn">
+                {settings ? (
+                  <div className="space-y-4 text-sm text-slate-700">
+                    <InfoList title="Thiết bị/học liệu dùng chung" items={settings.commonMaterials} compact />
+                    <InfoList title="Nguyên tắc góp ý giáo án" items={settings.reviewGuidelines} compact />
+                  </div>
+                ) : <EmptyState label="Chưa tải được thiết lập tổ chuyên môn." />}
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'ngan-hang' && (
+          <div className="grid gap-6 xl:grid-cols-[0.95fr,1.05fr]">
+            <Card title="Tìm trong dữ liệu chương trình" desc="Tìm theo bài/chủ đề/từ khóa trong chương trình, câu hỏi và rubric.">
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <input value={bankSearch} onChange={(event: any) => setBankSearch(event.target.value)} placeholder="Ví dụ: nhân vật, số nguyên, đo chiều dài..." className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                  <button onClick={() => void loadCurriculumSearch(bankSearch)} className="rounded-xl bg-slate-900 px-4 py-2 text-white">Tìm</button>
+                </div>
+                <div className="space-y-3">
+                  {curriculumHits.length === 0 ? (
+                    <EmptyState label="Chưa có kết quả tìm trong dữ liệu chương trình." />
+                  ) : (
+                    curriculumHits.map((item) => (
+                      <button key={item.id} onClick={() => openTopicInEditor(item.topic)} className="block w-full rounded-2xl border border-slate-200 bg-white p-3 text-left hover:bg-slate-50">
+                        <div className="text-xs uppercase tracking-wide text-slate-500">{labelSearchType(item.type)}</div>
+                        <div className="font-medium text-slate-900">{item.title}</div>
+                        <div className="mt-1 text-sm text-slate-600">{item.snippet}</div>
+                        <div className="mt-1 text-xs text-blue-700">{item.subject} · {item.topic}</div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            </Card>
+
+            <div className="space-y-6">
+              <Card title="Ngân hàng câu hỏi của chủ đề hiện tại">
+                <div className="grid gap-4 lg:grid-cols-3">
+                  <QuestionGroup title="Nhận biết" items={questionBank.filter((item) => item.level === 'nhận biết')} />
+                  <QuestionGroup title="Thông hiểu" items={questionBank.filter((item) => item.level === 'thông hiểu')} />
+                  <QuestionGroup title="Vận dụng" items={questionBank.filter((item) => item.level === 'vận dụng')} />
+                </div>
+              </Card>
+
+              <Card title="Ngân hàng rubric">
+                {rubricBank.length === 0 ? (
+                  <EmptyState label="Chưa có rubric cho lựa chọn hiện tại." />
+                ) : (
+                  <div className="space-y-4">
+                    {rubricBank.map((item) => (
+                      <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="font-semibold text-slate-900">{item.title}</div>
+                        <div className="mt-1 text-sm text-slate-600">{item.subject} · {item.topic}</div>
+                        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+                          {item.criteria.map((criterion) => <li key={criterion}>{criterion}</li>)}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'thu-vien' && (
+          <div className="grid gap-6 xl:grid-cols-[1.1fr,1fr]">
+            <Card title="Thư viện mẫu giáo án" desc="Kho mẫu dùng chung để giáo viên tái sử dụng và thống nhất cách viết trong tổ.">
+              <div className="space-y-4">
+                {templateLibrary.map((item) => (
+                  <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                      <div>
+                        <div className="font-semibold text-slate-900">{item.name}</div>
+                        <div className="mt-1 text-sm text-slate-600">{item.description}</div>
+                      </div>
+                      <button onClick={() => { setTemplate(item.name); setActiveTab('soan'); }} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-100">Dùng mẫu này</button>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {item.recommendedModes.map((mode) => <Badge key={mode}>{mode}</Badge>)}
+                    </div>
+                    <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+                      {item.useCases.map((caseItem) => <li key={caseItem}>{caseItem}</li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Card title="Thư viện học liệu dùng chung" desc="Các học liệu, phiếu, rubric và thiết bị có thể tái sử dụng giữa các giáo viên.">
+              <div className="mb-4 flex gap-2">
+                <input value={resourceSearch} onChange={(event: any) => setResourceSearch(event.target.value)} placeholder="Tìm theo từ khóa học liệu, thiết bị, rubric..." className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                <button onClick={() => void loadResources(resourceSearch)} className="rounded-xl bg-slate-900 px-4 py-2 text-white">Tìm</button>
+              </div>
+              <div className="space-y-3">
+                {resources.length === 0 ? (
+                  <EmptyState label="Không có học liệu phù hợp với bộ lọc hiện tại." />
+                ) : (
+                  resources.map((item) => (
+                    <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex flex-wrap gap-2">
+                        <Badge>{item.type}</Badge>
+                        <Badge>{item.audience}</Badge>
+                        <Badge>{item.grade}</Badge>
+                      </div>
+                      <div className="mt-2 font-medium text-slate-900">{item.title}</div>
+                      <div className="mt-1 text-sm text-slate-600">{item.description}</div>
+                      <div className="mt-2 text-xs text-blue-700">{item.subject} · {item.topic || 'Dùng chung'} · {item.tags.join(', ')}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </Card>
+
+            <Card title="Kho trò chơi / hoạt động thú vị" desc="Gợi ý hoạt động theo lớp, môn, bài, thời lượng, sĩ số, thiết bị và mức độ ồn. Seed chỉ là khung an toàn, chưa phải học liệu verified.">
+              <div className="mb-4 flex gap-2">
+                <input value={activityGameSearch} onChange={(event: any) => setActivityGameSearch(event.target.value)} placeholder="Tìm trò chơi, hoạt động, exit ticket..." className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                <button onClick={() => void loadActivityGames(activityGameSearch)} className="rounded-xl bg-slate-900 px-4 py-2 text-white">Tìm</button>
+              </div>
+              {activityGameSummary ? (
+                <div className="mb-4 grid gap-3 sm:grid-cols-5">
+                  <MiniMetric label="Hoạt động" value={activityGameSummary.total} />
+                  <MiniMetric label="Safe skeleton" value={activityGameSummary.safeSkeletonOnly} />
+                  <MiniMetric label="Public allowed" value={activityGameSummary.publicAllowed} />
+                  <MiniMetric label="Chờ duyệt" value={activityGameSummary.moderationQueue ?? 0} />
+                  <MiniMetric label="Đã giữ/gỡ" value={activityGameSummary.takenDown ?? 0} />
+                </div>
+              ) : null}
+              <div className="space-y-3">
+                {activityGames.length === 0 ? (
+                  <EmptyState label="Chưa có hoạt động/trò chơi phù hợp. Nếu dữ liệu chưa verified, hệ thống chỉ nên hiển thị khung an toàn." />
+                ) : (
+                  activityGames.map((item) => {
+                    const readiness = activityGameReadiness[item.id];
+                    return (
+                      <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex flex-wrap gap-2">
+                          <Badge>{item.kind}</Badge>
+                          <Badge>{item.grade}</Badge>
+                          <Badge>{item.timeMinutes} phút</Badge>
+                          <Badge>ồn: {item.noiseLevel}</Badge>
+                          <Badge>{readiness?.safeSkeletonOnly ? 'safe skeleton' : 'reviewed/public-ready'}</Badge>
+                        </div>
+                        <div className="mt-2 font-medium text-slate-900">{item.title}</div>
+                        <div className="mt-1 text-sm text-slate-600">{item.subject} · {item.topic || 'Dùng chung'} · {item.phase}</div>
+                        <InfoList title="Sản phẩm học sinh" items={item.studentProducts.slice(0, 3)} compact />
+                        {readiness?.issues?.length ? <div className="mt-2 text-xs text-amber-700">Cảnh báo: {readiness.issues.slice(0, 2).map((issue) => issue.message).join(' ')}</div> : null}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {activeTab === 'kho' && (
+          <div className="space-y-6">
+            <Card title="Kho nội bộ giáo án" desc="Lưu bản nháp, gửi duyệt, nhân bản, mở lại giáo án và review trực tiếp.">
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+                <input value={librarySearch} onChange={(event: any) => setLibrarySearch(event.target.value)} placeholder="Tìm theo tên bài, môn, nội dung..." className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                <Select label="" value={libraryStatus} onChange={(value) => setLibraryStatus(value as LessonStatus | 'all')} options={allStatusFilters} />
+                <input value={librarySubject} onChange={(event: any) => setLibrarySubject(event.target.value)} placeholder="Lọc theo môn" className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                <input value={libraryGrade} onChange={(event: any) => setLibraryGrade(event.target.value)} placeholder="Lọc theo lớp" className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                <div className="flex gap-2">
+                  <input value={libraryAuthor} onChange={(event: any) => setLibraryAuthor(event.target.value)} placeholder="Tác giả" className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+                  <button onClick={() => void loadLibrary()} className="rounded-xl bg-slate-900 px-4 py-2 text-white">Tìm</button>
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-4">
+                {library.length === 0 ? (
+                  <EmptyState label="Chưa có giáo án nào được lưu." />
+                ) : (
+                  library.map((item) => (
+                    <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                        <div className="space-y-2">
+                          <div>
+                            <div className="text-lg font-semibold text-slate-900">{item.title}</div>
+                            <div className="mt-1 text-sm text-slate-600">{item.grade} · {item.subject} · {item.book}</div>
+                            <div className="mt-1 text-sm text-slate-600">Tác giả: {item.authorName} · Vai trò: {labelRole(item.authorRole)} · Cập nhật: {formatDate(item.updatedAt)}</div>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <StatusBadge status={item.status} />
+                            <Badge>{(item.reviews?.length || 0)} nhận xét</Badge>
+                            <Badge>v{item.currentVersion || 1}</Badge>
+                            <Badge>{(item.versions?.length || 0)} phiên bản lưu</Badge>
+                          </div>
+                          <LessonGovernancePanel snapshot={item.governanceSnapshot} settings={settings} compact />
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                          <button onClick={() => applySavedLesson(item)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100">Mở lại</button>
+                          <button onClick={() => void cloneLesson(item)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100">Nhân bản</button>
+                          <button onClick={() => void updateStatus(item.id, 'review')} className="rounded-xl border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100">Gửi duyệt</button>
+                          {(user?.role === 'leader' || user?.role === 'admin') && <button onClick={() => void updateStatus(item.id, 'approved')} className="rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-emerald-800 hover:bg-emerald-100">Duyệt nhanh</button>}
+                          <button onClick={() => void removeLesson(item.id)} className="rounded-xl border border-rose-300 bg-rose-50 px-3 py-2 text-rose-700 hover:bg-rose-100">Xóa</button>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 grid gap-4 xl:grid-cols-[1fr,0.95fr]">
+                        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                          <div className="mb-2 font-medium text-slate-900">Tóm tắt nội dung</div>
+                          <p className="whitespace-pre-wrap text-sm text-slate-700">{item.content.slice(0, 700)}{item.content.length > 700 ? '...' : ''}</p>
+                        </div>
+
+                        <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+                          <div className="font-medium text-slate-900">Nhận xét / phản biện</div>
+                          <textarea value={reviewDrafts[item.id] || ''} onChange={(event: any) => setReviewDrafts((prev) => ({ ...prev, [item.id]: event.target.value }))} placeholder="Nhập góp ý cụ thể cho giáo án..." className="min-h-[120px] w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                          <div className="flex flex-wrap gap-2">
+                            <button onClick={() => void submitReview(item.id)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100">Gửi nhận xét</button>
+                            {(user?.role === 'leader' || user?.role === 'admin') && <button onClick={() => void submitReview(item.id, 'approved')} className="rounded-xl bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700">Nhận xét và duyệt</button>}
+                          </div>
+
+                          <div className="space-y-2">
+                            {(item.reviews || []).length === 0 ? (
+                              <div className="text-sm text-slate-500">Chưa có nhận xét nào.</div>
+                            ) : (
+                              (item.reviews || []).map((review) => (
+                                <div key={review.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                                  <div className="font-medium text-slate-900">{review.reviewerName} · {labelRole(review.reviewerRole)}</div>
+                                  <div className="mt-1 text-slate-700">{review.comment}</div>
+                                  <div className="mt-1 text-xs text-slate-500">{formatDate(review.createdAt)}</div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 grid gap-4 xl:grid-cols-2">
+                        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                          <div className="mb-3 font-medium text-slate-900">Lịch sử phiên bản</div>
+                          <div className="space-y-2">
+                            {(item.versions || []).length === 0 ? (
+                              <div className="text-sm text-slate-500">Chưa có phiên bản nào.</div>
+                            ) : (
+                              (item.versions || []).map((version) => (
+                                <div key={version.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                                  <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <div className="font-medium text-slate-900">v{version.versionNumber} · {formatDate(version.createdAt)}</div>
+                                    <div className="flex flex-wrap gap-2"><button onClick={() => void compareVersion(item.id, version.id)} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:bg-slate-100">{loadingDiffKey === `${item.id}:${version.id}:auto` ? 'Đang so sánh...' : 'So với bản mới hơn'}</button><button onClick={() => void restoreVersion(item.id, version.id)} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:bg-slate-100">Phục hồi</button></div>
+                                  </div>
+                                  <div className="mt-1 text-slate-600">{version.changedByName} · {labelRole(version.changedByRole)}</div>
+                                  {version.changeSummary && <div className="mt-1 text-slate-700">{version.changeSummary}</div>}
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                          <div className="mb-3 font-medium text-slate-900">So sánh phiên bản</div>
+                          {!versionDiffs[item.id] ? (
+                            <div className="text-sm text-slate-500">Chọn một phiên bản ở cột bên trái để xem phần khác biệt so với bản mới hơn.</div>
+                          ) : (
+                            <div className="space-y-3 text-sm">
+                              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                <div className="font-medium text-slate-900">{versionDiffs[item.id].baseLabel} → {versionDiffs[item.id].compareLabel}</div>
+                                <div className="mt-1 text-slate-600">{versionDiffs[item.id].summary.changedFields} trường thay đổi · {versionDiffs[item.id].summary.changedLines} dòng khác.</div>
+                              </div>
+                              <div className="space-y-2">
+                                {versionDiffs[item.id].fieldChanges.map((field) => (
+                                  <div key={field.field} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                    <div className="font-medium text-slate-900">{field.label}</div>
+                                    <div className="mt-1 text-rose-700">Trước: {field.before || '—'}</div>
+                                    <div className="mt-1 text-emerald-700">Sau: {field.after || '—'}</div>
+                                  </div>
+                                ))}
+                                {versionDiffs[item.id].fieldChanges.length === 0 && <div className="text-slate-500">Không có thay đổi metadata đáng kể.</div>}
+                              </div>
+                              <div className="space-y-2">
+                                {versionDiffs[item.id].contentChanges.slice(0, 20).map((change) => (
+                                  <div key={`${change.line}-${change.kind}`} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                    <div className="font-medium text-slate-900">Dòng {change.line} · {labelDiffKind(change.kind)}</div>
+                                    {change.before !== undefined && <div className="mt-1 whitespace-pre-wrap text-rose-700">- {change.before || ' '}</div>}
+                                    {change.after !== undefined && <div className="mt-1 whitespace-pre-wrap text-emerald-700">+ {change.after || ' '}</div>}
+                                  </div>
+                                ))}
+                                {versionDiffs[item.id].contentChanges.length > 20 && <div className="text-xs text-slate-500">Chỉ hiển thị 20 thay đổi dòng đầu tiên trong UI.</div>}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                          <div className="mb-3 font-medium text-slate-900">Nhật ký workflow</div>
+                          <div className="space-y-2">
+                            {(item.history || []).length === 0 ? (
+                              <div className="text-sm text-slate-500">Chưa có hoạt động nào.</div>
+                            ) : (
+                              (item.history || []).map((event) => (
+                                <div key={event.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                                  <div className="font-medium text-slate-900">{labelWorkflowAction(event.action)} · {formatDate(event.createdAt)}</div>
+                                  <div className="mt-1 text-slate-600">{event.actorName} · {labelRole(event.actorRole)}</div>
+                                  {event.note && <div className="mt-1 text-slate-700">{event.note}</div>}
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {activeTab === 'dashboard' && (
+          <div className="space-y-6">
+            <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+              <StatCard title="Tổng giáo án" value={dashboard?.total ?? 0} />
+              <StatCard title="Nguồn nội dung" value={labelContentModeShort(metadata?.contentOverview?.sourceMode)} />
+              <StatCard title="Bản nháp" value={dashboard?.drafts ?? 0} />
+              <StatCard title="Chờ duyệt" value={dashboard?.inReview ?? 0} />
+              <StatCard title="Đã duyệt" value={dashboard?.approved ?? 0} />
+              <StatCard title="Tổng nhận xét" value={dashboard?.totalReviews ?? 0} />
+              <StatCard title="Tổng phiên bản" value={dashboard?.totalVersions ?? 0} />
+            </div>
+
+            <div className="grid gap-6 xl:grid-cols-[1fr,1fr,1.1fr]">
+              <Card title="Theo môn"><BarList items={dashboard?.bySubject || []} /></Card>
+              <Card title="Theo trạng thái"><BarList items={dashboard?.byStatus || []} /></Card>
+              <Card title="Hàng chờ duyệt">
+                {dashboard?.reviewQueue?.length ? (
+                  <div className="space-y-3">
+                    {dashboard.reviewQueue.map((item) => (
+                      <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                        <div className="font-medium text-slate-900">{item.title}</div>
+                        <div className="mt-1 text-sm text-slate-600">{item.authorName} · {formatDate(item.updatedAt)}</div>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <button onClick={() => applySavedLesson(item)} className="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-sm hover:bg-slate-100">Mở lại</button>
+                          {(user?.role === 'leader' || user?.role === 'admin') && <button onClick={() => void updateStatus(item.id, 'approved')} className="rounded-xl bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700">Duyệt</button>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : <EmptyState label="Không có giáo án nào đang chờ duyệt." />}
+              </Card>
+            </div>
+
+            <div className="grid gap-6 xl:grid-cols-[1fr,1fr,1.1fr]">
+              <Card title="Theo lớp"><BarList items={dashboard?.byGrade || []} /></Card>
+              <Card title="Theo tác giả"><BarList items={dashboard?.byAuthor || []} /></Card>
+              <Card title="Cập nhật gần đây">
+                {dashboard?.recent?.length ? (
+                  <div className="space-y-3">
+                    {dashboard.recent.map((item) => (
+                      <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                        <div className="font-medium text-slate-900">{item.title}</div>
+                        <div className="mt-1 text-sm text-slate-600">{item.subject} · {item.authorName}</div>
+                        <div className="mt-1 text-xs text-slate-500">{formatDate(item.updatedAt)}</div>
+                      </div>
+                    ))}
+                  </div>
+                ) : <EmptyState label="Chưa có dữ liệu dashboard." />}
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'van-hanh' && (
+          <div className="space-y-6">
+            <Card title="Batch36 — No-AI 1–12 Product Operating Foundation" desc="Bảng vận hành không-AI: định vị sản phẩm, gói/quota, coverage thật 1–12, ledger điểm/lượt dùng và queue cộng đồng. Đây là foundation/config, chưa phải billing hay marketplace thật.">
+              {operatingBoard ? (
+                <div className="space-y-5">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="font-medium text-slate-900">Định vị hiện tại</div>
+                    <div className="mt-2 text-sm text-slate-700">{operatingBoard.positioning.headline}</div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <Badge>AI lesson generation: {operatingBoard.featureFlags.aiLessonGeneration ? 'bật' : 'tắt'}</Badge>
+                      <Badge>Paid AI API: {operatingBoard.featureFlags.paidAiApi ? 'bật' : 'tắt'}</Badge>
+                      <Badge>Thanh toán thật: {operatingBoard.featureFlags.cashPayment ? 'bật' : 'tắt'}</Badge>
+                      <Badge>Marketplace tiền mặt: {operatingBoard.featureFlags.cashMarketplace ? 'bật' : 'tắt'}</Badge>
+                      <Badge>Referral nhiều tầng: {operatingBoard.featureFlags.multiLevelReferral ? 'bật' : 'tắt'}</Badge>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <div className="font-medium text-indigo-950">Batch67 — Demo readiness</div>
+                        <div className="mt-1 text-sm text-indigo-900">Health/readiness cho bản demo deployable: không claim runtime-ready nếu thiếu install/typecheck/build/live smoke.</div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge>demo: {demoReadiness?.demoModeEnabled ? 'bật' : 'tắt/unknown'}</Badge>
+                        <Badge>status: {demoReadiness?.status || 'unknown'}</Badge>
+                        <Badge>{demoReadiness?.readinessPercent ?? 0}% readiness</Badge>
+                      </div>
+                    </div>
+                    {demoReadiness ? (
+                      <div className="mt-4 space-y-3">
+                        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+                          <MiniMetric label="Blockers" value={demoReadiness.blockers.length} />
+                          <MiniMetric label="Warnings" value={demoReadiness.warnings.length} />
+                          <MiniMetric label="Flow routes" value={demoReadiness.smokeFlow.filter((step) => step.sourcePresent).length + '/' + demoReadiness.smokeFlow.length} />
+                          <MiniMetric label="Data mode" value={demoReadiness.dataMode} />
+                          <MiniMetric label="Target" value={demoReadiness.deploymentTarget} />
+                        </div>
+                        {demoReadiness.blockers.length ? (
+                          <div className="rounded-xl border border-amber-200 bg-white p-3 text-xs text-amber-800">
+                            <div className="font-medium">Blocker demo/runtime còn lại</div>
+                            <ul className="mt-2 list-disc space-y-1 pl-5">
+                              {demoReadiness.blockers.slice(0, 4).map((item) => <li key={item.code}>{item.label}: {item.detail}</li>)}
+                            </ul>
+                          </div>
+                        ) : <div className="rounded-xl border border-emerald-200 bg-white p-3 text-xs text-emerald-800">Không có blocker source-level trong demo readiness. Vẫn phải chạy typecheck/build/live smoke thật trước khi public test rộng.</div>}
+                      </div>
+                    ) : <EmptyState label="Chưa tải được demo readiness board." />}
+                  </div>
+
+                  {operatingEntitlement ? (
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                      <div className="font-medium text-emerald-950">Runtime quota hiện tại</div>
+                      <div className="mt-1 text-sm text-emerald-900">User: {operatingEntitlement.userName} · Plan: {operatingEntitlement.plan.name} · {operatingEntitlement.assignmentSource === 'assignment' ? 'có assignment' : 'fallback Free'}</div>
+                      <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                        <MiniMetric label="Saved lessons" value={`${operatingEntitlement.savedLessons.used}/${operatingEntitlement.savedLessons.limit}`} />
+                        {operatingEntitlement.usage.slice(0, 3).map((metric) => (
+                          <MiniMetric key={metric.action} label={metric.action} value={metric.limit === null ? metric.used : `${metric.used}/${metric.limit}`} />
+                        ))}
+                      </div>
+                      <div className="mt-3 text-xs text-emerald-800">{operatingEntitlement.watermarkRequired ? 'Plan hiện tại yêu cầu watermark khi export.' : 'Plan hiện tại không tự yêu cầu watermark, nhưng export guard/compliance vẫn có thể bắt watermark.'}</div>
+                    </div>
+                  ) : null}
+
+                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <MiniStat label="Subject slots 1–12" value={String(operatingBoard.coverageAudit.totalRequiredSubjectSlots)} />
+                    <MiniStat label="Phủ bề mặt" value={operatingBoard.coverageAudit.surfaceCoveragePercent + '%'} />
+                    <MiniStat label="Truth readiness" value={operatingBoard.coverageAudit.truthReadinessPercent + '%'} />
+                    <MiniStat label="Verified scopes" value={String(operatingBoard.coverageAudit.verifiedScopes)} />
+                    <MiniStat label="Operational scopes" value={String(operatingBoard.coverageAudit.operationalScopes)} />
+                    <MiniStat label="Saved lessons" value={String(operatingBoard.lessonBiasAudit.totalSavedLessons)} />
+                    <MiniStat label="Lớp 6 share" value={operatingBoard.lessonBiasAudit.grade6SharePercent + '%'} />
+                    <MiniStat label="Community public" value={String(operatingBoard.communityModeration.public)} />
+                    <MiniStat label="Activity games" value={String(operatingBoard.activityGameLibrary?.total || 0)} />
+                    <MiniStat label="Creator profiles" value={String(operatingBoard.communityHub?.creatorProfiles || communityHub?.summary.creatorProfiles || 0)} />
+                    <MiniStat label="Forum queue" value={String(operatingBoard.forumThreadSafety?.moderationQueue || 0)} />
+                  </div>
+
+                  {operatingBoard.coverageAudit.truthWarnings.length || operatingBoard.coverageAudit.priorityActions.length ? (
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm">
+                      <div className="font-semibold text-amber-950">Coverage truth & bias guard</div>
+                      <div className="mt-2 text-amber-900">Bảng này phân biệt coverage bề mặt với readiness thật. Không tự nâng seed/scaffold thành reviewed/verified.</div>
+                      {operatingBoard.coverageAudit.truthWarnings.length ? <ul className="mt-3 list-disc space-y-1 pl-5 text-amber-900">{operatingBoard.coverageAudit.truthWarnings.slice(0, 4).map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}
+                      {operatingBoard.coverageAudit.priorityActions.length ? (
+                        <div className="mt-3 grid gap-2 md:grid-cols-2">
+                          {operatingBoard.coverageAudit.priorityActions.slice(0, 4).map((item) => (
+                            <div key={`${item.priority}-${item.grade}-${item.action}`} className="rounded-xl border border-amber-200 bg-white p-3">
+                              <div className="font-medium text-slate-900">{item.priority.toUpperCase()} · {item.grade}</div>
+                              <div className="mt-1 text-slate-700">{item.action}</div>
+                              <div className="mt-1 text-xs text-slate-500">{item.reason}</div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  <div className="grid gap-6 xl:grid-cols-[1.1fr,0.9fr]">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                      <div className="mb-3 font-medium text-slate-900">Coverage audit theo lớp</div>
+                      <div className="space-y-3">
+                        {operatingBoard.coverageAudit.gradeAudits.map((item) => (
+                          <div key={item.grade} className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-medium text-slate-900">{item.grade} · {item.level}</span>
+                              <Badge>bề mặt {item.surfaceCoveragePercent}%</Badge>
+                              <Badge>truth {item.truthReadinessPercent}%</Badge>
+                              <Badge>{item.coveredSubjects.length}/{item.requiredSubjects.length} môn</Badge>
+                              <Badge>seed {item.seedScopes}</Badge>
+                              <Badge>verified {item.verifiedScopes}</Badge>
+                              <Badge>operational {item.operationalScopes}</Badge>
+                              {item.savedLessons ? <Badge>saved lessons {item.savedLessons}</Badge> : null}
+                            </div>
+                            {item.missingSubjects.length ? <div className="mt-2 text-xs text-amber-700">Thiếu: {item.missingSubjects.join(', ')}</div> : null}
+                            {item.warnings.length ? <div className="mt-2 text-xs text-slate-600">Cảnh báo: {item.warnings.slice(0, 2).join(' ')}</div> : null}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                        <div className="mb-3 font-medium text-slate-900">Plan/quota foundation</div>
+                        <div className="space-y-3">
+                          {operatingBoard.plans.map((plan) => (
+                            <div key={plan.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                              <div className="font-medium text-slate-900">{plan.name}</div>
+                              <div className="mt-1 text-slate-600">{plan.audience}</div>
+                              <div className="mt-1 text-xs text-slate-500">{plan.priceNote}</div>
+                              <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                                <Badge>DOCX {plan.limits.exportDocxPerMonth}/tháng</Badge>
+                                <Badge>PDF {plan.limits.exportPdfPerMonth}/tháng</Badge>
+                                <Badge>{plan.limits.pdfWatermark ? 'watermark' : 'no watermark'}</Badge>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                        <div className="mb-3 font-medium text-slate-900">Ledger / cộng đồng</div>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <MiniMetric label="Usage records" value={operatingBoard.ledgerSummary.usageRecords} />
+                          <MiniMetric label="Point records" value={operatingBoard.ledgerSummary.pointRecords} />
+                          <MiniMetric label="Points earned" value={operatingBoard.ledgerSummary.pointsEarned} />
+                          <MiniMetric label="Queue kiểm duyệt" value={operatingBoard.communityModeration.moderationQueue} />
+                          <MiniMetric label="Activity/Game safe skeleton" value={operatingBoard.activityGameLibrary?.safeSkeletonOnly || 0} />
+                          <MiniMetric label="Activity/Game public" value={operatingBoard.activityGameLibrary?.publicAllowed || 0} />
+                          <MiniMetric label="Forum queue" value={operatingBoard.forumThreadSafety?.moderationQueue || 0} />
+                          <MiniMetric label="Forum reports" value={operatingBoard.forumThreadSafety?.openReports || 0} />
+                        </div>
+                        <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">Point policy không có cash equivalent. Community resource public và Activity/Game Library public phải qua moderation, source/license và review; seed chỉ là safe skeleton.</div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <div className="font-medium text-slate-900">Forum/Q&A Thread Safety</div>
+                        <div className="mt-1 text-sm text-slate-600">Nền tảng hỏi đáp/thảo luận có auto-hold cho thành viên mới, report/takedown và review helpful answer — không public tự do, không AI auto-answer.</div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge>new member hold</Badge>
+                        <Badge>report auto-hold</Badge>
+                        <Badge>no AI answer</Badge>
+                      </div>
+                    </div>
+                    {operatingBoard.forumThreadSafety ? (
+                      <div className="space-y-3">
+                        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
+                          <MiniMetric label="Threads" value={operatingBoard.forumThreadSafety.totalThreads} />
+                          <MiniMetric label="Public" value={operatingBoard.forumThreadSafety.publicThreads} />
+                          <MiniMetric label="Limited" value={operatingBoard.forumThreadSafety.limitedThreads} />
+                          <MiniMetric label="Queue" value={operatingBoard.forumThreadSafety.moderationQueue} />
+                          <MiniMetric label="Reports" value={operatingBoard.forumThreadSafety.openReports} />
+                          <MiniMetric label="Helpful answers" value={operatingBoard.forumThreadSafety.approvedHelpfulAnswers} />
+                        </div>
+                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">Forum/Q&A hiện là JSON/source-level foundation. Seed/demo thread không được quảng cáo là cộng đồng thật; thread bị report phải giữ khỏi public cho tới khi triage.</div>
+                      </div>
+                    ) : <EmptyState label="Chưa có forum thread safety summary." />}
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <div className="font-medium text-slate-900">Community/Creator Hub</div>
+                        <div className="mt-1 text-sm text-slate-600">Xếp hạng theo chất lượng, trust level, nguồn/license và đóng góp được duyệt — không xếp theo spam số lượng, không thưởng tiền mặt.</div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge>cash reward: tắt</Badge>
+                        <Badge>marketplace tiền mặt: tắt</Badge>
+                        <Badge>quality leaderboard</Badge>
+                      </div>
+                    </div>
+                    {communityHub ? (
+                      <div className="space-y-4">
+                        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+                          <MiniMetric label="Creator profiles" value={communityHub.summary.creatorProfiles} />
+                          <MiniMetric label="Public profiles" value={communityHub.summary.publicCreatorProfiles} />
+                          <MiniMetric label="Trusted creators" value={communityHub.summary.trustedCreators} />
+                          <MiniMetric label="Queue" value={communityHub.summary.moderationQueue} />
+                          <MiniMetric label="Taken down/rejected" value={communityHub.summary.takenDownOrRejected} />
+                        </div>
+                        {communityHub.leaderboard.length ? (
+                          <div className="grid gap-3 md:grid-cols-2">
+                            {communityHub.leaderboard.slice(0, 4).map((creator) => (
+                              <div key={creator.userId} className="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span className="font-medium text-slate-900">{creator.displayName}</span>
+                                  <Badge>{creator.trustLevel}</Badge>
+                                  <Badge>score {creator.qualityScore}</Badge>
+                                </div>
+                                <div className="mt-1 text-slate-600">{creator.headline}</div>
+                                <div className="mt-2 text-xs text-slate-500">{creator.rankReasons.join(' · ')}</div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : <EmptyState label="Public leaderboard đang trống vì chưa có creator đủ điều kiện public. Đây là đúng an toàn khi dữ liệu còn seed/demo." />}
+                        {communityHub.warnings.length ? <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">{communityHub.warnings.slice(0, 3).join(' ')}</div> : null}
+                      </div>
+                    ) : <EmptyState label="Chưa tải được Community/Creator Hub." />}
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                    <div className="mb-3 font-medium text-slate-900">Validation issues</div>
+                    {operatingBoard.issues.length === 0 ? <EmptyState label="Chưa phát hiện blocker/warning ở operating foundation." /> : (
+                      <div className="space-y-2">
+                        {operatingBoard.issues.map((issue) => (
+                          <div key={issue.code} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                            <span className="font-medium text-slate-900">{issue.severity.toUpperCase()} · {issue.code}</span>
+                            <div className="mt-1 text-slate-700">{issue.message}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : <EmptyState label="Chưa tải được operating foundation board." />}
+            </Card>
+          </div>
+        )}
+
+        {activeTab === 'thiet-lap' && (
+          <div className="grid gap-6 xl:grid-cols-[1.1fr,0.9fr]">
+            <Card title="Thiết lập nhà trường / tổ chuyên môn" desc="Tạo chuẩn dùng chung để thống nhất khi soạn, gửi duyệt và góp ý giáo án.">
+              {settingsDraft ? (
+                <div className="space-y-4">
+                  <Input label="Tên trường" value={settingsDraft.schoolName} onChange={(value) => updateSettingsField('schoolName', value)} />
+                  <Input label="Tên tổ / bộ môn" value={settingsDraft.departmentName} onChange={(value) => updateSettingsField('departmentName', value)} />
+                  <Input label="Thời lượng mặc định" value={settingsDraft.defaultLessonDuration} onChange={(value) => updateSettingsField('defaultLessonDuration', value)} />
+                  <Select label="Cấp học mặc định khi mở workspace" value={settingsDraft.preferredLevel || ''} onChange={(value) => updateSettingsField('preferredLevel', value)} options={settingsLevelOptions} />
+                  <Select label="Lớp mặc định khi mở workspace" value={settingsDraft.preferredGrade || ''} onChange={(value) => updateSettingsField('preferredGrade', value)} options={settingsGradeOptions} />
+                  <Select label="Môn mặc định khi mở workspace" value={settingsDraft.preferredSubject || ''} onChange={(value) => updateSettingsField('preferredSubject', value)} options={settingsSubjectOptions} />
+                  <Select label="Bộ sách mặc định khi mở workspace" value={settingsDraft.preferredBook || ''} onChange={(value) => updateSettingsField('preferredBook', value)} options={settingsBookOptions} />
+                  <ToggleRow label="Bắt buộc gửi duyệt trước khi được duyệt chính thức" checked={settingsDraft.approvalRequired} onChange={(value) => updateSettingsField('approvalRequired', value)} />
+                  <ToggleRow label="Leader chỉ review/approve trong cùng tổ" checked={settingsDraft.reviewDepartmentOnly} onChange={(value) => updateSettingsField('reviewDepartmentOnly', value)} />
+                  <Select label="Phạm vi mặc định cho kho nội dung nội bộ" value={settingsDraft.defaultContentScope} onChange={(value) => updateSettingsField('defaultContentScope', value as any)} options={[{ value: 'department', label: 'Theo tổ / bộ môn' }, { value: 'school', label: 'Toàn trường' }, { value: 'system', label: 'Hệ thống dùng chung' }]} />
+                  <Select label="Ngưỡng sourceStatus tối thiểu cho luồng sinh giáo án" value={settingsDraft.teachingMinSourceStatus} onChange={(value) => updateSettingsField('teachingMinSourceStatus', value as any)} options={[{ value: 'seed', label: 'Cho phép seed/demo (phù hợp demo nội bộ)' }, { value: 'reviewed', label: 'Tối thiểu reviewed' }, { value: 'verified', label: 'Tối thiểu verified' }]} />
+                  <Select label="Ngưỡng release tier tối thiểu cho luồng sinh giáo án" value={settingsDraft.teachingMinReleaseTier} onChange={(value) => updateSettingsField('teachingMinReleaseTier', value as any)} options={[{ value: 'internal_preview', label: 'internal preview' }, { value: 'school_release_candidate', label: 'school release candidate' }, { value: 'verified_release', label: 'verified release' }]} />
+                  <Select label="Ngưỡng support level tối thiểu cho luồng sinh giáo án" value={settingsDraft.teachingMinSupportLevel} onChange={(value) => updateSettingsField('teachingMinSupportLevel', value as any)} options={[{ value: 'starter', label: 'starter' }, { value: 'developing', label: 'developing' }, { value: 'foundation', label: 'foundation' }, { value: 'operational', label: 'operational' }]} />
+                  <ToggleRow label="Cho leader/admin bật internal preview bypass khi scope chưa đạt ngưỡng" checked={settingsDraft.allowPrivilegedPreviewBypass} onChange={(value) => updateSettingsField('allowPrivilegedPreviewBypass', value)} />
+                  <TextareaField label="Ghi chú dùng chung" value={settingsDraft.sharedNotes} onChange={(value) => updateSettingsField('sharedNotes', value)} />
+                  <TextareaField label="Thiết bị / học liệu dùng chung (mỗi dòng một mục)" value={settingsDraft.commonMaterials.join('\n')} onChange={(value) => updateSettingsField('commonMaterials', splitLines(value))} />
+                  <TextareaField label="Nguyên tắc góp ý / phản biện (mỗi dòng một mục)" value={settingsDraft.reviewGuidelines.join('\n')} onChange={(value) => updateSettingsField('reviewGuidelines', splitLines(value))} />
+                  <TextareaField label="Mẫu giáo án ưu tiên (mỗi dòng một mẫu)" value={settingsDraft.preferredTemplates.join('\n')} onChange={(value) => updateSettingsField('preferredTemplates', splitLines(value))} />
+                  <button disabled={!(user?.role === 'leader' || user?.role === 'admin')} onClick={() => void saveSettings()} className="rounded-xl bg-slate-900 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50">
+                    Lưu thiết lập
+                  </button>
+                </div>
+              ) : <EmptyState label="Chưa tải được thiết lập." />}
+            </Card>
+
+            <div className="space-y-6">
+              <Card title="Thiết lập hiện hành">
+                {settings ? (
+                  <div className="space-y-4 text-sm text-slate-700">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="font-medium text-slate-900">{settings.schoolName}</div>
+                      <div className="mt-1 text-slate-600">{settings.departmentName}</div>
+                      <div className="mt-2 text-slate-600">Thời lượng mặc định: {settings.defaultLessonDuration}</div>
+                      <div className="mt-1 text-slate-600">Quy trình duyệt: {settings.approvalRequired ? 'Bắt buộc gửi duyệt' : 'Cho phép lưu và duyệt ngay'}</div>
+                      <div className="mt-1 text-slate-600">Phạm vi review của leader: {settings.reviewDepartmentOnly ? 'Cùng tổ' : 'Toàn trường'}</div>
+                      <div className="mt-1 text-slate-600">Scope mặc định kho nội dung: {settings.defaultContentScope}</div>
+                      <div className="mt-1 text-slate-600">Mở workspace mặc định: {settings.preferredLevel} · {settings.preferredGrade} · {settings.preferredSubject} · {settings.preferredBook}</div>
+                      <div className="mt-1 text-slate-600">Ngưỡng sinh giáo án: {settings.teachingMinSourceStatus} · {settings.teachingMinReleaseTier} · {labelCurriculumSupportLevel(settings.teachingMinSupportLevel)}</div>
+                      <div className="mt-1 text-slate-600">Preview bypass cho leader/admin: {settings.allowPrivilegedPreviewBypass ? 'Cho phép' : 'Tắt'}</div>
+                    </div>
+                    <InfoList title="Mẫu ưu tiên" items={settings.preferredTemplates} compact />
+                    <InfoList title="Thiết bị / học liệu dùng chung" items={settings.commonMaterials} compact />
+                    <InfoList title="Nguyên tắc góp ý" items={settings.reviewGuidelines} compact />
+                  </div>
+                ) : <EmptyState label="Chưa có thiết lập hiện hành." />}
+              </Card>
+
+              <Card title="Kho nội dung dùng cho workspace" desc="Đồng bộ seed có cấu trúc vào JSON store hoặc database để chuẩn bị cho giai đoạn nhập liệu chuẩn thật.">
+                <div className="space-y-4 text-sm text-slate-700">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="font-medium text-slate-900">Nguồn hiện hành: {labelContentMode(metadata?.contentOverview?.sourceMode)}</div>
+                    <div className="mt-1 text-slate-600">Chủ đề {metadata?.contentOverview?.topics ?? 0} · Câu hỏi {metadata?.contentOverview?.questions ?? 0} · Rubric {metadata?.contentOverview?.rubrics ?? 0}</div>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <button disabled={!(user?.role === 'leader' || user?.role === 'admin') || syncingContent} onClick={() => void syncContent('auto')} className="rounded-xl bg-slate-900 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50">Đồng bộ vào nguồn hiện hành</button>
+                    <button disabled={!(user?.role === 'leader' || user?.role === 'admin') || syncingContent} onClick={() => void syncContent('json')} className="rounded-xl border border-slate-300 bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50">Đồng bộ JSON store</button>
+                    <button disabled={!(user?.role === 'admin') || syncingContent} onClick={() => void syncContent('database')} className="rounded-xl border border-slate-300 bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50">Đồng bộ database</button>
+                  </div>
+                  {contentSyncMessage ? <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">{contentSyncMessage}</div> : null}
+                </div>
+              </Card>
+
+              <Card title="Quyền cập nhật">
+                <div className="space-y-2 text-sm text-slate-700">
+                  <div>Giáo viên: xem thiết lập và dùng để soạn giáo án.</div>
+                  <div>Tổ trưởng / chuyên môn: cập nhật thiết lập, góp ý, duyệt giáo án, đồng bộ JSON store.</div>
+                  <div>Quản trị: toàn quyền cập nhật, điều phối hệ thống và đồng bộ database.</div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'quan-tri-noi-dung' && (
+          <ContentAdminPanel
+            user={user}
+            level={level}
+            grade={grade}
+            subject={subject}
+            book={book}
+            topic={topic}
+            onChanged={() => {
+              void loadBoot();
+              void loadProgram();
+              void loadBanks();
+              void loadResources(resourceSearch);
+            }}
+          />
+        )}
+
+      </div>
+    </main>
+  );
+}
+
+function labelSourceStatus(status?: 'seed' | 'reviewed' | 'verified') {
+  if (status === 'verified') return 'verified';
+  if (status === 'reviewed') return 'reviewed';
+  return 'seed/demo';
+}
+
+function labelCurriculumSupportLevel(level?: CurriculumSupportLevel) {
+  if (level === 'operational') return 'vận hành';
+  if (level === 'foundation') return 'foundation';
+  if (level === 'developing') return 'đang làm dày';
+  return 'starter';
+}
+
+function labelContentMode(mode?: ContentOverview['sourceMode']) {
+  if (mode === 'database') return 'Database';
+  if (mode === 'json_store') return 'JSON store';
+  return 'Seed có cấu trúc';
+}
+
+function labelContentModeShort(mode?: ContentOverview['sourceMode']) {
+  if (mode === 'database') return 'DB';
+  if (mode === 'json_store') return 'JSON';
+  return 'Seed';
+}
+
+function labelRole(role: SessionUser['role']) {
+  if (role === 'leader') return 'Tổ trưởng / chuyên môn';
+  if (role === 'admin') return 'Quản trị';
+  return 'Giáo viên';
+}
+
+function labelSearchType(type: CurriculumSearchItem['type']) {
+  if (type === 'question') return 'Câu hỏi';
+  if (type === 'rubric') return 'Rubric';
+  return 'Chủ đề';
+}
+
+function labelDiffKind(kind: 'added' | 'removed' | 'modified') {
+  if (kind === 'added') return 'Dòng thêm mới';
+  if (kind === 'removed') return 'Dòng bị bỏ';
+  return 'Dòng chỉnh sửa';
+}
+
+function labelWorkflowAction(action: WorkflowEvent['action']) {
+  if (action === 'created') return 'Tạo mới';
+  if (action === 'submitted') return 'Gửi duyệt';
+  if (action === 'approved') return 'Đã duyệt';
+  if (action === 'reviewed') return 'Nhận xét';
+  if (action === 'cloned') return 'Nhân bản';
+  if (action === 'restored_version') return 'Phục hồi phiên bản';
+  if (action === 'deleted') return 'Xóa';
+  return 'Cập nhật';
+}
+
+function formatDate(value: string) {
+  try {
+    return new Intl.DateTimeFormat('vi-VN', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(value));
+  } catch {
+    return value;
+  }
+}
+
+function splitLines(value: string) {
+  return value.split('\n').map((item) => item.trim()).filter(Boolean);
+}
+
+function labelLessonQualityDecision(decision?: LessonQualityChecklistReport['summary']['decision']) {
+  if (decision === 'release_blocked') return 'Chặn gửi duyệt/chính thức';
+  if (decision === 'needs_revision') return 'Cần sửa thêm';
+  if (decision === 'editable_draft') return 'Bản nháp có cảnh báo';
+  return 'Ứng viên gửi duyệt';
+}
+
+function LessonQualityPanel({ report }: { report?: LessonQualityChecklistReport | null }) {
+  if (!report) {
+    return <div className="mb-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">Chưa có checklist chất lượng cho nội dung đang soạn. Bấm “Checklist giáo án” hoặc sinh giáo án mới để kiểm tra rule-based.</div>;
+  }
+  const topIssues = report.issues.filter((issue) => issue.severity === 'blocker' || issue.severity === 'warning').slice(0, 5);
+  return (
+    <div className="mb-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-medium text-slate-900">Checklist chất lượng giáo án</span>
+        <Badge>{report.summary.score}/100</Badge>
+        <Badge>{labelLessonQualityDecision(report.summary.decision)}</Badge>
+        <Badge>{report.gradeBand}</Badge>
+        <Badge>blocker {report.summary.blockers}</Badge>
+        <Badge>cảnh báo {report.summary.warnings}</Badge>
+      </div>
+      <div className="mt-2 text-slate-600">Đạt {report.summary.passed}/{report.summary.total} tiêu chí; tiêu chí bắt buộc {report.summary.requiredPassed}/{report.summary.requiredTotal}. Đây là checklist rule-based, không thay review chuyên môn.</div>
+      {topIssues.length > 0 ? (
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-amber-800">
+          {topIssues.map((issue) => <li key={issue.code}>{issue.message}</li>)}
+        </ul>
+      ) : <div className="mt-2 text-xs text-emerald-700">Chưa thấy blocker/cảnh báo lớn theo rule hiện tại.</div>}
+    </div>
+  );
+}
+
+function LessonGovernancePanel({ snapshot, settings, compact = false, title = 'Governance / provenance' }: { snapshot?: LessonGovernanceSnapshot | null; settings?: SchoolSettings | null; compact?: boolean; title?: string }) {
+  if (!snapshot) {
+    return <div className={`rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 ${compact ? 'mt-2' : 'mb-3'}`}>Chưa có snapshot governance/provenance được lưu cùng giáo án này.</div>;
+  }
+  const assessment = settings ? assessLessonGovernanceForApproval({ snapshot, settings }) : null;
+  const effective = assessment?.effectiveSnapshot || normalizeLessonGovernanceSnapshot(snapshot);
+  const blockers = assessment?.issues.filter((item) => item.severity === 'blocker') || [];
+  const warnings = assessment?.issues.filter((item) => item.severity === 'warning') || [];
+  return (
+    <div className={`rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm ${compact ? 'mt-2' : 'mb-3'}`}>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-medium text-slate-900">{title}</span>
+        <Badge>{labelSourceStatus(effective.sourceStatus)}</Badge>
+        <Badge>{effective.releaseTier}</Badge>
+        <Badge>{labelCurriculumSupportLevel(effective.supportLevel)}</Badge>
+        {assessment ? <Badge>{labelLessonGovernanceApproval(assessment)}</Badge> : null}
+        <Badge>{effective.sourceReferences.length || effective.referenceCount || 0} ref</Badge>
+      </div>
+      <div className="mt-2 text-slate-600">{effective.packId ? `Pack ${effective.packId}` : 'Chưa gắn pack'} · {effective.sourceLabel}</div>
+      {blockers.length > 0 ? <div className="mt-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-800">Blocker: {blockers.map((item) => item.message).join(' ')}</div> : null}
+      {blockers.length === 0 && warnings.length > 0 ? <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">Cảnh báo: {warnings.slice(0, 2).map((item) => item.message).join(' ')}</div> : null}
+    </div>
+  );
+}
+
+function Input(props: { label: string; value: string; onChange: (value: string) => void; placeholder?: string; type?: string }) {
+  return (
+    <div>
+      {props.label ? <label className="mb-2 block text-sm font-medium text-slate-700">{props.label}</label> : <div className="mb-2 block text-sm font-medium text-transparent">.</div>}
+      <input type={props.type || 'text'} value={props.value} onChange={(event: any) => props.onChange(event.target.value)} placeholder={props.placeholder} className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2" />
+    </div>
+  );
+}
+
+function TextareaField(props: { label: string; value: string; onChange: (value: string) => void }) {
+  return (
+    <div>
+      <label className="mb-2 block text-sm font-medium text-slate-700">{props.label}</label>
+      <textarea value={props.value} onChange={(event: any) => props.onChange(event.target.value)} className="min-h-[120px] w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm" />
+    </div>
+  );
+}
+
+function ToggleRow(props: { label: string; checked: boolean; onChange: (value: boolean) => void }) {
+  return (
+    <button type="button" onClick={() => props.onChange(!props.checked)} className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left">
+      <div>
+        <div className="font-medium text-slate-900">{props.label}</div>
+        <div className="mt-1 text-sm text-slate-600">{props.checked ? 'Đang bật' : 'Đang tắt'}</div>
+      </div>
+      <div className={`h-7 w-12 rounded-full transition ${props.checked ? 'bg-slate-900' : 'bg-slate-300'}`}>
+        <div className={`mt-1 h-5 w-5 rounded-full bg-white transition ${props.checked ? 'translate-x-6' : 'translate-x-1'}`} />
+      </div>
+    </button>
+  );
+}
+
+function Select(props: { label: string; value: string; onChange: (value: string) => void; options: Array<{ value: string; label: string }> }) {
+  return (
+    <div>
+      {props.label ? <label className="mb-2 block text-sm font-medium text-slate-700">{props.label}</label> : <div className="mb-2 block text-sm font-medium text-transparent">.</div>}
+      <select value={props.value} onChange={(event: any) => props.onChange(event.target.value)} className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2">
+        {props.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+      </select>
+    </div>
+  );
+}
+
+function Card({ title, desc, children }: { title: string; desc?: string; children?: ReactNode }) {
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
+        {desc && <p className="mt-1 text-sm text-slate-600">{desc}</p>}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function MiniStat({ label, value }: { label: string; value: string }) {
+  return <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><div className="text-xs uppercase tracking-wide text-slate-500">{label}</div><div className="mt-1 text-lg font-semibold text-slate-900">{value}</div></div>;
+}
+
+function Badge({ children }: { children?: ReactNode; [key: string]: any }) {
+  return <span className="inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm text-slate-700">{children}</span>;
+}
+
+function StatusBadge({ status }: { status: SavedLessonPlan['status'] }) {
+  const label = status === 'approved' ? 'Đã duyệt' : status === 'review' ? 'Chờ duyệt' : 'Bản nháp';
+  const style = status === 'approved' ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : status === 'review' ? 'border-amber-200 bg-amber-50 text-amber-800' : 'border-slate-200 bg-slate-100 text-slate-700';
+  return <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${style}`}>{label}</span>;
+}
+
+function TabButton({ active, children, onClick }: { active: boolean; children?: ReactNode; onClick: () => void }) {
+  return <button onClick={onClick} className={`rounded-full px-4 py-2 text-sm transition ${active ? 'bg-slate-900 text-white' : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100'}`}>{children}</button>;
+}
+
+function FilterButton({ active, children, onClick }: { active: boolean; children?: ReactNode; onClick: () => void; [key: string]: any }) {
+  return <button onClick={onClick} className={`rounded-full px-3 py-1.5 text-sm transition ${active ? 'bg-slate-900 text-white' : 'border border-slate-300 bg-white hover:bg-slate-100'}`}>{children}</button>;
+}
+
+function CheckCard({ checked, onClick, title, desc }: { checked: boolean; onClick: () => void; title: string; desc: string; [key: string]: any }) {
+  return (
+    <button onClick={onClick} className={`w-full rounded-2xl border p-3 text-left transition ${checked ? 'border-blue-300 bg-blue-50' : 'border-slate-200 bg-white hover:bg-slate-50'}`}>
+      <div className="flex items-start gap-3">
+        <div className={`mt-0.5 h-5 w-5 rounded-md border ${checked ? 'border-blue-500 bg-blue-500' : 'border-slate-300 bg-white'}`} />
+        <div>
+          <div className="font-medium text-slate-900">{title}</div>
+          <div className="mt-1 text-sm text-slate-600">{desc}</div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function InfoList({ title, items, compact = false }: { title: string; items: string[]; compact?: boolean }) {
+  return <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="font-medium text-slate-900">{title}</div><ul className={`mt-3 list-disc pl-5 text-sm text-slate-700 ${compact ? 'space-y-1' : 'space-y-2'}`}>{items.map((item) => <li key={item}>{item}</li>)}</ul></div>;
+}
+
+function QuestionGroup({ title, items }: { title: string; items: QuestionBankItem[] }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="font-medium text-slate-900">{title}</div>
+      <div className="mt-3 space-y-3">
+        {items.length === 0 ? <div className="text-sm text-slate-500">Chưa có câu hỏi ở mức này.</div> : items.map((item) => <div key={item.id} className="rounded-xl border border-slate-200 bg-white p-3 text-sm"><div className="font-medium text-slate-900">{item.text}</div><div className="mt-1 text-slate-600">{item.answerHint}</div></div>)}
+      </div>
+    </div>
+  );
+}
+
+function MiniMetric({ label, value }: { label: string; value: string | number; [key: string]: any }) {
+  return <div className="rounded-xl border border-slate-200 bg-slate-50 p-3"><div className="text-xs uppercase tracking-wide text-slate-500">{label}</div><div className="mt-1 text-lg font-semibold text-slate-900">{value}</div></div>;
+}
+
+function StatCard({ title, value }: { title: string; value: string | number }) {
+  return <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"><div className="text-sm text-slate-500">{title}</div><div className="mt-2 text-3xl font-bold text-slate-900">{value}</div></div>;
+}
+
+function BarList({ items }: { items: Array<{ name: string; value: number }> }) {
+  const max = Math.max(...items.map((item) => item.value), 1);
+  if (!items.length) return <EmptyState label="Chưa có dữ liệu." />;
+  return <div className="space-y-3">{items.map((item) => <div key={item.name}><div className="mb-1 flex items-center justify-between text-sm text-slate-700"><span>{item.name}</span><strong>{item.value}</strong></div><div className="h-2 rounded-full bg-slate-100"><div className="h-2 rounded-full bg-slate-900" style={{ width: `${(item.value / max) * 100}%` }} /></div></div>)}</div>;
+}
+
+function EmptyState({ label }: { label: string }) {
+  return <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">{label}</div>;
+}

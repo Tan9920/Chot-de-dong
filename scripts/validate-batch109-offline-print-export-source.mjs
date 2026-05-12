@@ -1,0 +1,44 @@
+import fs from 'node:fs';
+function read(file) { return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : ''; }
+function readJson(file, fallback = {}) { try { return JSON.parse(read(file) || JSON.stringify(fallback)); } catch { return fallback; } }
+const issues = [];
+function check(label, condition, detail = '') { if (!condition) issues.push(detail ? `${label}: ${detail}` : label); }
+const pkg = readJson('package.json');
+const lock = readJson('package-lock.json');
+const policy = readJson('data/teacher-pilot-print-export-policy.json');
+const registry = readJson('data/subject-data-registry.json', { records: [] });
+const html = read('public/teacher-pilot-demo.html');
+const lib = read('lib/teacher-pilot-completion.ts');
+const route = read('app/api/teacher-pilot/completion/route.ts');
+const adminRoute = read('app/api/admin/teacher-pilot-completion-board/route.ts');
+const runValidators = read('scripts/run-source-validators.mjs');
+const workspace = read('components/workspace.tsx');
+const css = read('app/globals.css');
+const notes = read('BATCH109_NOTES.md') + '\n' + read('docs/BATCH109_OFFLINE_PRINT_EXPORT.md');
+check('package.json version must be 0.109.0', ['0.109.0','0.110.0'].includes(pkg.version), pkg.version);
+check('package-lock top-level version must be 0.109.0', ['0.109.0','0.110.0'].includes(lock.version), lock.version);
+check('package-lock root package version must be 0.109.0', ['0.109.0','0.110.0'].includes(lock.packages?.['']?.version), lock.packages?.['']?.version);
+for (const script of ['batch109:offline-print-export-validate','teacher-pilot:print-export-validate','teacher-pilot:print-export-report','smoke:batch109','verify:batch109']) check(`package.json missing script ${script}`, Boolean(pkg.scripts?.[script]));
+for (const file of ['BATCH109_NOTES.md','docs/BATCH109_OFFLINE_PRINT_EXPORT.md','data/teacher-pilot-print-export-policy.json','scripts/validate-batch109-offline-print-export-source.mjs','scripts/teacher-print-export-report.mjs','public/teacher-pilot-demo.html','lib/teacher-pilot-completion.ts','app/api/teacher-pilot/completion/route.ts']) check(`missing ${file}`, fs.existsSync(file));
+check('policy must be Batch109', String(policy.version || '').includes('batch109'), policy.version);
+check('policy must not claim server-side DOCX/PDF proof', policy.guardrails?.serverSideDocxPdfProof === false);
+check('policy must not claim hosted runtime', policy.guardrails?.hostedRuntimeClaimed === false);
+check('policy must not create AI dependency', policy.guardrails?.addsAiDependency === false && policy.guardrails?.aiUsed === false);
+for (const marker of ['Batch109','teacher_print_export_package','printable-preview','downloadHtml','printLesson','Tải HTML in được','In / xuất PDF bằng trình duyệt','Không claim DOCX/PDF runtime','sourceStatusIsUserSelectable:false','Batch108','Phân số chỉ hiện khi chọn Toán','không cho tự chọn verified','Không cần npm/build','KẾ HOẠCH BÀI DẠY']) check(`offline HTML missing marker ${marker}`, html.includes(marker));
+check('offline HTML must keep print CSS', html.includes('@media print'));
+check('offline HTML must not expose source status select', !html.includes('<select id="source"') && !html.includes("<select id='source'"));
+for (const marker of ['buildTeacherPilotPrintableExport','teacher_print_export_package','serverSideDocxPdfClaimed: false','hostedRuntimeClaimed: false','sourceStatusIsUserSelectable: false']) check(`lib missing marker ${marker}`, lib.includes(marker));
+for (const marker of ['buildTeacherPilotPrintableExport','printableExport']) check(`route missing marker ${marker}`, route.includes(marker));
+for (const marker of ['buildTeacherPilotPrintableExport','printableExport']) check(`admin route missing marker ${marker}`, adminRoute.includes(marker));
+for (const marker of ['Batch109','teacher-print-export','printable-preview']) check(`workspace missing marker ${marker}`, workspace.includes(marker));
+for (const marker of ['Batch109 Offline Print Export','teacher-print-export']) check(`CSS missing marker ${marker}`, css.includes(marker));
+check('run-source-validators must register Batch109 validator', runValidators.includes('validate-batch109-offline-print-export-source.mjs'));
+check('run-source-validators must know smoke/verify batch109 scripts', runValidators.includes('smoke:batch109') && runValidators.includes('verify:batch109'));
+const fakeVerified = (registry.records || []).filter((item) => ['verified','approved_for_release'].includes(item.sourceStatus) || item.contentDepthAllowed);
+check('Batch109 must not create fake verified/contentDepthAllowed records', fakeVerified.length === 0, `${fakeVerified.length} found`);
+const pkgText = JSON.stringify(pkg).toLowerCase();
+for (const forbidden of ['openai','@google/generative-ai','@anthropic-ai/sdk','anthropic','langchain']) check(`forbidden AI dependency ${forbidden}`, !pkgText.includes(`"${forbidden}`));
+check('notes must state no AI/no fake verified/no hosted overclaim', notes.includes('Không thêm AI') && notes.includes('Không tạo verified giả') && notes.includes('Không claim hosted/runtime pass'));
+const result = { ok: issues.length === 0, packageVersion: pkg.version, policyVersion: policy.version, offlineArtifact: policy.offlineArtifact, fakeVerifiedRecords: fakeVerified.length, checks: { htmlPrintCss: html.includes('@media print'), exportModes: Array.isArray(policy.exportModes) ? policy.exportModes.length : 0 }, issues, note: 'Batch109 validates source-level/offline print/export polish. It does not prove server-side DOCX/PDF, Next build, live runtime, or hosted URL smoke.' };
+console.log(JSON.stringify(result, null, 2));
+process.exit(result.ok ? 0 : 1);

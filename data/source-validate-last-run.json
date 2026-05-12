@@ -1,0 +1,1147 @@
+{
+  "ok": true,
+  "checkedValidators": 171,
+  "checkedJson": 70,
+  "timeoutMs": 15000,
+  "issues": [],
+  "results": [
+    {
+      "file": "scripts/validate-json-data.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-internal-imports.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-demo-readiness-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-basic-flow-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-product-foundation-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-saved-lesson-persistence-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-export-compliance-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-runtime-security-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-subject-data-truth-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-curriculum-import-review-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-lesson-drafting-quality-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch76-ui-integration-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch78-type-build-readiness-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch79-install-build-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch80-deep-hidden-risk-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch81-lesson-design-studio-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch82-runtime-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch83-deploy-runtime-contract-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch84-hosted-demo-launch-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch85-runtime-deploy-hardening-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch86-hosted-url-runtime-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch87-demo-tester-feedback-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch88-demo-feedback-evidence-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch89-core-flow-uiux-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch90-app-shell-uiux-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch91-teacher-workflow-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch92-starter-data-expansion-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch93-runtime-metadata-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch94-auth-gate-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch95-auth-runtime-gate-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch96-deep-auth-membership-hardening-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch97-version-runtime-smoke-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch98-dependency-runtime-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch100-ux-governance-polish-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch101-operating-runtime-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch102-breakthrough-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch103-academic-coverage-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch104-academic-source-intake-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch105-runtime-deploy-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch106-runtime-hosted-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch107-teacher-pilot-completion-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch108-teacher-topic-picker-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/teacher-pilot-print-export-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch109-offline-print-export-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/teacher-print-export-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH109_OFFLINE_PRINT_EXPORT.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/curriculum-compatibility-matrix.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/curriculum-compatibility-matrix.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/curriculum/matrix/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/curriculum-gap-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch110-curriculum-matrix-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/curriculum-gap-board-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH110_CURRICULUM_MATRIX.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH110_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH109_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch109-offline-print-export-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/official-curriculum-source-catalog.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/academic-verification-readiness-dossier.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/academic-verification-accelerator.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/academic/verification-readiness/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/academic-verification-readiness-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/academic-verification-readiness-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch111-academic-verification-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH111_VERIFIED_ACADEMIC_READINESS.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH111_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/academic-copyright-compliance-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/academic-copyright-compliance-dossier.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/academic-copyright-compliance.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/academic/copyright-compliance/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/academic-copyright-compliance-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/academic-copyright-compliance-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch112-copyright-compliance-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH112_COPYRIGHT_SAFE_VERIFICATION.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH112_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/academic-release-dry-run-dossier.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/academic-release-dry-run.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/academic/release-dry-run/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/academic-release-dry-run-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/academic-release-dry-run-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch113-release-dry-run-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH113_RELEASE_DRY_RUN.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH113_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/runtime-dependency-closure-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/runtime-dependency-closure.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/dependency-closure/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/dependency-closure-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/runtime-dependency-closure-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch114-runtime-dependency-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH114_RUNTIME_DEPENDENCY_CLOSURE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH114_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/runtime-build-stability-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/runtime-build-stability.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/build-stability/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/build-stability-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/runtime-build-stability-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch115-runtime-build-stability-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH115_RUNTIME_BUILD_STABILITY.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH115_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/runtime-build-closure-guard-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/runtime-build-closure-guard.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/build-closure-guard/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/build-closure-guard-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/next-build-runtime-guard.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/runtime-build-closure-guard-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch116-runtime-build-closure-guard-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH116_RUNTIME_BUILD_CLOSURE_GUARD.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH116_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/runtime-raw-build-closure-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/runtime-raw-build-closure.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/raw-build-closure/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/raw-build-closure-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/raw-next-build-diagnostic.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/runtime-raw-build-closure-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch117-raw-build-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH117_RAW_NEXT_BUILD_HOSTED_CLOSURE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH117_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/runtime-build-hard-gate-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch118-runtime-build-hard-gate-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/runtime-build-hard-gate-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH118_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch131-p0-hosted-final-proof-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch132-p0-hosted-ci-final-proof-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch133-public-rollout-readiness-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch134-lovable-plan-bridge-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch135-plan-bridge-hardening-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/p0-hosted-evidence-capture-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/p0-hosted-evidence-capture.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/p0-hosted-evidence-capture/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/p0-hosted-evidence-capture-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-hosted-evidence-capture-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch137-p0-hosted-evidence-capture-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH137_P0_HOSTED_EVIDENCE_CAPTURE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH137_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/p0-hosted-proof-execution-gate-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/p0-hosted-proof-execution-gate.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/p0-hosted-proof-execution-gate/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/p0-hosted-proof-execution-gate-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-hosted-proof-execution-gate-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch138-p0-hosted-proof-execution-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch139-p0-p1-local-evidence-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH138_P0_HOSTED_PROOF_EXECUTION_GATE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH138_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/p0-p1-local-evidence-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/p0-p1-local-evidence.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/p0-p1-local-evidence/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/p0-p1-local-evidence-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-command-evidence.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-local-evidence-runner.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-local-evidence-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch139-p0-p1-local-evidence-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH139_P0_P1_LOCAL_EVIDENCE_LIFT.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH139_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch140-p0-p1-evidence-integrity-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH140_P0_P1_EVIDENCE_REPORT_INTEGRITY_FIX.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH140_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch141-p0-hosted-proof-artifact-integrity-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH141_P0_HOSTED_PROOF_ARTIFACT_DISAMBIGUATION.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH141_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch142-p0-node24-ci-provenance-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH142_P0_NODE24_CI_PROVENANCE_HARDENING.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH142_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/p0-p1-final-closure-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "lib/p0-p1-final-closure.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/runtime/p0-p1-final-closure/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "app/api/admin/p0-p1-final-closure-board/route.ts",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/visual-smoke-evidence-capture.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-final-closure-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch143-p0-p1-final-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch144-p0-p1-build-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH143_P0_P1_FINAL_CLOSURE_CANDIDATE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH143_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    }
+  ],
+  "jsonResults": [
+    {
+      "file": "data/academic-copyright-compliance-dossier.json",
+      "ok": true
+    },
+    {
+      "file": "data/academic-copyright-compliance-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/academic-release-dry-run-dossier.json",
+      "ok": true
+    },
+    {
+      "file": "data/academic-source-intake-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/academic-source-pack-submissions.json",
+      "ok": true
+    },
+    {
+      "file": "data/academic-verification-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/academic-verification-queue.json",
+      "ok": true
+    },
+    {
+      "file": "data/academic-verification-readiness-dossier.json",
+      "ok": true
+    },
+    {
+      "file": "data/activity-game-contributions.json",
+      "ok": true
+    },
+    {
+      "file": "data/activity-game-library.json",
+      "ok": true
+    },
+    {
+      "file": "data/auth-accounts.json",
+      "ok": true
+    },
+    {
+      "file": "data/auth-sessions.json",
+      "ok": true
+    },
+    {
+      "file": "data/community-resources.json",
+      "ok": true
+    },
+    {
+      "file": "data/content-admin-store.json",
+      "ok": true
+    },
+    {
+      "file": "data/content-reviews.json",
+      "ok": true
+    },
+    {
+      "file": "data/content-store.json",
+      "ok": true
+    },
+    {
+      "file": "data/creator-profiles.json",
+      "ok": true
+    },
+    {
+      "file": "data/curriculum-compatibility-matrix.json",
+      "ok": true
+    },
+    {
+      "file": "data/curriculum-import-drafts.json",
+      "ok": true
+    },
+    {
+      "file": "data/demo-feedback-submissions.json",
+      "ok": true
+    },
+    {
+      "file": "data/demo-tester-feedback-pack.json",
+      "ok": true
+    },
+    {
+      "file": "data/evidence-ledger.json",
+      "ok": true
+    },
+    {
+      "file": "data/evidence-review-records.json",
+      "ok": true
+    },
+    {
+      "file": "data/forum-threads.json",
+      "ok": true
+    },
+    {
+      "file": "data/full-verify-chain-stability-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/hosted-demo-release-checklist.json",
+      "ok": true
+    },
+    {
+      "file": "data/lesson-design-studio-blueprints.json",
+      "ok": true
+    },
+    {
+      "file": "data/lesson-drafting-profiles.json",
+      "ok": true
+    },
+    {
+      "file": "data/membership-invites.json",
+      "ok": true
+    },
+    {
+      "file": "data/memberships.json",
+      "ok": true
+    },
+    {
+      "file": "data/official-curriculum-source-catalog.json",
+      "ok": true
+    },
+    {
+      "file": "data/operating-plan-config.json",
+      "ok": true
+    },
+    {
+      "file": "data/p0-hosted-evidence-capture-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/p0-hosted-proof-execution-gate-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/p0-p1-final-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/p0-p1-local-evidence-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/p0-p1-stability-gate-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/plan-bridge-ui-guardrails.json",
+      "ok": true
+    },
+    {
+      "file": "data/point-ledger.json",
+      "ok": true
+    },
+    {
+      "file": "data/product-foundation.json",
+      "ok": true
+    },
+    {
+      "file": "data/public-rollout-readiness-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/raw-build-diagnostic-lifecycle-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-build-closure-guard-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-build-hard-gate-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-build-stability-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-dependency-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-deploy-closure-plan.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-evidence-gate-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-hosted-closure-evidence.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-node24-alignment-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-p0-9899-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-p0-deepest-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-p0-final-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-p0-hosted-ci-final-proof-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-p0-hosted-final-proof-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-p0-local-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-p0-p1-transition-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/runtime-raw-build-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/saved-lesson-versions.json",
+      "ok": true
+    },
+    {
+      "file": "data/saved-lessons.json",
+      "ok": true
+    },
+    {
+      "file": "data/security-audit-events.json",
+      "ok": true
+    },
+    {
+      "file": "data/security-data-protection-foundation-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/source-validate-last-run.json",
+      "ok": true
+    },
+    {
+      "file": "data/starter-curriculum-catalog.json",
+      "ok": true
+    },
+    {
+      "file": "data/subject-data-registry.json",
+      "ok": true
+    },
+    {
+      "file": "data/teacher-pilot-completion-pack.json",
+      "ok": true
+    },
+    {
+      "file": "data/teacher-pilot-print-export-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/teacher-pilot-topic-picker-catalog.json",
+      "ok": true
+    },
+    {
+      "file": "data/universal-verify-kit-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/usage-ledger.json",
+      "ok": true
+    }
+  ],
+  "note": "Batch98 source:validate is a fail-fast static registry/JSON/marker check. Run dedicated validators and runtime commands separately for stronger proof."
+}

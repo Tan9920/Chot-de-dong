@@ -1,0 +1,95 @@
+{
+  "version": "2026-05-04.batch112-copyright-compliance-dossier",
+  "updatedAt": "2026-05-04T00:00:00.000+07:00",
+  "batch": "Batch112 — Legal/Copyright-Safe Academic Verification Pipeline",
+  "purpose": "Dossier vận hành để mọi source pack/học liệu/ảnh/câu hỏi đi qua copyright gate trước khi được review học thuật hoặc release verified.",
+  "registryMutationPolicy": {
+    "registryMutationsInBatch112": 0,
+    "fakeVerifiedCreated": 0,
+    "fakeContentDepthCreated": 0,
+    "allowedNow": false,
+    "reason": "Batch112 chỉ thêm legal/copyright compliance pipeline. Không nâng reviewed/verified/contentDepthAllowed khi chưa có bằng chứng và reviewer thật."
+  },
+  "sourcePackLegalChecklist": [
+    {
+      "id": "source_identity",
+      "label": "Nguồn/tác giả/chủ sở hữu rõ ràng",
+      "required": true
+    },
+    {
+      "id": "permission_basis",
+      "label": "Có cơ sở được phép sử dụng: metadata only, teacher owned, school permission, license, public domain/open license",
+      "required": true
+    },
+    {
+      "id": "no_long_copy",
+      "label": "Không copy dài SGK/SGV/tài liệu bản quyền; chỉ metadata/mapping/trích yếu ngắn",
+      "required": true
+    },
+    {
+      "id": "attribution",
+      "label": "Có cách ghi nguồn/tác giả/NXB/license trong UI/export",
+      "required": true
+    },
+    {
+      "id": "takedown",
+      "label": "Có contact và quy trình gỡ nội dung",
+      "required": true
+    },
+    {
+      "id": "reviewer_signoff",
+      "label": "Có reviewer chuyên môn + legal reviewer/audit log nếu public/release",
+      "required": true
+    },
+    {
+      "id": "current_law_check",
+      "label": "Kiểm tra hiệu lực văn bản pháp lý hiện hành trước release",
+      "required": true
+    },
+    {
+      "id": "export_label",
+      "label": "Export DOCX/PDF ghi rõ nhãn dữ liệu và nguồn/giới hạn sử dụng",
+      "required": true
+    }
+  ],
+  "pilotScopesStillBlocked": [
+    {
+      "scopeId": "g5-toan",
+      "reason": "Có thể làm pilot verified sau, nhưng hiện vẫn thiếu source pack bài cụ thể, reviewer Toán, license/attribution và release gate.",
+      "safeAction": "Chỉ dựng khung, mapping chương trình, yêu cầu giáo viên nhập bài tập/nội dung hợp pháp."
+    },
+    {
+      "scopeId": "g5-tieng-viet",
+      "reason": "Rủi ro văn bản đọc/đoạn trích rất cao; không được tự tạo/copy bài đọc theo SGK nếu không có quyền.",
+      "safeAction": "Chỉ cho giáo viên chọn nguồn/văn bản tự sở hữu hoặc nhập đoạn đã có quyền sử dụng."
+    },
+    {
+      "scopeId": "g6-lich-su-va-dia-li",
+      "reason": "Môn có thay đổi chương trình cần current-check; không release sâu nếu chưa đối chiếu TT17/2025 và nguồn bài/chủ đề.",
+      "safeAction": "Metadata/source spine only; không copy nội dung SGK/ảnh/bản đồ."
+    }
+  ],
+  "takedownWorkflow": {
+    "intakeStatuses": ["received", "identity_check", "temporary_hold", "reviewing", "action_required", "taken_down", "reinstated", "rejected_with_reason"],
+    "emergencyHoldTriggers": [
+      "credible_copyright_owner_claim",
+      "student_personal_data_exposure",
+      "copied_textbook_passage_or_answer_key",
+      "publisher_owned_image_or_diagram",
+      "legal_notice_or_court_authority"
+    ],
+    "defaultAction": "Ẩn tạm tài nguyên khỏi public/export nếu claim có căn cứ ban đầu; giữ audit log và thông báo tác giả."
+  },
+  "metricsPolicy": {
+    "reportSeparately": [
+      "copyrightCheckedSourcePacks",
+      "legalHoldSourcePacks",
+      "publicAllowedResources",
+      "teacherOwnedResources",
+      "licensedResources",
+      "verifiedOrApprovedScopes",
+      "deepContentAllowedScopes"
+    ],
+    "doNotMerge": "Không gộp legal-ready resource với academic verified scope; hợp pháp chưa đồng nghĩa đúng chuyên môn."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "templates": [],
+  "auditLogs": [
+    {
+      "id": "3b50005d-f0e4-4e74-925f-212899778ed1",
+      "entityType": "manifest",
+      "entityId": "Lớp 4",
+      "action": "imported",
+      "actorName": "batch24 materialize",
+      "actorRole": "admin",
+      "summary": "Đã materialize 156 evidence ledger scaffold record cho Lớp 4.",
+      "createdAt": "2026-04-16T02:45:21.102Z"
+    },
+    {
+      "id": "5ff3036a-d476-475d-88d3-a2d171d1b6bc",
+      "entityType": "manifest",
+      "entityId": "Lớp 3",
+      "action": "imported",
+      "actorName": "CLI ledger materialize",
+      "actorRole": "admin",
+      "summary": "Đã materialize 128 evidence ledger scaffold record cho Lớp 3.",
+      "createdAt": "2026-04-16T02:44:41.470Z"
+    },
+    {
+      "id": "96b022c1-23a8-41bf-b724-1219e706d82a",
+      "entityType": "manifest",
+      "entityId": "Lớp 2",
+      "action": "imported",
+      "actorName": "CLI ledger materialize",
+      "actorRole": "admin",
+      "summary": "Đã materialize 100 evidence ledger scaffold record cho Lớp 2.",
+      "createdAt": "2026-04-16T02:43:58.292Z"
+    },
+    {
+      "id": "4f6bcbc2-98cc-48ab-827d-bac4ac772b10",
+      "entityType": "manifest",
+      "entityId": "Lớp 1",
+      "action": "imported",
+      "actorName": "CLI ledger materialize",
+      "actorRole": "admin",
+      "summary": "Đã materialize 100 evidence ledger scaffold record cho Lớp 1.",
+      "createdAt": "2026-04-16T02:43:43.830Z"
+    }
+  ],
+  "importBatches": [],
+  "memberships": [],
+  "contentReviews": []
+}

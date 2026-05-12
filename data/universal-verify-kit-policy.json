@@ -1,0 +1,22 @@
+{
+  "batch": 122,
+  "name": "Universal Verify Kit & Single Release Flow",
+  "priority": "P0 Runtime/Build/Release Flow",
+  "commands": {
+    "verifyAll": "npm run verify:all",
+    "verifyRelease": "npm run verify:release",
+    "strictUrlSmoke": "APP_URL=https://your-vercel-url npm run smoke:url:strict"
+  },
+  "goals": [
+    "Expose stable universal verification entrypoints.",
+    "Skip unsupported checks clearly instead of failing falsely.",
+    "Run strict deployed URL smoke only when APP_URL or NEXT_PUBLIC_APP_URL exists.",
+    "Avoid fake hosted/Vercel proof."
+  ],
+  "nonGoals": [
+    "No AI/API integration.",
+    "No payment or marketplace feature.",
+    "No product logic change.",
+    "No production-ready claim without deployed runtime smoke evidence."
+  ]
+}
