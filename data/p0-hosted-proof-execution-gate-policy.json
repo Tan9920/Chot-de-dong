@@ -1,6 +1,6 @@
 {
-  "batch": "Batch138 — P0 Hosted Proof Execution Gate",
-  "version": "0.138.0",
+  "batch": "Batch146 — Hosted Proof Runner Hardening & Evidence Summary",
+  "version": "0.146.0",
   "phase": "P0 hosted proof execution gate before P1/P2 expansion",
   "sourceLevelOnly": true,
   "purpose": "Provide one auditable gate that reads the real proof artifacts, classifies blockers, and prevents hosted/public proof from being claimed until Node24 CI, APP_URL strict smoke, hosted save/export smoke, real visual smoke evidence, P0/P1 stability and public rollout readiness artifacts pass.",
@@ -11,15 +11,30 @@
     {
       "id": "local_dry_run",
       "description": "Runs source/type/build/local smoke and writes a blocked hosted proof report when APP_URL or Node24/visual evidence is missing.",
-      "allowedClaims": ["local source/runtime evidence only", "hosted proof still blocked"]
+      "allowedClaims": [
+        "local source/runtime evidence only",
+        "hosted proof still blocked"
+      ]
     },
     {
       "id": "hosted_strict_ci",
       "description": "Runs on Node24 with APP_URL/GIAOAN_DEMO_URL and uploaded visual evidence. This mode can close hosted proof only if every required artifact passes.",
-      "allowedClaims": ["hosted evidence passed for the specific URL and artifact set", "production-ready still requires separate production DB/security/legal review"]
+      "allowedClaims": [
+        "hosted evidence passed for the specific URL and artifact set",
+        "production-ready still requires separate production DB/security/legal review"
+      ]
     }
   ],
   "hardGates": [
+    {
+      "id": "hosted_proof_preflight",
+      "label": "Strict hosted proof preflight",
+      "command": "npm run p0:hosted-proof-preflight",
+      "artifact": "artifacts/p0-hosted-final-proof-preflight-last-run.json",
+      "required": true,
+      "blocksHostedProof": true,
+      "passRule": "artifact.ok === true, Node major is 24, GitHub Actions provenance exists, and APP_URL is HTTPS non-localhost"
+    },
     {
       "id": "node24_ci",
       "label": "Node24 CI/deploy proof",
@@ -85,7 +100,14 @@
     }
   ],
   "visualEvidence": {
-    "requiredViewports": ["mobile-360", "mobile-390", "mobile-430", "tablet-768", "desktop-1366", "desktop-1440"],
+    "requiredViewports": [
+      "mobile-360",
+      "mobile-390",
+      "mobile-430",
+      "tablet-768",
+      "desktop-1366",
+      "desktop-1440"
+    ],
     "templateIsPass": false,
     "requiredSignals": [
       "home/app shell visible",
@@ -101,10 +123,13 @@
     "requiredInputOrSecret": "workflow_dispatch app_url or secret GIAOAN_DEMO_URL",
     "strictFinalCommand": "npm run verify:p0-hosted-ci-proof",
     "finalGateReportCommand": "npm run p0:hosted-proof-execution-report",
-    "artifactUploadExpected": true
+    "artifactUploadExpected": true,
+    "preflightCommand": "npm run p0:hosted-proof-preflight",
+    "summaryCommand": "npm run p0:hosted-proof-summary"
   },
   "claimPolicy": {
     "allowed": [
+      "Batch146 adds fail-fast hosted proof preflight and final evidence summary.",
       "Batch138 adds a P0 hosted proof execution gate and report.",
       "A local run may say the gate is blocked and list missing evidence.",
       "Hosted proof can only be described for the exact URL/artifacts that passed."

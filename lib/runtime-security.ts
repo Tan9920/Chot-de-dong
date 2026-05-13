@@ -15,6 +15,7 @@ export function createCsrfToken() {
 export function attachCsrfCookie(response: NextResponse, token: string) {
   response.cookies.set(csrfCookieName, token, {
     path: '/',
+    httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 12

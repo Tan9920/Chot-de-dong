@@ -1,7 +1,7 @@
 {
   "ok": true,
-  "checkedValidators": 171,
-  "checkedJson": 70,
+  "checkedValidators": 193,
+  "checkedJson": 76,
   "timeoutMs": 15000,
   "issues": [],
   "results": [
@@ -851,12 +851,122 @@
       "mode": "registered_static_check"
     },
     {
+      "file": "data/batch145-hosted-proof-artifact-upload-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch145-hosted-proof-artifact-upload-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH145_HOSTED_PROOF_ARTIFACT_UPLOAD_CLOSURE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH145_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/batch146-hosted-proof-runner-hardening-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-hosted-final-proof-preflight.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-hosted-final-proof-summary.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch146-hosted-proof-runner-hardening-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH146_HOSTED_PROOF_RUNNER_HARDENING.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH146_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
       "file": "docs/BATCH143_P0_P1_FINAL_CLOSURE_CANDIDATE.md",
       "ok": true,
       "mode": "registered_static_check"
     },
     {
       "file": "BATCH143_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/batch149-p0-p1-max-closure-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-max-closure-runner.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-max-closure-report.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch149-p0-p1-max-closure-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH149_P0_P1_MAX_CLOSURE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH149_NOTES.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "data/batch150-p0-p1-to-p2-transition-policy.json",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-to-p2-transition-gate.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/p0-p1-external-closure-operator-guide.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "scripts/validate-batch150-p0-p1-to-p2-transition-source.mjs",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "docs/BATCH150_P0_P1_TO_P2_TRANSITION_GATE.md",
+      "ok": true,
+      "mode": "registered_static_check"
+    },
+    {
+      "file": "BATCH150_NOTES.md",
       "ok": true,
       "mode": "registered_static_check"
     }
@@ -908,6 +1018,30 @@
     },
     {
       "file": "data/auth-sessions.json",
+      "ok": true
+    },
+    {
+      "file": "data/batch145-hosted-proof-artifact-upload-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/batch146-hosted-proof-runner-hardening-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/batch147-real-hosted-proof-run-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/batch148-hosted-proof-authenticity-lock-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/batch149-p0-p1-max-closure-policy.json",
+      "ok": true
+    },
+    {
+      "file": "data/batch150-p0-p1-to-p2-transition-policy.json",
       "ok": true
     },
     {

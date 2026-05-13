@@ -1,0 +1,119 @@
+{
+  "batch": "Batch147 — Real Hosted Proof Run Closure Kit",
+  "version": "0.147.0",
+  "phase": "P0 hosted/public proof execution closure support after Batch146 runner hardening",
+  "sourceLevelOnly": true,
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "selectedBecause": "Batch146 made the hosted proof runner auditable, but the project still needs a deterministic way to review the downloaded GitHub Actions artifact bundle and decide whether hosted proof is actually closed without guessing from screenshots or partial logs.",
+  "scope": [
+    "Add a closure dossier script that can review either the current repo artifacts or a downloaded/extracted GitHub Actions artifact folder.",
+    "Validate preflight, runner, CI report, execution gate, visual evidence, screenshot PNGs, public rollout report, and secret-leak red flags as separate gates.",
+    "Add strict mode for final closure review while keeping local/source smoke non-failing for honest blocked-state reporting.",
+    "Add a runbook for the exact Vercel/GitHub Actions hosted proof procedure and the Android/desktop artifact review path.",
+    "Keep source/local readiness separate from hosted/public/production claims."
+  ],
+  "artifactRootEnv": "GIAOAN_HOSTED_PROOF_ARTIFACT_ROOT",
+  "commands": {
+    "dossier": "npm run p0:hosted-proof-closure-dossier",
+    "strictDossier": "npm run p0:hosted-proof-closure-dossier:strict",
+    "validate": "npm run batch147:real-hosted-proof-run-closure-validate",
+    "smoke": "npm run smoke:batch147",
+    "verify": "npm run verify:batch147"
+  },
+  "closureDossierContract": {
+    "script": "scripts/p0-hosted-proof-closure-dossier.mjs",
+    "jsonArtifact": "artifacts/p0-hosted-proof-closure-dossier-last-run.json",
+    "markdownArtifact": "artifacts/p0-hosted-proof-closure-dossier.md",
+    "strictModeFailsWhenHostedProofNotClosed": true,
+    "canReviewDownloadedArtifactRoot": true
+  },
+  "hardGates": [
+    {
+      "id": "preflight_node24_github_app_url",
+      "label": "Strict preflight proves Node24 + GitHub Actions + HTTPS hosted APP_URL",
+      "artifact": "artifacts/p0-hosted-final-proof-preflight-last-run.json",
+      "required": true,
+      "blocksHostedProof": true
+    },
+    {
+      "id": "hosted_ci_runner_all_pass",
+      "label": "Hosted CI final proof runner completed in strict mode with zero failed steps",
+      "artifact": "artifacts/p0-hosted-ci-final-proof-runner-last-run.json",
+      "required": true,
+      "blocksHostedProof": true
+    },
+    {
+      "id": "hosted_ci_report_ok",
+      "label": "Runtime P0 hosted CI report accepts all required evidence contracts",
+      "artifact": "artifacts/runtime-p0-hosted-ci-final-proof-report-last-run.json",
+      "required": true,
+      "blocksHostedProof": true
+    },
+    {
+      "id": "execution_gate_hosted_closed",
+      "label": "Execution gate marks hostedProofClosed=true",
+      "artifact": "artifacts/p0-hosted-proof-execution-gate-last-run.json",
+      "required": true,
+      "blocksHostedProof": true
+    },
+    {
+      "id": "summary_hosted_closed",
+      "label": "Final hosted proof summary marks hostedProofClosed=true",
+      "artifact": "artifacts/p0-hosted-final-proof-summary-last-run.json",
+      "required": true,
+      "blocksHostedProof": true
+    },
+    {
+      "id": "visual_smoke_evidence_pngs",
+      "label": "Real visual smoke evidence has required viewport passes and PNG screenshots",
+      "artifact": "artifacts/visual-smoke-evidence.json",
+      "validateArtifact": "artifacts/visual-smoke-evidence-validate-last-run.json",
+      "required": true,
+      "blocksHostedProof": true
+    },
+    {
+      "id": "public_rollout_readiness_optional",
+      "label": "Public rollout readiness remains a separate gate after hosted proof",
+      "artifact": "artifacts/public-rollout-readiness-report-last-run.json",
+      "required": false,
+      "blocksHostedProof": false
+    }
+  ],
+  "requiredViewports": [
+    "mobile-360",
+    "mobile-390",
+    "mobile-430",
+    "tablet-768",
+    "desktop-1366",
+    "desktop-1440"
+  ],
+  "secretLeakNeedles": [
+    "OPENAI_API_KEY",
+    "ANTHROPIC_API_KEY",
+    "GEMINI_API_KEY",
+    "GOOGLE_API_KEY",
+    "DATABASE_URL",
+    "NEXTAUTH_SECRET",
+    "AUTH_SECRET",
+    "VERCEL_AUTOMATION_BYPASS_SECRET",
+    "PRIVATE_KEY",
+    "BEGIN PRIVATE KEY",
+    "sk-"
+  ],
+  "claimPolicy": {
+    "allowed": [
+      "Batch147 adds a stronger artifact-review and go/no-go closure kit for real hosted proof runs.",
+      "Local/source smoke can produce a blocked dossier that explains exactly what evidence is missing.",
+      "Strict closure can only pass after a real GitHub Actions Node24 run with APP_URL and visual PNG artifacts."
+    ],
+    "blocked": [
+      "Không nói hosted proof closed nếu closure dossier strict chưa pass với artifact thật.",
+      "Không nói public rollout allowed nếu public-rollout readiness chưa pass và chưa review production DB/security/legal.",
+      "Không nói production-ready trong Batch147.",
+      "Không dùng local Node22/loopback/dry-run để thay cho hosted proof thật.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  }
+}

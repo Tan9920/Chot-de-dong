@@ -1,0 +1,156 @@
+{
+  "batch": "Batch150 — P0/P1 to P2 Transition Gate & External Closure Guide",
+  "version": "0.150.0",
+  "phase": "P0/P1 source/local relaxation for starting P2 work, while hosted/public proof remains a hard external gate",
+  "purpose": "Solve the hardest remaining internal problem before moving to P2: make the transition decision explicit, machine-readable, and impossible to overclaim. Batch150 separates what may be relaxed for local P2 development from what remains blocked for public rollout: GitHub Actions Node24, real Vercel APP_URL, real PNG visual smoke, hosted save/export HTTPS, and production DB/security/legal review.",
+  "productionReady": false,
+  "publicRolloutAllowed": false,
+  "scope": {
+    "noAiCore": true,
+    "noPayment": true,
+    "noMarketplaceCash": true,
+    "noFakeVerifiedData": true,
+    "noAutoPublicCommunity": true,
+    "jsonFallbackIsDemoOnly": true,
+    "singleBatchScope": "P0/P1 to P2 transition decision gate and external closure operator guide only"
+  },
+  "transitionPolicy": {
+    "localP2DevelopmentMayStartWhen": [
+      "source:validate passes",
+      "data:validate passes",
+      "typecheck passes",
+      "Current guarded build artifact is ready, live:smoke passes, loopback hosted-style smoke passes, and P1 security report passes; or Batch149 max-closure report already captured the same local closure candidate",
+      "P2 work stays source/local/private and does not open public rollout, payment, AI, marketplace, or auto-public community"
+    ],
+    "publicP2OrPublicRolloutBlockedUntil": [
+      "GitHub Actions Node24 run with CI provenance passes",
+      "APP_URL/NEXT_PUBLIC_APP_URL/GIAOAN_DEMO_URL point to the same real HTTPS Vercel URL",
+      "Hosted save/export smoke passes through HTTPS",
+      "Real visual smoke screenshots exist as PNG files for canonical viewports",
+      "Downloaded artifact set from one GitHub Actions run passes closure dossier and authenticity lock",
+      "Production DB/session/security/legal review is completed before any production-ready claim"
+    ],
+    "allowedClaimsAfterLocalPass": [
+      "P0/P1 local/source/runtime can be relaxed enough to begin P2 source work",
+      "P2 can start behind private/local gate, still no public rollout",
+      "Hosted/public proof remains blocked until external evidence is supplied"
+    ],
+    "forbiddenClaimsUntilExternalPass": [
+      "P0/P1 100%",
+      "hosted proof closed",
+      "public rollout allowed",
+      "production-ready",
+      "visual smoke passed without PNG screenshots",
+      "Node24 CI proof from a local Node22 run"
+    ]
+  },
+  "evidenceArtifacts": {
+    "sourceValidate": "data/source-validate-last-run.json",
+    "batch149Runner": "artifacts/batch149-p0-p1-max-closure-runner-last-run.json",
+    "batch149Report": "artifacts/batch149-p0-p1-max-closure-report-last-run.json",
+    "p0p1FinalClosure": "artifacts/p0-p1-final-closure-report-last-run.json",
+    "hostedSummary": "artifacts/p0-hosted-final-proof-summary-last-run.json",
+    "closureDossier": "artifacts/p0-hosted-proof-closure-dossier-last-run.json",
+    "authenticityLock": "artifacts/p0-hosted-proof-authenticity-lock-last-run.json",
+    "publicRolloutReadiness": "artifacts/public-rollout-readiness-report-last-run.json",
+    "securityDataProtection": "artifacts/security-data-protection-report-last-run.json",
+    "guardedBuild": "artifacts/next-build-runtime-guard-last-run.json",
+    "liveSmoke": "artifacts/live-http-smoke-last-run.json",
+    "loopbackSmoke": "artifacts/p0-loopback-url-smoke-last-run.json"
+  },
+  "localTransitionRequired": [
+    {
+      "id": "source_validate",
+      "label": "Source registry/static validation",
+      "artifact": "data/source-validate-last-run.json",
+      "command": "npm run source:validate",
+      "required": true
+    },
+    {
+      "id": "batch149_local_max_closure",
+      "label": "Current P0/P1 local/source/runtime closure evidence or Batch149 max-closure report",
+      "artifact": "artifacts/batch149-p0-p1-max-closure-report-last-run.json",
+      "fallbackArtifact": "artifacts/batch149-p0-p1-max-closure-runner-last-run.json",
+      "command": "GIAOAN_SKIP_REDUNDANT_NEXT_BUILD_CHECKS=1 GIAOAN_BUILD_TRACE_GRACE_MS=0 GIAOAN_BUILD_ARTIFACT_READY_GRACE_MS=0 npm run build && npm run live:smoke && npm run runtime:p0-loopback-url-smoke",
+      "required": true
+    },
+    {
+      "id": "p0_p1_final_closure_local",
+      "label": "P0/P1 final closure board shows local closure candidate",
+      "artifact": "artifacts/p0-p1-final-closure-report-last-run.json",
+      "command": "npm run p0-p1:final-closure-report",
+      "required": false,
+      "reasonOptional": "Batch149 report is the stronger latest local max-closure artifact; this board is preserved as supporting evidence."
+    }
+  ],
+  "externalHardBlockers": [
+    {
+      "id": "node24_github_actions",
+      "label": "GitHub Actions Node24 provenance",
+      "whyHard": "Local Node22/ChatGPT container cannot prove the production CI contract.",
+      "command": "Run the P0 Hosted Final Proof workflow in GitHub Actions with strict=true.",
+      "evidence": "p0-hosted-final-proof-preflight-last-run.json shows node24=true and githubActions=true."
+    },
+    {
+      "id": "vercel_https_app_url",
+      "label": "Real Vercel HTTPS APP_URL",
+      "whyHard": "A real public URL must exist outside the repository.",
+      "command": "Set workflow input app_url or secret GIAOAN_DEMO_URL to https://<your-vercel-domain>.",
+      "evidence": "APP_URL, NEXT_PUBLIC_APP_URL and GIAOAN_DEMO_URL resolve to the same non-local HTTPS origin."
+    },
+    {
+      "id": "hosted_save_export_https",
+      "label": "Hosted save/export smoke over HTTPS",
+      "whyHard": "Loopback smoke is strong but does not prove public network/session behavior.",
+      "command": "APP_URL=https://<vercel-url> NEXT_PUBLIC_APP_URL=https://<vercel-url> GIAOAN_DEMO_URL=https://<vercel-url> npm run verify:p0-hosted-ci-proof",
+      "evidence": "runtime-p0-hosted-ci-final-proof-report-last-run.json and runner artifacts show all hosted checks pass."
+    },
+    {
+      "id": "real_visual_pngs",
+      "label": "Real browser visual smoke PNGs",
+      "whyHard": "Screenshots must be produced by Chromium against the hosted URL.",
+      "command": "APP_URL=https://<vercel-url> npm run visual:smoke:evidence-capture && npm run visual:smoke:evidence-validate",
+      "evidence": "artifacts/visual-smoke/**/*.png exists and authenticity lock passes screenshot inventory."
+    },
+    {
+      "id": "downloaded_single_run_artifact_set",
+      "label": "Downloaded single GitHub Actions artifact set",
+      "whyHard": "Artifacts must come from one real run, not mixed local/stale files.",
+      "command": "Download p0-hosted-final-proof-artifacts from GitHub Actions and validate with closure dossier + authenticity lock.",
+      "evidence": "p0-hosted-proof-closure-dossier and p0-hosted-proof-authenticity-lock pass in strict mode."
+    },
+    {
+      "id": "production_db_security_legal_review",
+      "label": "Production DB, security and legal review",
+      "whyHard": "JSON fallback/local smoke does not prove production data protection, legal, or school/user obligations.",
+      "command": "Complete production DB/session/security/legal checklist before any public or production-ready claim.",
+      "evidence": "A signed/reviewed production-readiness dossier outside source-level checks."
+    }
+  ],
+  "operatorGuide": {
+    "localBeforeP2Commands": [
+      "npm ci --ignore-scripts --no-audit --no-fund",
+      "npm run source:validate",
+      "npm run data:validate",
+      "npm run typecheck",
+      "npm run verify:batch149",
+      "npm run p0-p1:to-p2-transition-gate"
+    ],
+    "hostedProofCommands": [
+      "Push Batch150 to GitHub.",
+      "Deploy/import the repo on Vercel with Node 24.",
+      "Open GitHub > Actions > P0 Hosted Final Proof > Run workflow.",
+      "Set app_url to https://<your-vercel-domain> and strict=true.",
+      "Download artifact p0-hosted-final-proof-artifacts.",
+      "Run npm run p0:hosted-proof-closure-dossier:strict and npm run p0:hosted-proof-authenticity-lock:strict against that artifact set.",
+      "Run npm run p0-p1:to-p2-transition-gate again and confirm externalHardBlockersRemaining is empty before public rollout."
+    ]
+  },
+  "artifacts": {
+    "transitionJson": "artifacts/batch150-p0-p1-to-p2-transition-gate-last-run.json",
+    "transitionMarkdown": "artifacts/batch150-p0-p1-to-p2-transition-gate.md",
+    "operatorGuideJson": "artifacts/batch150-external-closure-operator-guide-last-run.json",
+    "operatorGuideMarkdown": "artifacts/batch150-external-closure-operator-guide.md"
+  },
+  "noAiPaymentVerifiedFakeAdded": true
+}

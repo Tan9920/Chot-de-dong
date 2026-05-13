@@ -1,0 +1,123 @@
+{
+  "batch": "Batch148 — Hosted Proof Evidence Authenticity Lock",
+  "version": "0.148.0",
+  "phase": "P0 hosted proof artifact authenticity and anti-stale lock after Batch147 closure dossier",
+  "sourceLevelOnly": true,
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "selectedBecause": "Batch147 can review downloaded hosted proof artifacts, but a final closure still needs a stronger authenticity lock so stale local artifacts, mixed-run JSON files, missing screenshots, or manually copied partial evidence cannot be mistaken for real GitHub Actions Node24 hosted proof.",
+  "artifactRootEnv": "GIAOAN_HOSTED_PROOF_ARTIFACT_ROOT",
+  "maxTimestampSpreadMinutes": 90,
+  "minRequiredArtifacts": 8,
+  "commands": {
+    "authenticityLock": "npm run p0:hosted-proof-authenticity-lock",
+    "strictAuthenticityLock": "npm run p0:hosted-proof-authenticity-lock:strict",
+    "validate": "npm run batch148:hosted-proof-authenticity-lock-validate",
+    "smoke": "npm run smoke:batch148",
+    "verify": "npm run verify:batch148"
+  },
+  "lockContract": {
+    "script": "scripts/p0-hosted-proof-authenticity-lock.mjs",
+    "jsonArtifact": "artifacts/p0-hosted-proof-authenticity-lock-last-run.json",
+    "markdownArtifact": "artifacts/p0-hosted-proof-authenticity-lock.md",
+    "strictModeFailsWhenAuthenticityNotLocked": true,
+    "hashesAllRequiredEvidence": true,
+    "rejectsStaleOrMixedEvidence": true,
+    "keepsProductionReadyFalse": true
+  },
+  "requiredJsonArtifacts": [
+    {
+      "id": "preflight",
+      "file": "artifacts/p0-hosted-final-proof-preflight-last-run.json",
+      "mustBeOk": true,
+      "requiresNode24": true,
+      "requiresGithubActions": true,
+      "requiresHttpsAppUrl": true
+    },
+    {
+      "id": "hostedCiRunner",
+      "file": "artifacts/p0-hosted-ci-final-proof-runner-last-run.json",
+      "mustBeOk": true,
+      "requiresStrict": true,
+      "requiresZeroFailures": true
+    },
+    {
+      "id": "hostedCiReport",
+      "file": "artifacts/runtime-p0-hosted-ci-final-proof-report-last-run.json",
+      "mustBeOk": true,
+      "requiresPublicRolloutAllowed": true,
+      "requiresNode24": true
+    },
+    {
+      "id": "executionGate",
+      "file": "artifacts/p0-hosted-proof-execution-gate-last-run.json",
+      "mustBeOk": true,
+      "requiresHostedProofClosed": true
+    },
+    {
+      "id": "finalSummary",
+      "file": "artifacts/p0-hosted-final-proof-summary-last-run.json",
+      "mustBeOk": true,
+      "requiresHostedProofClosed": true
+    },
+    {
+      "id": "closureDossier",
+      "file": "artifacts/p0-hosted-proof-closure-dossier-last-run.json",
+      "mustBeOk": true,
+      "requiresHostedProofClosed": true
+    },
+    {
+      "id": "visualEvidence",
+      "file": "artifacts/visual-smoke-evidence.json",
+      "mustBeOk": true,
+      "requiresScreenshots": true
+    },
+    {
+      "id": "visualEvidenceValidate",
+      "file": "artifacts/visual-smoke-evidence-validate-last-run.json",
+      "mustBeOk": true
+    },
+    {
+      "id": "hostedUrlSmoke",
+      "file": "artifacts/hosted-demo-url-smoke-last-run.json",
+      "mustBeOk": true
+    },
+    {
+      "id": "publicRolloutReadiness",
+      "file": "artifacts/public-rollout-readiness-report-last-run.json",
+      "mustBeOk": true,
+      "requiresPublicRolloutAllowed": true,
+      "separateFromProductionReady": true
+    }
+  ],
+  "requiredViewports": [
+    "mobile-360",
+    "mobile-390",
+    "mobile-430",
+    "tablet-768",
+    "desktop-1366",
+    "desktop-1440"
+  ],
+  "consistencyLocks": [
+    "All available generatedAt timestamps for required JSON artifacts must fit inside maxTimestampSpreadMinutes.",
+    "Preflight, summary, hosted CI report, closure dossier, and visual evidence must not mix local dry-run evidence with hosted proof claims.",
+    "Every required JSON artifact is hashed into the lock manifest; screenshot PNG files are inventoried with sha256 and byte size.",
+    "APP_URL origin must be HTTPS and non-local wherever an origin is present.",
+    "GitHub Actions provenance must exist at least in preflight for strict hosted proof."
+  ],
+  "claimPolicy": {
+    "allowed": [
+      "Batch148 adds an anti-stale authenticity lock and hash manifest for real hosted proof artifact bundles.",
+      "Local/source runs can produce a blocked authenticity report explaining stale, mixed, or missing evidence.",
+      "Strict authenticity lock can pass only with same-run Node24 GitHub Actions hosted evidence and screenshot PNG inventory."
+    ],
+    "blocked": [
+      "Không nói hosted proof closed nếu authenticity lock strict chưa pass với artifact GitHub Actions thật.",
+      "Không dùng artifact local/stale/mixed-run để claim APP_URL hosted proof.",
+      "Không nói public rollout allowed nếu readiness, production DB/security/legal review chưa đủ.",
+      "Không nói production-ready trong Batch148.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  }
+}

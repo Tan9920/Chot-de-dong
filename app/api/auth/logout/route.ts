@@ -15,6 +15,6 @@ export async function POST(request: NextRequest) {
   await recordSecurityAuditEvent({ eventType: 'auth_logout', outcome: 'success', request });
   const res = NextResponse.json({ ok: true });
   res.cookies.set(sessionCookieName, '', { path: '/', expires: new Date(0), httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
-  res.cookies.set(csrfCookieName, '', { path: '/', expires: new Date(0), sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
+  res.cookies.set(csrfCookieName, '', { path: '/', httpOnly: true, expires: new Date(0), sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
   return res;
 }

@@ -60,6 +60,9 @@ jobs:
       - name: Install dependencies cleanly
         run: npm run install:clean
 
+      - name: Preflight hosted proof contract
+        run: npm run p0:hosted-proof-preflight
+
       - name: Capture real visual smoke evidence with Chromium
         run: npm run visual:smoke:evidence-capture
 
@@ -78,10 +81,35 @@ jobs:
         if: always()
         run: npm run p0:hosted-proof-execution-report
 
+      - name: Final hosted proof summary
+        if: always()
+        run: npm run p0:hosted-proof-summary
+
+      - name: Generate Batch147 closure dossier
+        if: always()
+        run: npm run p0:hosted-proof-closure-dossier
+
+      - name: Generate Batch148 authenticity lock
+        if: always()
+        run: npm run p0:hosted-proof-authenticity-lock
+
+      - name: Generate Batch150 P0/P1 to P2 transition gate
+        if: always()
+        run: npm run p0-p1:to-p2-transition-gate && npm run p0-p1:external-closure-guide
+
       - name: Upload P0 hosted proof artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: p0-hosted-final-proof-artifacts
-          path: artifacts/*.json
-          if-no-files-found: ignore
+          path: |
+            artifacts/*.json
+            artifacts/*.md
+            artifacts/p0-hosted-proof-closure-dossier-last-run.json
+            artifacts/p0-hosted-proof-closure-dossier.md
+            artifacts/p0-hosted-proof-authenticity-lock-last-run.json
+            artifacts/p0-hosted-proof-authenticity-lock.md
+            artifacts/batch150-*.json
+            artifacts/batch150-*.md
+            artifacts/visual-smoke/**/*.png
+          if-no-files-found: warn

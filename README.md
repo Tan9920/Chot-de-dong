@@ -1,3 +1,89 @@
+# GiaoAn Workspace VN — Batch150 P0/P1 to P2 Transition Gate & External Closure Guide
+
+## Trạng thái mới nhất sau Batch150 — version 0.150.0
+
+- Batch150 là batch chốt trước khi chuyển sang P2: cho phép **P2 source/local/private work** khi P0/P1 local/source/runtime evidence pass, nhưng vẫn chặn public rollout.
+- Lệnh quyết định mới: `npm run p0-p1:to-p2-transition-gate`.
+- Lệnh hướng dẫn việc không thể xử lý trong chat/local ZIP: `npm run p0-p1:external-closure-guide`.
+- Public/hosted proof vẫn cần GitHub Actions Node24 + Vercel APP_URL + hosted save/export HTTPS + PNG visual smoke thật.
+- Không claim production-ready, P0/P1 100%, hosted proof closed nếu chưa có artifact thật.
+
+Lệnh Batch150:
+
+```bash
+npm run batch150:p0-p1-to-p2-transition-validate
+npm run smoke:batch150
+npm run p0-p1:to-p2-transition-gate
+npm run p0-p1:external-closure-guide
+npm run verify:batch150
+```
+
+---
+
+# GiaoAn Workspace VN — Batch149 P0/P1 Maximum Closure & Security Cookie Hardening
+
+## Trạng thái mới nhất sau Batch149
+
+- Repo version: `0.149.0`.
+- Batch149 tiếp tục đúng blocker P0/P1: đẩy local/source/runtime evidence lên tối đa trong repo, nhưng không claim hosted/public proof nếu chưa có GitHub Actions Node24 + Vercel APP_URL + PNG visual smoke thật.
+- Nâng cấp P1 security: CSRF cookie trong `lib/runtime-security.ts` dùng `httpOnly: true`; logout cũng clear CSRF cookie với cùng posture.
+- Lệnh mới: `npm run p0-p1:max-closure-runner` và `npm run p0-p1:max-closure-report` sau khi `source:validate`, `data:validate`, hosted dry reports và `typecheck` đã chạy riêng.
+- Hosted/public proof, public rollout và production-ready vẫn false cho đến khi có external hosted evidence + production DB/security/legal review.
+- Không thêm AI, không thêm payment, không tạo verified giả, không mở community auto-public.
+
+Lệnh Batch149:
+
+```bash
+npm run batch149:p0-p1-max-closure-validate
+npm run smoke:batch149
+npm run p0-p1:max-closure-runner
+npm run p0-p1:max-closure-report
+npm run verify:batch149
+```
+
+---
+
+# GiaoAn Workspace VN — Batch148 Hosted Proof Evidence Authenticity Lock
+
+## Trạng thái mới nhất sau Batch148
+
+- Repo version: `0.148.0`.
+- Batch148 không thêm tính năng giáo viên mới; batch này tiếp tục xử lý blocker P0 hosted/public proof.
+- Nâng cấp chính: thêm anti-stale/authenticity lock cho artifact GitHub Actions bằng timestamp spread, run identity, APP_URL origin consistency, sha256 manifest và screenshot PNG inventory.
+- Lệnh mới: `npm run p0:hosted-proof-authenticity-lock` và `npm run p0:hosted-proof-authenticity-lock:strict`.
+- Hosted/public proof vẫn chưa được claim nếu chưa có GitHub Actions Node24 thật + Vercel APP_URL + artifact PNG/JSON/MD cùng một run. Production-ready vẫn false cho tới khi có production DB/security/legal review.
+- Không thêm AI, không thêm payment, không tạo verified giả, không mở community auto-public.
+
+Lệnh Batch148:
+
+```bash
+npm run batch148:hosted-proof-authenticity-lock-validate
+npm run smoke:batch148
+npm run verify:batch148
+```
+
+---
+
+# GiaoAn Workspace VN — Batch145 Hosted Proof Artifact Upload Closure
+
+## Trạng thái mới nhất sau Batch145
+
+- Repo version: `0.145.0`.
+- Batch145 không thêm tính năng giáo viên mới; batch này xử lý blocker hosted/public proof sau khi Batch144 đã đóng Local/source P0/P1 ở mức source candidate.
+- Workflow `.github/workflows/p0-hosted-final-proof.yml` giờ upload JSON reports, Markdown checklists và screenshot PNG thật từ `artifacts/visual-smoke/**/*.png`.
+- Đây là source-level artifact upload closure; không được claim hosted proof closed/public rollout/production-ready nếu chưa có GitHub Actions Node24 + APP_URL + visual smoke screenshot thật + public rollout readiness pass.
+- Không thêm AI, không thêm payment, không tạo verified giả, không mở community auto-public.
+
+Lệnh Batch145:
+
+```bash
+npm run batch145:hosted-proof-artifact-upload-validate
+npm run smoke:batch145
+npm run verify:batch145
+```
+
+---
+
 # GiaoAn Workspace VN — Batch142 P0 Node24 CI Provenance Hardening
 
 ## Trạng thái mới nhất sau Batch142
@@ -336,3 +422,20 @@ Claim policy: local/source P0/P1 may be a closure candidate when local gates pas
 Batch144 giải quyết blocker build/page-data còn lại trước khi đóng local P0/P1: guarded build và raw build diagnostic đều xoá `.next` trước khi chạy để artifact là current-run proof. P0/P1 local evidence giờ bắt buộc raw Next build exit 0 (`raw_build_diagnostic`) ngoài guarded build, live smoke, auth invite smoke, loopback hosted-style smoke và security/data protection report.
 
 Claim hợp lệ sau khi verify pass: local/source P0/P1 closure candidate. Hosted/public proof, production-ready và public rollout vẫn bị chặn nếu thiếu Node24 GitHub Actions, hosted APP_URL, visual screenshots thật, production DB/security/legal review.
+
+
+## Batch146 — Hosted Proof Runner Hardening
+
+Batch146 đẩy hosted/public proof lên mức source-level cao hơn bằng cách thêm strict preflight, dry-run preflight, final evidence summary và GitHub Step Summary cho workflow `p0-hosted-final-proof.yml`.
+
+Key commands:
+
+```bash
+npm run p0:hosted-proof-preflight:dry
+npm run batch146:hosted-proof-runner-hardening-validate
+npm run smoke:batch146
+APP_URL=https://<vercel-url> npm run visual:smoke:evidence-capture
+npm run p0:hosted-proof-summary
+```
+
+Claim policy: Batch146 chỉ harden runner/auditability. Hosted proof vẫn chưa đóng nếu chưa có GitHub Actions Node24 + APP_URL + screenshots + hosted smoke + public rollout artifacts pass. Production-ready vẫn cần production DB/security/legal review riêng.

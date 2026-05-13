@@ -1,0 +1,54 @@
+{
+  "batch": "Batch145 — Hosted Proof Artifact Upload Closure",
+  "version": "0.145.0",
+  "phase": "P0 hosted/public proof evidence packaging after Batch144 local/source closure",
+  "sourceLevelOnly": true,
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "selectedBecause": "Batch144 closed local/source P0/P1 as a strong candidate, but hosted/public proof remains blocked. The next blocker is making GitHub Actions/Vercel hosted proof artifacts auditable, especially real visual smoke screenshots, without claiming public rollout or production readiness.",
+  "scope": [
+    "Preserve Batch144 local/source closure claim boundaries.",
+    "Require the P0 hosted final proof workflow to upload JSON reports, Markdown checklists, and real visual smoke screenshot PNG files.",
+    "Keep hosted proof blocked unless Node24 CI provenance, APP_URL strict smoke, hosted save/export smoke, visual smoke screenshots, P0-100 release proof, capture board, and public rollout readiness all pass.",
+    "Do not add AI, payment, fake verified data, community auto-public, or role self-selection."
+  ],
+  "workflow": {
+    "file": ".github/workflows/p0-hosted-final-proof.yml",
+    "requiredNodeVersion": "24",
+    "requiredEnv": [
+      "APP_URL",
+      "NEXT_PUBLIC_APP_URL",
+      "GIAOAN_DEMO_URL",
+      "GIAOAN_STRICT_HOSTED_CI_PROOF"
+    ],
+    "requiredSteps": [
+      "Setup Node 24",
+      "Capture real visual smoke evidence with Chromium",
+      "Run hosted CI final proof runner",
+      "Strict final proof gate",
+      "Batch137 evidence capture report",
+      "Batch138 hosted proof execution gate",
+      "Upload P0 hosted proof artifacts"
+    ],
+    "requiredUploadPaths": [
+      "artifacts/*.json",
+      "artifacts/*.md",
+      "artifacts/visual-smoke/**/*.png"
+    ]
+  },
+  "claimPolicy": {
+    "allowed": [
+      "Batch145 improves hosted proof artifact upload/auditability source-level.",
+      "The workflow is prepared to preserve screenshot evidence when run on GitHub Actions with a hosted URL.",
+      "Local/source P0/P1 remains a closed source candidate only within source/local evidence."
+    ],
+    "blocked": [
+      "Không nói hosted proof closed khi chưa có workflow run Node24 + APP_URL + artifacts uploaded.",
+      "Không nói public rollout allowed khi public-rollout readiness còn false.",
+      "Không nói production-ready nếu chưa có production DB/security/legal review.",
+      "Không nói visual smoke pass nếu thiếu screenshot PNG thật.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  }
+}

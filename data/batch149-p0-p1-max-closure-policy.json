@@ -1,0 +1,92 @@
+{
+  "batch": "Batch149 — P0/P1 Maximum Closure & Security Cookie Hardening",
+  "version": "0.149.0",
+  "phase": "P0/P1 local evidence maximization while hosted/public proof remains externally gated",
+  "purpose": "Push P0/P1 as far as this repo can be pushed without a real Vercel APP_URL/GitHub Actions Node24 run: harden CSRF cookie handling, add a single max-closure runner/report, preserve hosted/public blockers, and prevent local artifacts from being overclaimed as production-ready. The verify script runs source/data/batch149 validation before this runner, so the runner itself focuses on runtime/security/hosted-dry evidence to avoid duplicating the heaviest source registry output. Runner commands are intentionally limited to the strongest runtime/security evidence commands because smoke/source/typecheck/hosted-dry commands are run separately and can exceed constrained chat tool wall-time when duplicated.",
+  "productionReady": false,
+  "publicRolloutAllowed": false,
+  "scope": {
+    "noAiCore": true,
+    "noPayment": true,
+    "noMarketplaceCash": true,
+    "noFakeVerifiedData": true,
+    "noAutoPublicCommunity": true,
+    "jsonFallbackIsDemoOnly": true,
+    "singleBatchScope": "P0/P1 closure evidence and security-cookie hardening only"
+  },
+  "securityHardening": [
+    {
+      "id": "csrf-cookie-http-only",
+      "required": true,
+      "evidence": "lib/runtime-security.ts",
+      "summary": "CSRF cookie is now explicitly httpOnly while the token remains available through the JSON response for the client header, reducing accidental script-side cookie exposure without breaking the double-submit check."
+    },
+    {
+      "id": "csrf-cookie-clear-http-only",
+      "required": true,
+      "evidence": "app/api/auth/logout/route.ts",
+      "summary": "Logout clears the CSRF cookie with the same httpOnly/sameSite/secure posture so stale write tokens do not linger under a weaker cookie shape."
+    }
+  ],
+  "maxClosureCommands": [
+    {
+      "id": "security_data_protection_report",
+      "command": "npm run security:data-protection-report",
+      "required": true,
+      "kind": "p1_security"
+    },
+    {
+      "id": "guarded_build",
+      "command": "GIAOAN_SKIP_REDUNDANT_NEXT_BUILD_CHECKS=1 GIAOAN_BUILD_TRACE_GRACE_MS=0 GIAOAN_BUILD_ARTIFACT_READY_GRACE_MS=0 npm run build",
+      "required": true,
+      "kind": "local_runtime"
+    },
+    {
+      "id": "live_smoke",
+      "command": "npm run live:smoke",
+      "required": true,
+      "kind": "p0_runtime"
+    },
+    {
+      "id": "loopback_hosted_style_smoke",
+      "command": "npm run runtime:p0-loopback-url-smoke",
+      "required": true,
+      "kind": "p0_runtime"
+    },
+    {
+      "id": "final_closure_report",
+      "command": "npm run p0-p1:final-closure-report",
+      "required": true,
+      "kind": "closure_report"
+    }
+  ],
+  "hostedPublicStillRequired": [
+    "GitHub Actions Node24 run with CI provenance.",
+    "Real Vercel APP_URL/NEXT_PUBLIC_APP_URL/GIAOAN_DEMO_URL.",
+    "Hosted save/export smoke over HTTPS.",
+    "Real browser visual smoke PNG screenshots for canonical viewports.",
+    "Downloaded artifact set from one GitHub Actions run validated by closure dossier + authenticity lock.",
+    "Production DB/session/security/legal review before public rollout or production-ready claims."
+  ],
+  "claimPolicy": {
+    "allowedAfterRunnerPass": [
+      "P0/P1 local/source/runtime max-closure candidate in the current audit environment.",
+      "P1 CSRF cookie posture hardened at source level.",
+      "Hosted proof readiness strengthened but not externally closed."
+    ],
+    "forbiddenUntilHostedPass": [
+      "production-ready",
+      "public-rollout-ready",
+      "hosted proof closed",
+      "P0/P1 100%",
+      "visual smoke passed without PNG screenshots",
+      "Node24 CI proof from local Node22"
+    ]
+  },
+  "artifacts": {
+    "runnerJson": "artifacts/batch149-p0-p1-max-closure-runner-last-run.json",
+    "reportJson": "artifacts/batch149-p0-p1-max-closure-report-last-run.json",
+    "reportMarkdown": "artifacts/batch149-p0-p1-max-closure-report.md"
+  },
+  "noAiPaymentVerifiedFakeAdded": true
+}

@@ -47,7 +47,10 @@ function run(id, script, env = {}) {
 function shouldStop(item) { return strict && item.status !== 'PASS'; }
 function finish() { const out = write(true); console.log(JSON.stringify({ ok: out.ok, artifactPath, strict, summary: out.summary }, null, 2)); process.exit(strict ? (out.ok ? 0 : 1) : 0); }
 
-let item = await run('source-batch141', 'batch141:p0-hosted-proof-artifact-integrity-validate');
+let item = await run('hosted-proof-preflight', strict ? 'p0:hosted-proof-preflight' : 'p0:hosted-proof-preflight:dry');
+if (shouldStop(item)) finish();
+
+item = await run('source-batch141', 'batch141:p0-hosted-proof-artifact-integrity-validate');
 if (shouldStop(item)) finish();
 
 item = await run('source-batch132', 'runtime:p0-hosted-ci-proof-validate');

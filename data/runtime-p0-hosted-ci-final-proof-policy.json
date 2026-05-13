@@ -1,11 +1,12 @@
 {
-  "batch": "Batch143 — P0/P1 Final Closure Candidate & Visual Smoke Contract Harmonization",
-  "version": "0.143.0",
+  "batch": "Batch146 — Hosted Proof Runner Hardening & Evidence Summary",
+  "version": "0.146.0",
   "phase": "P0 hosted/public proof evidence runner",
   "purpose": "Push P0/P1 as far as possible without overclaiming: align visual smoke viewport contracts, require real Chromium screenshot capture for hosted visual evidence, and keep public rollout blocked until Node24 CI/APP_URL/save-export/visual/P0-100 proof all pass.",
   "publicRolloutAllowed": false,
   "productionReady": false,
   "strictProofRequires": [
+    "Strict hosted proof preflight with Node24 GitHub Actions provenance and HTTPS APP_URL",
     "Node 24 GitHub Actions/Vercel runtime proof with CI provenance",
     "APP_URL hosted strict smoke",
     "hosted real account save/export smoke",
@@ -14,6 +15,20 @@
     "canonical visual viewport ids shared by template, validator, hosted CI report, public rollout and P0/P1 stability gates"
   ],
   "requiredEvidence": [
+    {
+      "id": "hosted_proof_preflight",
+      "label": "Strict hosted proof preflight",
+      "command": "npm run p0:hosted-proof-preflight",
+      "artifact": "artifacts/p0-hosted-final-proof-preflight-last-run.json",
+      "required": true,
+      "blocksPublicRollout": true,
+      "artifactContract": {
+        "mustHaveOk": true,
+        "mustHaveNode24": true,
+        "mustHaveGithubActions": true,
+        "mustHaveHttpsNonLocalAppUrl": true
+      }
+    },
     {
       "id": "node24_ci_deepest",
       "label": "Node24 GitHub Actions runtime proof with provenance",
@@ -121,7 +136,10 @@
     "uploadsArtifacts": true,
     "strictCommand": "npm run verify:p0-hosted-ci-proof",
     "requiresCiProvenance": true,
-    "visualCaptureCommand": "npm run visual:smoke:evidence-capture"
+    "visualCaptureCommand": "npm run visual:smoke:evidence-capture",
+    "preflightCommand": "npm run p0:hosted-proof-preflight",
+    "summaryCommand": "npm run p0:hosted-proof-summary",
+    "uploadsMarkdownAndScreenshots": true
   },
   "visualEvidence": {
     "templateCommand": "npm run visual:smoke:evidence-template",
@@ -161,6 +179,8 @@
     "noAiPaymentVerifiedFakeAdded": true
   },
   "artifactIntegrityRules": [
+    "Strict hosted proof preflight must pass before visual capture/runner output can close hosted proof.",
+    "Final hosted proof summary must inventory JSON, Markdown and screenshot PNG artifacts.",
     "Hosted strict release and P0-100 release must use separate artifact files.",
     "A required evidence item is pass only when artifact.ok=true and the artifact proofProfile/command/required flags match that evidence item.",
     "verify-release-strict cannot satisfy p0_100_release because it lacks requireVisualSmoke=true and requireNode24=true.",

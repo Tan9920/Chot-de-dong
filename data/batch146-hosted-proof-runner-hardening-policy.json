@@ -1,0 +1,57 @@
+{
+  "batch": "Batch146 — Hosted Proof Runner Hardening & Evidence Summary",
+  "version": "0.146.0",
+  "phase": "P0 hosted/public proof execution readiness after Batch145 artifact upload closure",
+  "sourceLevelOnly": true,
+  "publicRolloutAllowed": false,
+  "productionReady": false,
+  "selectedBecause": "Batch145 made hosted proof artifacts uploadable, but hosted/public proof still depends on a real GitHub Actions Node24 run with APP_URL and auditable screenshots. Batch146 hardens the final hosted proof runner with fail-fast preflight, artifact manifest, GitHub job summary, and a single post-run evidence summary so the next real run can be judged without guessing.",
+  "scope": [
+    "Add a strict hosted proof preflight that fails if Node24/GitHub Actions/APP_URL requirements are missing.",
+    "Add a post-run evidence summary that inventories JSON, Markdown, and screenshot PNG artifacts without exposing secrets.",
+    "Wire the preflight and summary into the P0 hosted final proof workflow and hosted CI runner.",
+    "Keep source/local claims separate from hosted/public/production claims.",
+    "Do not add AI, payment, fake verified data, community auto-public, or role self-selection."
+  ],
+  "preflightContract": {
+    "script": "scripts/p0-hosted-final-proof-preflight.mjs",
+    "strictCommand": "npm run p0:hosted-proof-preflight",
+    "dryRunCommand": "npm run p0:hosted-proof-preflight:dry",
+    "artifact": "artifacts/p0-hosted-final-proof-preflight-last-run.json",
+    "strictRequires": [
+      "Node major version 24",
+      "GitHub Actions CI provenance",
+      "APP_URL/NEXT_PUBLIC_APP_URL/GIAOAN_DEMO_URL present",
+      "HTTPS hosted URL, not localhost",
+      "No AI/payment/verified-fake/community-auto-public change"
+    ]
+  },
+  "summaryContract": {
+    "script": "scripts/p0-hosted-final-proof-summary.mjs",
+    "command": "npm run p0:hosted-proof-summary",
+    "jsonArtifact": "artifacts/p0-hosted-final-proof-summary-last-run.json",
+    "markdownArtifact": "artifacts/p0-hosted-final-proof-summary.md",
+    "writesGithubStepSummary": true,
+    "checksScreenshotFiles": true,
+    "requiredArtifactPatterns": [
+      "artifacts/*.json",
+      "artifacts/*.md",
+      "artifacts/visual-smoke/**/*.png"
+    ]
+  },
+  "claimPolicy": {
+    "allowed": [
+      "Batch146 improves the final hosted proof runner/auditability at source level.",
+      "The next real Node24 GitHub Actions run with APP_URL can produce a cleaner pass/fail summary.",
+      "Local/source P0/P1 remains a closed source candidate only within source/local evidence."
+    ],
+    "blocked": [
+      "Không nói hosted proof closed nếu chưa có workflow run Node24 + APP_URL + preflight + screenshots + reports pass.",
+      "Không nói public rollout allowed nếu public-rollout readiness còn false.",
+      "Không nói production-ready nếu chưa có production DB/security/legal review.",
+      "Không nói visual smoke pass nếu thiếu screenshot PNG thật.",
+      "Không thêm AI/payment/verified giả/community auto-public."
+    ],
+    "noAiPaymentVerifiedFakeAdded": true
+  }
+}
