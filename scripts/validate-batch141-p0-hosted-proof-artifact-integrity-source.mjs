@@ -6,6 +6,7 @@ function readJson(file, fallback = {}) { try { return JSON.parse(read(file) || J
 function writeJson(file, value) { fs.mkdirSync(file.split('/').slice(0, -1).join('/') || '.', { recursive: true }); fs.writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`, 'utf8'); }
 function check(label, condition, detail = '') { if (!condition) issues.push(detail ? `${label}: ${detail}` : label); }
 const issues = [];
+function minorAtLeast(version, min) { return Number(String(version || '0.0.0').split('.')[1] || 0) >= min; }
 
 const pkg = readJson('package.json');
 const lock = readJson('package-lock.json');
@@ -18,17 +19,16 @@ const registry = read('scripts/run-source-validators.mjs');
 const readme = read('README.md');
 const notes = `${read('BATCH141_NOTES.md')}\n${read('docs/BATCH141_P0_HOSTED_PROOF_ARTIFACT_DISAMBIGUATION.md')}`;
 
-check('package version must be 0.141.0 or later-compatible', ['0.141.0','0.142.0'].includes(pkg.version), pkg.version);
-check('package-lock version must be 0.141.0 or later-compatible', ['0.141.0','0.142.0'].includes(lock.version), lock.version);
-check('package-lock root version must be 0.141.0 or later-compatible', ['0.141.0','0.142.0'].includes(lock.packages?.['']?.version), lock.packages?.['']?.version);
+check('package version must be 0.141.0 or later-compatible', minorAtLeast(pkg.version, 141), pkg.version);
+check('package-lock version must be 0.141.0 or later-compatible', minorAtLeast(lock.version, 141), lock.version);
+check('package-lock root version must be 0.141.0 or later-compatible', minorAtLeast(lock.packages?.['']?.version, 141), lock.packages?.['']?.version);
 check('node engine must remain 24.x', pkg.engines?.node === '24.x', pkg.engines?.node);
 for (const script of ['batch141:p0-hosted-proof-artifact-integrity-validate','smoke:batch141','verify:batch141','verify:release:strict','verify:p0-100-release','runtime:p0-hosted-ci-proof-report']) {
   check(`package.json missing script ${script}`, Boolean(pkg.scripts?.[script]));
 }
 check('verify:release:strict must write dedicated artifact', pkg.scripts?.['verify:release:strict']?.includes('GIAOAN_VERIFY_RELEASE_ARTIFACT=artifacts/verify-release-strict-last-run.json'));
 check('verify:p0-100-release must write dedicated artifact', pkg.scripts?.['verify:p0-100-release']?.includes('GIAOAN_VERIFY_RELEASE_ARTIFACT=artifacts/verify-p0-100-release-last-run.json'));
-check('policy must be Batch141 artifact disambiguation or Batch142-compatible hardening', (policy.batch === 'Batch141 — P0 Hosted Proof Artifact Disambiguation' && policy.version === '0.141.0') || (policy.batch === 'Batch142 — P0 Node24 CI Provenance Hardening' && policy.version === '0.142.0'));
-check('policy must keep public rollout blocked by default', policy.publicRolloutAllowed === false && policy.productionReady === false);
+check('policy must be Batch141 artifact disambiguation or Batch142-compatible hardening', minorAtLeast(policy.version, 141) && JSON.stringify(policy).includes('artifactIntegrityRules'), policy.version);check('policy must keep public rollout blocked by default', policy.publicRolloutAllowed === false && policy.productionReady === false);
 check('hosted strict and p0-100 artifacts must be separate in policy', JSON.stringify(policy).includes('verify-release-strict-last-run.json') && JSON.stringify(policy).includes('verify-p0-100-release-last-run.json'));
 check('policy must define artifact integrity rules and contracts', JSON.stringify(policy).includes('artifactIntegrityRules') && JSON.stringify(policy).includes('artifactContract') && JSON.stringify(policy).includes('proofProfile'));
 for (const marker of ['GIAOAN_VERIFY_RELEASE_ARTIFACT','proofProfile','hosted_release_strict','p0_100_release','artifactContract','requireNode24']) check(`verify-release missing ${marker}`, release.includes(marker));
