@@ -18,8 +18,12 @@ const nextConfig: NextConfig = {
   },
   staticPageGenerationTimeout: 90,
   // P0 Hosted Final Proof: strict TypeScript/ESLint must not be bypassed.
-  typescript: { ignoreBuildErrors: false },
-  eslint: { ignoreDuringBuilds: false },
+  typescript: {
+    ignoreBuildErrors: false
+  },
+  eslint: {
+    ignoreDuringBuilds: false
+  },
   // Batch121 marker: disable webpack filesystem cache during production build diagnostics so full verify does not leave heavy .next/cache/webpack packs in constrained CI/sandbox runs.
   webpack: (config) => {
     config.cache = false;

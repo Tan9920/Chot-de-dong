@@ -17,6 +17,7 @@ const hosted = readJson('artifacts/hosted-demo-url-smoke-last-run.json');
 const buildTime = timeMs(build?.generatedAt);
 const hostedTime = timeMs(hosted?.generatedAt);
 const actualNodeMajor = Number(process.versions.node.split('.')[0]);
+// Batch129+ compatibility: keep the repo on the 0.x release train while allowing real patch/minor bumps.
 const zeroMajorVersionAtLeast = (version, baselineMinor, baselinePatch = 0) => {
   const [major, minor, patch] = String(version || '0.0.0').split('.').map((part) => Number(part));
   if (major !== 0 || !Number.isInteger(minor) || !Number.isInteger(patch)) return false;
