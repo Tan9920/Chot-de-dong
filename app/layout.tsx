@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     'Web demo soạn giáo án: tạo khung bài dạy, chỉnh sửa, lưu bản nháp và xuất DOCX/PDF cho giáo viên Việt Nam.',
 };
 
-export const viewport: Viewport = {
+export const viewport = {
   width: 'device-width',
   initialScale: 1,
 };
