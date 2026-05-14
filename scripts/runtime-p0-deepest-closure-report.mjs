@@ -17,7 +17,15 @@ const hosted = readJson('artifacts/hosted-demo-url-smoke-last-run.json');
 const buildTime = timeMs(build?.generatedAt);
 const hostedTime = timeMs(hosted?.generatedAt);
 const actualNodeMajor = Number(process.versions.node.split('.')[0]);
-const packageMinorAtLeast = (version, min) => Number(String(version || '0.0.0').split('.')[1] || 0) >= min;
+// Batch129+ compatibility: keep the repo on the 0.x release train while allowing real minor/patch bumps.
+const zeroMajorVersionAtLeast = (version, baselineMinor, baselinePatch = 0) => {
+  const [major, minor, patch] = String(version || '0.0.0')
+    .split('.')
+    .map((part) => Number(part));
+
+  if (major !== 0 || !Number.isInteger(minor) || !Number.isInteger(patch)) return false;
+  return minor > baselineMinor || (minor === baselineMinor && patch >= baselinePatch);
+};
 const node24RuntimeVerified = actualNodeMajor === 24;
 const startableBuildStatus = new Set(['raw_next_build_passed','controlled_trace_timeout_with_startable_artifacts','controlled_artifact_ready_timeout_with_startable_artifacts','recovered_missing_500_after_artifacts_ready']);
 const rawExitZero = Boolean(build?.status === 'raw_next_build_passed' && build?.rawNextBuildExitCode === 0);
@@ -30,8 +38,7 @@ const missingLoopbackRoutes = requiredLoopbackRoutes.filter((route) => !loopback
 const hostedPassed = Boolean(hosted?.ok && (hosted?.status === 'hosted_url_smoke_passed' || hosted?.hostedUrlSmokePassed === true || Array.isArray(hosted?.checks)));
 const hostedFreshEnough = Boolean(hostedPassed && hostedTime >= buildTime);
 const checks = [
-  { id: 'repo_version_129_or_later', ok: packageMinorAtLeast(pkg.version, 129), evidence: pkg.version || null },
-  { id: 'node_engine_24x', ok: pkg.engines?.node === '24.x', evidence: pkg.engines || null },
+{ id: 'repo_version_129_or_later', ok: zeroMajorVersionAtLeast(pkg.version, 129, 0), evidence: pkg.version || null },  { id: 'node_engine_24x', ok: pkg.engines?.node === '24.x', evidence: pkg.engines || null },
   { id: 'responsive_mobile_contract_passed', ok: Boolean(responsive?.ok), evidence: responsive ? { failed: responsive.failed || [] } : null },
   { id: 'batch129_source_gate_passed', ok: Boolean(sourceGate?.ok), evidence: sourceGate ? { failed: sourceGate.failed || [] } : null },
   { id: 'startable_next_build_current', ok: startableArtifacts, evidence: build ? { status: build.status, rawNextBuildExitCode: build.rawNextBuildExitCode, generatedAt: build.generatedAt, artifacts: build.artifacts || null } : null },
