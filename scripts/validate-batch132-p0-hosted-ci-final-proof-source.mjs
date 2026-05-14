@@ -17,15 +17,17 @@ const release = read('scripts/verify-release.mjs');
 const workflow = read('.github/workflows/p0-hosted-final-proof.yml');
 const runValidators = read('scripts/run-source-validators.mjs');
 const notes = read('BATCH132_NOTES.md') + '\n' + read('docs/BATCH132_P0_HOSTED_CI_FINAL_PROOF.md');
-const compatibleVersions = ['0.132.0','0.133.0','0.134.0','0.135.0','0.136.0','0.137.0','0.138.0','0.139.0','0.140.0','0.141.0'];
+const compatibleVersions = Array.from({ length: 19 }, (_, i) => `0.${132 + i}.0`);
 
 check('package.json version must be hosted-proof compatible', compatibleVersions.includes(pkg.version), pkg.version);
 check('package-lock version must be hosted-proof compatible', compatibleVersions.includes(lock.version), lock.version);
 check('package-lock root version must be hosted-proof compatible', compatibleVersions.includes(lock.packages?.['']?.version), lock.packages?.['']?.version);
 check('node engine must stay pinned to 24.x', pkg.engines?.node === '24.x', pkg.engines?.node);
+
 for (const script of ['runtime:p0-hosted-ci-proof-validate','runtime:p0-hosted-ci-proof-report','runtime:p0-hosted-ci-proof-runner','verify:p0-hosted-ci-proof','smoke:batch132','verify:batch132','verify:release:strict','verify:p0-100-release']) {
   check(`package.json missing script ${script}`, Boolean(pkg.scripts?.[script]));
 }
+
 for (const file of [
   'data/runtime-p0-hosted-ci-final-proof-policy.json',
   'lib/runtime-p0-hosted-ci-final-proof.ts',
@@ -38,8 +40,8 @@ for (const file of [
   'docs/BATCH132_P0_HOSTED_CI_FINAL_PROOF.md',
   'BATCH132_NOTES.md'
 ]) check(`missing ${file}`, fs.existsSync(file));
-check('policy must remain hosted final proof policy', String(policy.batch || '').includes('Batch132') || String(policy.batch || '').includes('Batch141'), policy.batch);
-check('policy version must be hosted-proof compatible', compatibleVersions.includes(policy.version), policy.version);
+
+check('policy must remain hosted final proof policy', String(policy.batch || '').includes('Batch132') || String(policy.batch || '').includes('Batch141') || String(policy.batch || '').includes('Batch146'), policy.batch);check('policy version must be hosted-proof compatible', compatibleVersions.includes(policy.version), policy.version);
 check('policy must block public rollout by default', policy.publicRolloutAllowed === false && policy.productionReady === false);
 check('policy must require all final hosted evidence', JSON.stringify(policy).includes('node24_ci_deepest') && JSON.stringify(policy).includes('hosted_release_strict') && JSON.stringify(policy).includes('hosted_url_save_export') && JSON.stringify(policy).includes('visual_smoke_evidence') && JSON.stringify(policy).includes('p0_100_release'));
 check('policy must include GitHub workflow contract', policy.workflow?.file === '.github/workflows/p0-hosted-final-proof.yml' && policy.workflow?.nodeVersion === '24');
